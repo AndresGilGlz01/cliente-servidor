@@ -9,9 +9,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "udp-server", "udp-server\ud
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "unit-1", "unit-1", "{8C37DEB5-198C-48DF-BB49-49C2FC24B9B1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "tcp-client", "tcp-client\tcp-client.csproj", "{7EB47167-7A2F-40C2-9426-5287D91816F6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "tcp-client", "tcp-client\tcp-client.csproj", "{7EB47167-7A2F-40C2-9426-5287D91816F6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "tcp-server", "tcp-server\tcp-server.csproj", "{A9584583-C38F-49E2-AF0C-D0F427550104}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "tcp-server", "tcp-server\tcp-server.csproj", "{A9584583-C38F-49E2-AF0C-D0F427550104}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tcp-example", "tcp-example", "{9036EE12-B739-4839-A977-5E3CC15AD3A6}"
 EndProject
@@ -19,9 +19,13 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "udp-example", "udp-example"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "wpf-examples", "wpf-examples", "{E3A6C6A7-F46A-4FEE-B050-2F61D5898D56}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "udp-wpf-client", "udp-wpf-client\udp-wpf-client.csproj", "{66B9F158-3D90-4A43-AAB5-9E393B44A315}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "udp-wpf-client", "udp-wpf-client\udp-wpf-client.csproj", "{66B9F158-3D90-4A43-AAB5-9E393B44A315}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "udp-wpf-server", "udp-wpf-server\udp-wpf-server.csproj", "{372FFF1E-9740-48B9-B530-9DDBE40A344A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "udp-wpf-server", "udp-wpf-server\udp-wpf-server.csproj", "{372FFF1E-9740-48B9-B530-9DDBE40A344A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "tcp-wpf-client", "tcp-wpf-client\tcp-wpf-client.csproj", "{42DBE415-092E-4E0F-AA28-F24CBDEDC08C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "tcp-wpf-server", "tcp-wpf-server\tcp-wpf-server.csproj", "{47A7097C-B60E-4DE5-A37E-F66B792DBAC9}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -53,6 +57,14 @@ Global
 		{372FFF1E-9740-48B9-B530-9DDBE40A344A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{372FFF1E-9740-48B9-B530-9DDBE40A344A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{372FFF1E-9740-48B9-B530-9DDBE40A344A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{42DBE415-092E-4E0F-AA28-F24CBDEDC08C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{42DBE415-092E-4E0F-AA28-F24CBDEDC08C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{42DBE415-092E-4E0F-AA28-F24CBDEDC08C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{42DBE415-092E-4E0F-AA28-F24CBDEDC08C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{47A7097C-B60E-4DE5-A37E-F66B792DBAC9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{47A7097C-B60E-4DE5-A37E-F66B792DBAC9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{47A7097C-B60E-4DE5-A37E-F66B792DBAC9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{47A7097C-B60E-4DE5-A37E-F66B792DBAC9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -67,6 +79,8 @@ Global
 		{E3A6C6A7-F46A-4FEE-B050-2F61D5898D56} = {8C37DEB5-198C-48DF-BB49-49C2FC24B9B1}
 		{66B9F158-3D90-4A43-AAB5-9E393B44A315} = {E3A6C6A7-F46A-4FEE-B050-2F61D5898D56}
 		{372FFF1E-9740-48B9-B530-9DDBE40A344A} = {E3A6C6A7-F46A-4FEE-B050-2F61D5898D56}
+		{42DBE415-092E-4E0F-AA28-F24CBDEDC08C} = {E3A6C6A7-F46A-4FEE-B050-2F61D5898D56}
+		{47A7097C-B60E-4DE5-A37E-F66B792DBAC9} = {E3A6C6A7-F46A-4FEE-B050-2F61D5898D56}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {2134F099-F74D-4AB1-A8DC-D14434322077}

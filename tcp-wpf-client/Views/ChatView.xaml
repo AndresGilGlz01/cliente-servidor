@@ -1,0 +1,44 @@
+﻿<UserControl x:Class="tcp_wpf_client.Views.ChatView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:viewModels="clr-namespace:tcp_wpf_client.ViewModels"
+             xmlns:local="clr-namespace:tcp_wpf_client.Views" 
+             d:DataContext="{d:DesignInstance Type=viewModels:MainViewModel}"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <DockPanel>
+        <DockPanel Margin="5"
+                   DockPanel.Dock="Bottom">
+            <Button Content="Enviar"
+                    DockPanel.Dock="Right"
+                    Margin="0"
+                    Command="{Binding SendCommand}"
+                    Padding="10" />
+            <TextBox Height="100"
+                     Text="{Binding Message}"
+                     AcceptsReturn="True" />
+        </DockPanel>
+        <ListBox Margin="5" ItemsSource="{Binding Messages}">
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <Border Background="White"
+                            BorderBrush="Gray"
+                            BorderThickness="1"
+                            Padding="5"
+                            CornerRadius="10">
+                        <StackPanel>
+                            <TextBlock FontWeight="Bold"
+                                       Text="{Binding Origen}" />
+                            <TextBlock TextAlignment="Justify"
+                                       Text="{Binding Mensaje}" />
+                            <TextBlock Text="{Binding Fecha}"
+                                       HorizontalAlignment="Right" />
+                        </StackPanel>
+                    </Border>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+    </DockPanel>
+</UserControl>
