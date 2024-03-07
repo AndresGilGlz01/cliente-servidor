@@ -9,4 +9,29 @@
     <UseWPF>true</UseWPF>
   </PropertyGroup>
 
+  <ItemGroup>
+    <None Remove="Assets\Fonts\Montserrat-Regular.ttf" />
+    <None Remove="Assets\Images\Landing4.svg" />
+    <None Remove="Assets\Images\Landing6.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="Assets\Fonts\Montserrat-Regular.ttf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Images\Landing6.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="CommunityToolkit.Mvvm" Version="8.2.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="Assets\Images\Landing4.svg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>

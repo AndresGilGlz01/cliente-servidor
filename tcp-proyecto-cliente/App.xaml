@@ -2,8 +2,22 @@
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:local="clr-namespace:tcp_proyecto_cliente"
-             StartupUri="MainWindow.xaml">
+             StartupUri="Views/MainView.xaml">
     <Application.Resources>
-         
+        
+        <!-- Definición de colores -->
+        <Color x:Key="PrimaryColor">#674188</Color>
+        <Color x:Key="SecondaryColor">#C3ACD0</Color>
+        <Color x:Key="BackgroundColor">#FFFBF5</Color>
+        <Color x:Key="AccentColor">#F7EFE5</Color>
+
+        <!-- Definición de SolidColorBrushes basados en los colores -->
+        <SolidColorBrush x:Key="PrimaryBrush" Color="{StaticResource PrimaryColor}" />
+        <SolidColorBrush x:Key="SecondaryBrush" Color="{StaticResource SecondaryColor}" />
+        <SolidColorBrush x:Key="BackgroundBrush" Color="{StaticResource BackgroundColor}" />
+        <SolidColorBrush x:Key="AccentBrush" Color="{StaticResource AccentColor}" />
+
+        <FontFamily x:Key="Montserrat" >/Assets/Fonts/#Montserrat</FontFamily>
+   
     </Application.Resources>
 </Application>
