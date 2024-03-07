@@ -16,7 +16,7 @@ public class ChatService
     {
         try
         {
-            var socket = new IPEndPoint(ipAddress, 9630);
+            var socket = new IPEndPoint(ipAddress, 9000);
 
             client = new TcpClient();
             client.Connect(socket);
@@ -31,6 +31,8 @@ public class ChatService
             };
 
             SendMessage(request);
+
+            ReceiveMessage();
         }
         catch (Exception) { }
     }
@@ -73,10 +75,7 @@ public class ChatService
                     }
                 }
             }
-            catch (Exception ex)
-            {
-
-            }
+            catch (Exception) { }
         })
         {
             IsBackground = true

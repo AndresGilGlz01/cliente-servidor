@@ -22,6 +22,9 @@ public partial class MainViewModel : ObservableObject
     [ObservableProperty]
     private ObservableCollection<MessageDto> _messages = [];
 
+    [ObservableProperty]
+    private int _messageNumber;
+
     public MainViewModel()
     {
         var addresses = Dns.GetHostAddresses(Dns.GetHostName());
@@ -45,6 +48,7 @@ public partial class MainViewModel : ObservableObject
         }
 
         Messages.Add(e);
+        MessageNumber = Messages.Count - 1;
     }
 
     [RelayCommand]
