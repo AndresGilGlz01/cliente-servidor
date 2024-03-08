@@ -103,6 +103,9 @@ public partial class MainViewModel : ObservableObject
     {
         if (SelectedPicture is not null)
         {
+            SelectedPicture.Subject = "Add";
+            _galeryService.SendMessage(SelectedPicture); // Send a message to the server to remove the picture
+
             Pictures.Add(SelectedPicture);
             SelectedPicture = null;
 
@@ -123,6 +126,9 @@ public partial class MainViewModel : ObservableObject
     {
         Pictures.Remove(picture);
         OnPropertyChanged(nameof(Pictures));
+        
+        picture.Subject = "Remove";
+        _galeryService.SendMessage(picture); // Send a message to the server to remove the picture
     }
 
     private void OnUnexpected(object? sender, EventArgs e)
