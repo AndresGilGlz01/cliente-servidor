@@ -9,7 +9,7 @@ namespace tcp_proyecto_cliente.Services;
 
 public class GaleryService
 {
-    public event EventHandler? OnSendMessage;
+    public event EventHandler<PictureDto>? OnSendMessage;
     public event EventHandler? OnConnectServer;
     public event EventHandler? OnReceiveMessage;
     public event EventHandler? OnDisconnectServer;
@@ -90,7 +90,7 @@ public class GaleryService
     /// <param name="picture">Object with Autor and base 64 image</param>
     public void SendMessage(PictureDto picture)
     {
-        if (string.IsNullOrWhiteSpace(picture.Image)) return;
+        if (picture.Image is null) return;
 
         if (string.IsNullOrWhiteSpace(picture.Autor)) return;
 
@@ -100,6 +100,8 @@ public class GaleryService
 
         stream.Write(buffer, 0, buffer.Length);
         stream.Flush();
+
+        OnSendMessage?.Invoke(this, picture);
     }
 
     /// <summary>

@@ -14,6 +14,7 @@
 
     <Window.Resources>
         <controls:FormView x:Key="formView"/>
+        <controls:HomeView x:Key="homeView"/>
     </Window.Resources>
 
     <DockPanel>
@@ -26,6 +27,9 @@
                     <Style.Triggers>
                         <DataTrigger Binding="{Binding IsConnected}" Value="false">
                             <Setter Property="Content" Value="{StaticResource formView}"/>
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding IsConnected}" Value="true">
+                            <Setter Property="Content" Value="{StaticResource homeView}"/>
                         </DataTrigger>
                     </Style.Triggers>
                 </Style>
