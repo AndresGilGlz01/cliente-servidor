@@ -6,13 +6,201 @@
         xmlns:vm="clr-namespace:tcp_proyecto_server.ViewModels"
         xmlns:local="clr-namespace:tcp_proyecto_server.Views"
         mc:Ignorable="d"
-        Title="ServerView" Height="450" Width="800">
+        Title="ServerView" Height="550" Width="800" WindowStyle="None"
+        ResizeMode="NoResize" WindowStartupLocation="CenterScreen">
 
     <Window.DataContext>
         <vm:ServerViewModel></vm:ServerViewModel>
     </Window.DataContext>
-    
+
     <Grid>
-        
+        <Border Background="{StaticResource Background_Color}"
+                 CornerRadius="10"
+                MouseDown="Border_MouseDown"
+                >
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height=".0*"></RowDefinition>
+                    <RowDefinition Height=".7*">
+                    </RowDefinition>
+                    <RowDefinition Height=".2*"></RowDefinition>
+                </Grid.RowDefinitions>
+
+                <Slider x:Name="Slider"
+                    Minimum="0"
+                    Maximum="2"
+                    TickPlacement="BottomRight"
+                    TickFrequency="1"
+                    Visibility="Hidden"
+                    Grid.Row="0"
+                    ></Slider>
+
+                <Grid Grid.Row="1">
+
+
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width=".2*"></ColumnDefinition>
+                        <ColumnDefinition Width=".8*"></ColumnDefinition>
+                    </Grid.ColumnDefinitions>
+
+
+                    <Border Grid.Column="0" Margin="20,10,10,10" CornerRadius="10" Height="370" >
+                        <ListBox Background="{StaticResource SelectedImage_background}"
+                                 BorderThickness="0" 
+                                 ItemsSource="{Binding Mensajes}"
+                                 Name="lst"
+                                 >
+                            <ListBox.ItemTemplate>
+                                <DataTemplate>
+                                    <Border>
+                                        <StackPanel>
+                                            <TextBlock Text="{Binding Message}"></TextBlock>
+                                        </StackPanel>
+                                    </Border>
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                        </ListBox>
+                    </Border>
+
+                    <StackPanel Orientation="Horizontal"
+             HorizontalAlignment="Center"
+             VerticalAlignment="Center"
+             Width="520"
+             Height="370"
+             Grid.Column="1"
+             >
+
+
+
+                        <Border Height="370"
+Width="520"
+BorderThickness="0"
+CornerRadius="2"
+BorderBrush="{StaticResource SelectedImage_background}"
+Grid.Column="1"
+Background="{StaticResource SelectedImage_background}"
+>
+
+                            <Border.Effect>
+                                <DropShadowEffect ShadowDepth="10" 
+         Color="Black" 
+         Opacity="0.5"
+             />
+                            </Border.Effect>
+
+                            <StackPanel VerticalAlignment="Center">
+                                <Image Source="{Binding ElementName=listaimg, Path=SelectedItem.img}"
+       Grid.Row="0"
+       Width="250"
+       Height="240"
+       HorizontalAlignment="Center"
+       VerticalAlignment="Center"
+       ></Image>
+                            </StackPanel>
+
+                        </Border>
+                    </StackPanel>
+
+                </Grid>
+
+                <Grid Grid.Row="2"
+                      Margin="5"
+                      >
+
+                    <ScrollViewer ScrollViewer.VerticalScrollBarVisibility="Hidden" BorderThickness="0"
+                                  ScrollViewer.HorizontalScrollBarVisibility="Hidden">
+                        <ListBox x:Name="listaimg"
+                                 Background="Transparent"
+                                 BorderThickness="0" 
+                                 ItemsSource="{Binding ImagenesUsuarios}" 
+                                 >
+                            <ListBox.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <WrapPanel></WrapPanel>
+                                </ItemsPanelTemplate>
+                            </ListBox.ItemsPanel>
+                            <ListBox.ItemTemplate>
+                                <DataTemplate>
+                                    <!--Width="115"-->
+                                    <Border Background="#C3ACD0"
+                                    Margin="2"
+                                    Width="100"
+                                    CornerRadius="5"
+                                    Height="100"
+                                    >
+                                        <StackPanel VerticalAlignment="Center">
+                                            <Image Source="{Binding img}"
+                                               Width="80"
+                                               Height="80"
+                                               ></Image>
+                                            <TextBlock TextAlignment="Center"
+                                               FontWeight="Bold"
+                                               Foreground="White"
+                                               Text="{Binding Autor}"
+                                               ></TextBlock>
+                                        </StackPanel>
+                                    </Border>
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                        </ListBox>
+                    </ScrollViewer>
+
+                    <Button HorizontalAlignment="Right"
+                            Background="Transparent"
+                            Height="65"
+                            BorderThickness="0"
+                            Cursor="Hand"
+                            Command="{Binding AvanzarCommand}"
+                            Click="Button_Click"
+                            Tag="{Binding ElementName= sv}"
+                            >
+                        <Image Source="\Assets\arrow1.png"
+                               ></Image>
+                    </Button>
+
+                    <Button HorizontalAlignment="Left"
+                        Background="Transparent"
+                        Height="65"
+                        BorderThickness="0"
+                        Cursor="Hand"
+                            Command="{Binding RetrocederCommand}"
+                     >
+                        <Image Source="\Assets\arrow1-2.png"
+                    ></Image>
+                    </Button>
+
+
+                </Grid>
+
+
+
+
+
+                <Border Background="#C3ACD0"
+         Margin="7"
+         Width="115"
+         CornerRadius="5"
+         Height="100"
+         >
+                    <!--<StackPanel VerticalAlignment="Center">
+                        <Image Source="/Assets/image.png"
+                Width="50"
+                Height="50"
+                ></Image>
+                        <TextBlock TextAlignment="Center"
+                    FontWeight="Bold"
+                    Foreground="White"
+                    >Cliente 1</TextBlock>
+                    </StackPanel>-->
+                </Border>
+
+
+
+
+
+
+            </Grid>
+
+        </Border>
     </Grid>
 </Window>
