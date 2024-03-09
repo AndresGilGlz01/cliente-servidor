@@ -9,4 +9,11 @@
     <UseWPF>true</UseWPF>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Folder Include="Models\" />
+    <Folder Include="Services\" />
+    <Folder Include="Views\" />
+    <Folder Include="VieModels\" />
+  </ItemGroup>
+
 </Project>
