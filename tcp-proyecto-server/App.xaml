@@ -4,6 +4,10 @@
              xmlns:local="clr-namespace:tcp_proyecto_server"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
-         
+        <Color x:Key="MainBackgroundColor">#674188</Color>
+        <Color x:Key="SelectedPicBackground">#FFFBF5</Color>
+        <Color x:Key="SelectedPicBackground01">#F7EFE5</Color>
+        <Color x:Key="SmallImage_background">#C3ACD0</Color>
+        
     </Application.Resources>
 </Application>
