@@ -32,7 +32,7 @@ namespace tcp_proyecto_server.Services
             while (server.Server.IsBound)
             {
                 var tcpClient = server.AcceptTcpClient();
-                clients.Add(tcpClient); ////??
+                clients.Add(tcpClient); 
 
                 Thread t = new(() =>
                 {
