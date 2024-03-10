@@ -34,43 +34,44 @@ namespace tcp_proyecto_server.Services
                 var tcpClient = server.AcceptTcpClient();
                 clients.Add(tcpClient); 
 
-                Thread t = new(() =>
+                Thread t = new(async () =>
                 {
-                    RecibirMensajes(tcpClient);
+                    await RecibirMensajes(tcpClient);
                 });
                 t.IsBackground = true;
                 t.Start();
             }
         }
 
-        private void RecibirMensajes(TcpClient cliente)
+        private async Task RecibirMensajes(TcpClient cliente)
         {
+            var ns = cliente.GetStream();
+            byte[] lengthBuffer = new byte[4]; // Assuming length is a 32-bit integer
+
             while (cliente.Connected)
             {
-                var ns = cliente.GetStream();
+                await ns.ReadAsync(lengthBuffer, 0, 4);
+                int messageLength = BitConverter.ToInt32(lengthBuffer);
 
-                while (cliente.Available == 0)
+                byte[] messageBuffer = new byte[messageLength];
+                int bytesRead = 0;
+                while (bytesRead < messageLength)
                 {
-                    Thread.Sleep(500);
+                    bytesRead += await ns.ReadAsync(messageBuffer, bytesRead, messageLength - bytesRead);
                 }
 
-                byte[] buffer = new byte[cliente.Available];
-                ns.Read(buffer, 0, buffer.Length);
-                string json = Encoding.UTF8.GetString(buffer);
-
-
+                string json = Encoding.UTF8.GetString(messageBuffer);
 
                 var mensaje1 = JsonSerializer.Deserialize<PictureDto>(json);
                 var mensaje = JsonSerializer.Deserialize<MensajeDto>(json);
 
-                if (mensaje1.Image != null)
+                if (mensaje1?.Image != null)
                 {
                     Application.Current.Dispatcher.Invoke(() =>
                     {
                         ImagenRecibido?.Invoke(this, mensaje1);
                     });
                 }
-
 
                 if (mensaje != null)
                 {

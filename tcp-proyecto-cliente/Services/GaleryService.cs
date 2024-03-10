@@ -30,7 +30,7 @@ public class GaleryService
     /// </summary>
     /// <param name="ipAddress">Server Ip Address</param>
     /// <param name="port">Server Port</param>
-    public void Connect(IPAddress ipAddress, int port)
+    public async Task Connect(IPAddress ipAddress, int port)
     {
         try
         {
@@ -44,6 +44,8 @@ public class GaleryService
                 Name = Username,
                 Message = "**HELLO",
             };
+
+            await SendMessage(request);
         }
         catch (Exception) { }
     }
@@ -51,7 +53,7 @@ public class GaleryService
     /// <summary>
     /// Method to disconnect from the server
     /// </summary>
-    public void Disconect()
+    public async Task Disconect()
     {
         try
         {
@@ -61,7 +63,7 @@ public class GaleryService
                 Message = "**BYE",
             };
 
-            SendMessage(request);
+            await SendMessage(request);
 
             _client.Close();
         }
@@ -72,13 +74,16 @@ public class GaleryService
     /// Method to send a message to the server
     /// </summary>
     /// <param name="request">**HELLO to connect, **BYE to disconnect</param>
-    public void SendMessage(ConnectDto request)
+    public async Task SendMessage(ConnectDto request)
     {
         if (string.IsNullOrWhiteSpace(request.Message)) return;
 
         var json = JsonSerializer.Serialize(request);
         var buffer = Encoding.UTF8.GetBytes(json);
         var stream = _client.GetStream();
+
+        byte[] lengthBuffer = BitConverter.GetBytes(buffer.Length);
+        await stream.WriteAsync(lengthBuffer);
 
         stream.Write(buffer, 0, buffer.Length);
         stream.Flush();
@@ -88,21 +93,26 @@ public class GaleryService
     /// Method to send a picture to the server
     /// </summary>
     /// <param name="picture">Object with Autor and base 64 image</param>
-    public void SendMessage(PictureDto picture)
-    {
-        if (picture.Image is null) return;
+public async Task SendMessage(PictureDto picture)
+{
+    if (picture.Image is null) return;
 
-        if (string.IsNullOrWhiteSpace(picture.Autor)) return;
+    if (string.IsNullOrWhiteSpace(picture.Autor)) return;
 
-        var json = JsonSerializer.Serialize(picture);
-        var buffer = Encoding.UTF8.GetBytes(json);
-        var stream = _client.GetStream();
+    var json = JsonSerializer.Serialize(picture);
+    var buffer = Encoding.UTF8.GetBytes(json);
 
-        stream.Write(buffer, 0, buffer.Length);
-        stream.Flush();
+    var stream = _client.GetStream();
 
-        OnSendMessage?.Invoke(this, picture);
-    }
+    byte[] lengthBuffer = BitConverter.GetBytes(buffer.Length);
+    await stream.WriteAsync(lengthBuffer);
+
+    await stream.WriteAsync(buffer);
+    await stream.FlushAsync();
+
+    OnSendMessage?.Invoke(this, picture);
+}
+
 
     /// <summary>
     /// Method to listen the server

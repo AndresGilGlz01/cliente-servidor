@@ -55,20 +55,38 @@ public partial class MainViewModel : ObservableObject
     [RelayCommand]
     private void Connect()
     {
-        var ipAddress = IPAddress.Parse(IpAddress);
+        try
+        {
+            var ipAddress = IPAddress.Parse(IpAddress);
 
-        IsConnected = true;
-        //_galeryService.Connect(ipAddress, Port);
+            _galeryService.Connect(ipAddress, Port);
+
+            IsConnected = true;
+        }
+        catch (Exception)
+        {
+            IsConnected = false;
+        }
     }
 
     [RelayCommand]
     private void Disconnect()
     {
-        IsConnected = false;
-        //_galeryService.Disconnect();
-        SelectedPicture = null;
-        Pictures.Clear();
-        OnPropertyChanged(nameof(Pictures));
+        try
+        {
+            IsConnected = false;
+            _galeryService.Disconect();
+            SelectedPicture = null;
+            Pictures.Clear();
+            OnPropertyChanged(nameof(Pictures));
+        }
+        catch (Exception)
+        {
+            SelectedPicture = null;
+            Pictures.Clear();
+            OnPropertyChanged(nameof(Pictures));
+            IsConnected = false;
+        }
     }
 
     [RelayCommand]
@@ -99,12 +117,13 @@ public partial class MainViewModel : ObservableObject
     }
 
     [RelayCommand]
-    private void SendPhoto()
+    private async Task SendPhoto()
     {
         if (SelectedPicture is not null)
         {
             SelectedPicture.Subject = "Add";
-            _galeryService.SendMessage(SelectedPicture); // Send a message to the server to remove the picture
+            
+            await _galeryService.SendMessage(SelectedPicture); // Send a message to the server to remove the picture
 
             Pictures.Add(SelectedPicture);
             SelectedPicture = null;
@@ -122,13 +141,14 @@ public partial class MainViewModel : ObservableObject
     }
 
     [RelayCommand]
-    private void RemovePhoto(PictureDto picture)
+    private async Task RemovePhoto(PictureDto picture)
     {
         Pictures.Remove(picture);
         OnPropertyChanged(nameof(Pictures));
-        
+
         picture.Subject = "Remove";
-        _galeryService.SendMessage(picture); // Send a message to the server to remove the picture
+        
+        await _galeryService.SendMessage(picture); // Send a message to the server to remove the picture
     }
 
     private void OnUnexpected(object? sender, EventArgs e)
