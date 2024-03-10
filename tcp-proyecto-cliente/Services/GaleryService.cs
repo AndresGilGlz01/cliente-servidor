@@ -93,25 +93,25 @@ public class GaleryService
     /// Method to send a picture to the server
     /// </summary>
     /// <param name="picture">Object with Autor and base 64 image</param>
-public async Task SendMessage(PictureDto picture)
-{
-    if (picture.Image is null) return;
+    public async Task SendMessage(PictureDto picture)
+    {
+        if (picture.Image is null) return;
 
-    if (string.IsNullOrWhiteSpace(picture.Autor)) return;
+        if (string.IsNullOrWhiteSpace(picture.Autor)) return;
 
-    var json = JsonSerializer.Serialize(picture);
-    var buffer = Encoding.UTF8.GetBytes(json);
+        var json = JsonSerializer.Serialize(picture);
+        var buffer = Encoding.UTF8.GetBytes(json);
 
-    var stream = _client.GetStream();
+        var stream = _client.GetStream();
 
-    byte[] lengthBuffer = BitConverter.GetBytes(buffer.Length);
-    await stream.WriteAsync(lengthBuffer);
+        byte[] lengthBuffer = BitConverter.GetBytes(buffer.Length);
+        await stream.WriteAsync(lengthBuffer);
 
-    await stream.WriteAsync(buffer);
-    await stream.FlushAsync();
+        await stream.WriteAsync(buffer);
+        await stream.FlushAsync();
 
-    OnSendMessage?.Invoke(this, picture);
-}
+        OnSendMessage?.Invoke(this, picture);
+    }
 
 
     /// <summary>
@@ -132,7 +132,7 @@ public async Task SendMessage(PictureDto picture)
                     var request = JsonSerializer.Deserialize<ConnectDto>(Encoding.UTF8.GetString(buffer));
 
                     if (request is null) continue;
-                    
+
                     if (request.Message == "**OK")
                     {
                         OnConnectServer?.Invoke(this, EventArgs.Empty);

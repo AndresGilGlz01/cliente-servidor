@@ -1,4 +1,5 @@
 ﻿using CommunityToolkit.Mvvm.Input;
+
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -11,6 +12,7 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using System.Windows.Media.Imaging;
 using System.Windows.Threading;
+
 using tcp_proyecto_server.Models.DTOs;
 using tcp_proyecto_server.Services;
 
@@ -55,35 +57,46 @@ namespace tcp_proyecto_server.ViewModels
             {
                 if (e.Image != null && e.Autor != null)
                 {
-
-                    string base64Image = e.Image;
-                    byte[] imageBytes = Convert.FromBase64String(base64Image);
-                    using (MemoryStream ms = new MemoryStream(imageBytes))
+                    if (e.Subject == "Add")
                     {
-                        System.Drawing.Image imagen = System.Drawing.Image.FromStream(ms);
-                        string archivo = $"imagen{IndentificadorImg}.png";
-                        string carpetaUsuarios = "UsersImages";
-                        string rutaCarpeta = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, carpetaUsuarios);
-
-                        if (!Directory.Exists(rutaCarpeta))
+                        string base64Image = e.Image;
+                        byte[] imageBytes = Convert.FromBase64String(base64Image);
+                        using (MemoryStream ms = new MemoryStream(imageBytes))
                         {
-                            Directory.CreateDirectory(rutaCarpeta);
+                            System.Drawing.Image imagen = System.Drawing.Image.FromStream(ms);
+                            string archivo = $"imagen{IndentificadorImg}.png";
+                            string carpetaUsuarios = "UsersImages";
+                            string rutaCarpeta = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, carpetaUsuarios);
+
+                            if (!Directory.Exists(rutaCarpeta))
+                            {
+                                Directory.CreateDirectory(rutaCarpeta);
+                            }
+
+                            string rutaCompleta = Path.Combine(rutaCarpeta, archivo);
+
+                            imagen.Save(rutaCompleta, System.Drawing.Imaging.ImageFormat.Png);
+
+                            BitmapImage bitmapimage = new();
+                            bitmapimage = new BitmapImage(new Uri(rutaCompleta));
+                            e.img = bitmapimage;
                         }
 
-                        string rutaCompleta = Path.Combine(rutaCarpeta, archivo);
-
-                        imagen.Save(rutaCompleta, System.Drawing.Imaging.ImageFormat.Png);
-
-                        BitmapImage bitmapimage = new();
-                        bitmapimage = new BitmapImage(new Uri(rutaCompleta));
-                        e.img = bitmapimage;
+                        IndentificadorImg++;
+                        ImagenesUsuarios.Add(e);
                     }
+                    else if (e.Subject == "Remove")
+                    {
+                        var imagen = ImagenesUsuarios.FirstOrDefault(x =>
+                            x.Autor == e.Autor
+                            && x.Date == e.Date);
 
-                    IndentificadorImg++;
-                    ImagenesUsuarios.Add(e);
+                        if (imagen != null)
+                        {
+                            ImagenesUsuarios.Remove(imagen);
+                        }
+                    }
                 }
-
-
             });
         }
 

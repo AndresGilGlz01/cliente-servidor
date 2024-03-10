@@ -53,13 +53,13 @@ public partial class MainViewModel : ObservableObject
     }
 
     [RelayCommand]
-    private void Connect()
+    private async Task Connect()
     {
         try
         {
             var ipAddress = IPAddress.Parse(IpAddress);
 
-            _galeryService.Connect(ipAddress, Port);
+            await _galeryService.Connect(ipAddress, Port);
 
             IsConnected = true;
         }
@@ -70,12 +70,14 @@ public partial class MainViewModel : ObservableObject
     }
 
     [RelayCommand]
-    private void Disconnect()
+    private async Task Disconnect()
     {
         try
         {
             IsConnected = false;
-            _galeryService.Disconect();
+
+            await _galeryService.Disconect();
+
             SelectedPicture = null;
             Pictures.Clear();
             OnPropertyChanged(nameof(Pictures));
@@ -122,10 +124,9 @@ public partial class MainViewModel : ObservableObject
         if (SelectedPicture is not null)
         {
             SelectedPicture.Subject = "Add";
-            
+
             await _galeryService.SendMessage(SelectedPicture); // Send a message to the server to remove the picture
 
-            Pictures.Add(SelectedPicture);
             SelectedPicture = null;
 
             OnSendPicture?.Invoke(this, EventArgs.Empty);
@@ -143,11 +144,8 @@ public partial class MainViewModel : ObservableObject
     [RelayCommand]
     private async Task RemovePhoto(PictureDto picture)
     {
-        Pictures.Remove(picture);
-        OnPropertyChanged(nameof(Pictures));
-
         picture.Subject = "Remove";
-        
+
         await _galeryService.SendMessage(picture); // Send a message to the server to remove the picture
     }
 
@@ -163,9 +161,16 @@ public partial class MainViewModel : ObservableObject
 
     private void OnSendMessage(object? sender, PictureDto e)
     {
-        Pictures.Add(e);
+        if (e.Subject == "Add")
+        {
+            Pictures.Add(e);
+        }
+        else if (e.Subject == "Remove")
+        {
+            Pictures.Remove(e);
+        }
 
-        OnPropertyChanged(nameof(Pictures));
+        OnPropertyChanged();
     }
 
     private void OnReceiveMessage(object? sender, EventArgs e)

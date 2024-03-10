@@ -12,6 +12,8 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 
+using tcp_proyecto_cliente.ViewModels;
+
 namespace tcp_proyecto_cliente.Views
 {
     /// <summary>
@@ -22,6 +24,13 @@ namespace tcp_proyecto_cliente.Views
         public MainView()
         {
             InitializeComponent();
+        }
+
+        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            var viewModel = DataContext as MainViewModel;
+
+            if (viewModel!.IsConnected) viewModel.DisconnectCommand.Execute(null);
         }
     }
 }

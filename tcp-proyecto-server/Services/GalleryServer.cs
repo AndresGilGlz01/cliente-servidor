@@ -73,7 +73,7 @@ namespace tcp_proyecto_server.Services
                     });
                 }
 
-                if (mensaje != null)
+                if (mensaje?.Message != null || mensaje?.Name != null)
                 {
                     Application.Current.Dispatcher.Invoke(() =>
                     {
