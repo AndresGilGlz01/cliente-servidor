@@ -26,15 +26,80 @@ namespace tcp_proyecto_server.Views
 
         private void Border_MouseDown(object sender, MouseButtonEventArgs e)
         {
+
+        }
+        double offset = 0;
+        int indice = 0;
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+           
+        }
+
+        
+        private void Button_Click_1(object sender, RoutedEventArgs e)
+        {
+            
+        }
+
+        private void lista_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            indice = lista.SelectedIndex;
+        }
+
+        private void Button_Click_2(object sender, RoutedEventArgs e)
+        {
+           
+        }
+
+        private void btnPrev_Click(object sender, RoutedEventArgs e)
+        {
+            var btn = (Button)sender;
+            ScrollViewer sv = (ScrollViewer)btn.Tag;
+            offset -= 240;
+            if (offset < 0)
+            {
+                offset = 0;
+            }
+
+            sv.ScrollToHorizontalOffset(offset);
+            if (indice <= 0)
+            {
+                indice = 0;
+            }
+            else
+            {
+                indice--;
+            }
+
+            lista.SelectedItem = lista.Items.GetItemAt(indice);
+        }
+
+        private void btnNext_Click(object sender, RoutedEventArgs e)
+        {
+            var btn = (Button)sender;
+            ScrollViewer? sv = (ScrollViewer)btn.Tag;
+            offset += 240;
+            if (offset > sv.ScrollableWidth)
+            {
+                offset = sv.ScrollableWidth;
+            }
+            sv.ScrollToHorizontalOffset(offset);
+            if (indice >= lista.Items.Count - 1)
+            {
+                indice = lista.Items.Count - 1;
+            }
+            else
+            {
+                indice++;
+            }
+        }
+
+        private void Window_MouseDown(object sender, MouseButtonEventArgs e)
+        {
             if (e.ChangedButton == MouseButton.Left)
             {
                 this.DragMove();
             }
-        }
-
-        private void Button_Click(object sender, RoutedEventArgs e)
-        {
-
         }
     }
 }
