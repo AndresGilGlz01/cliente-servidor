@@ -19,9 +19,9 @@ namespace tcp_proyecto_server.Services
         public event EventHandler<PictureDto> ImagenRecibido;
         public event EventHandler<MensajeDto> MensajeRecibido;
 
-        public void Iniciar()
+        public void Iniciar(IPAddress ip)
         {
-            server = new(new IPEndPoint(IPAddress.Any, 9630));  
+            server = new(new IPEndPoint(ip, 9630));  
             server.Start();
             new Thread(Escuchar) { IsBackground = true }.Start();
 

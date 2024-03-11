@@ -16,7 +16,9 @@
         <vm:ServerViewModel></vm:ServerViewModel>
     </Window.DataContext>
 
-    <Border Background="{StaticResource Background_Color}"
+    <DockPanel>
+        <TextBlock DockPanel.Dock="Top" Text="{Binding IP}" Background="White"/>
+        <Border Background="{StaticResource Background_Color}"
             CornerRadius="10"
             >
 
@@ -240,10 +242,5 @@
         
         
     </Border>
-    
-    
-    
-    
-    
-    
+    </DockPanel>
 </Window>

@@ -37,7 +37,7 @@ namespace tcp_proyecto_server.ViewModels
             var direcciones = Dns.GetHostAddresses(Dns.GetHostName());
             if (direcciones != null)
             {
-                IP = string.Join(",", direcciones.Where(x => x.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork).Select(x => x.ToString()));
+                IP = direcciones.Where(x => x.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork).Select(x => x.ToString()).FirstOrDefault()!;
             }
 
             IniciarServerCommand = new RelayCommand(IniciarServer);
@@ -48,7 +48,9 @@ namespace tcp_proyecto_server.ViewModels
 
         private void IniciarServer()
         {
-            server.Iniciar();
+            IPAddress.TryParse(IP, out IPAddress ip);
+            
+            server.Iniciar(ip);
         }
 
         private void Server_ImagenRecibido(object? sender, PictureDto e)
@@ -118,7 +120,7 @@ namespace tcp_proyecto_server.ViewModels
 
                     foreach (var elemento in ImagenesUsuarios)
                     {
-                        if(elemento.Autor == e.Name)
+                        if (elemento.Autor == e.Name)
                         {
                             elementosAEliminar.Add(elemento);
                         }
@@ -128,7 +130,7 @@ namespace tcp_proyecto_server.ViewModels
                     {
                         ImagenesUsuarios.Remove(item);
                     }
-                   
+
                 }
                 Mensajes.Add(e);
             });
