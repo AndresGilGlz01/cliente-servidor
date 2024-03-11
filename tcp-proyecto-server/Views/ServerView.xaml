@@ -22,12 +22,34 @@
 
         <Grid>
             <Grid.RowDefinitions>
+                <RowDefinition Height=".1*"></RowDefinition>
                 <RowDefinition Height=".7*"></RowDefinition>
                 <RowDefinition Height=".3*"></RowDefinition>
             </Grid.RowDefinitions>
 
+            <Button Width="20"
+                    Height="20"
+                    HorizontalAlignment="Right"
+                    Margin="0,0,15,0"
+                    Name="btnClose"
+                    Click="btnClose_Click"
+                    >
+                <Button.Template>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="red"
+                                CornerRadius="2"
+                                >
+                            <TextBlock HorizontalAlignment="Center"
+                                       VerticalAlignment="Center"
+                                       FontWeight="DemiBold"
+                                       FontSize="20"
+                                       >X</TextBlock>
+                        </Border>
+                    </ControlTemplate>
+                </Button.Template>
+            </Button>
 
-            <DockPanel>
+            <DockPanel Grid.Row="1">
                 <Border  DockPanel.Dock="Right"
                          Margin="10,3,15,3"
                          BorderThickness="0"
@@ -69,7 +91,7 @@
             </DockPanel>
 
 
-            <Grid Grid.Row="1" Margin="7">
+            <Grid Grid.Row="2" Margin="7">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width=".2*"></ColumnDefinition>
                     <ColumnDefinition></ColumnDefinition>
@@ -91,6 +113,7 @@
                         Name="btnPrev"
                         Click="btnPrev_Click"
                         Cursor="Hand"
+                        Tag="{Binding ElementName= sv}"
                         >
                     <Button.Template>
                         <ControlTemplate TargetType="Button">
@@ -108,7 +131,7 @@
                 VerticalScrollBarVisibility="Hidden"
                 HorizontalScrollBarVisibility="Hidden"
                 Margin="8"
-                              x:Name="sv"
+                x:Name="sv"
                 >
 
       <ListBox Background="Transparent"
@@ -196,6 +219,7 @@
                         Grid.Column="2"
                         Click="btnNext_Click"
                         Cursor="Hand"
+                        Tag="{Binding ElementName= sv}"
                 >
                     <Button.Template>
                         <ControlTemplate TargetType="Button">

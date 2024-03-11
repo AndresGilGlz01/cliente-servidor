@@ -28,8 +28,7 @@ namespace tcp_proyecto_server.Views
         {
 
         }
-        double offset = 0;
-        int indice = 0;
+        
         private void Button_Click(object sender, RoutedEventArgs e)
         {
            
@@ -50,7 +49,8 @@ namespace tcp_proyecto_server.Views
         {
            
         }
-
+        double offset = 0;
+        int indice = 0;
         private void btnPrev_Click(object sender, RoutedEventArgs e)
         {
             var btn = (Button)sender;
@@ -100,6 +100,11 @@ namespace tcp_proyecto_server.Views
             {
                 this.DragMove();
             }
+        }
+
+        private void btnClose_Click(object sender, RoutedEventArgs e)
+        {
+            this.Close();
         }
     }
 }

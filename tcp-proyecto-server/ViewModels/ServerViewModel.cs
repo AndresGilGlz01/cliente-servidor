@@ -113,6 +113,22 @@ namespace tcp_proyecto_server.ViewModels
                 {
                     e.Message = $"{e.Name} se ha desconectado";
                     Usuarios.Remove(e.Name);
+
+                    var elementosAEliminar = new List<PictureDto>();
+
+                    foreach (var elemento in ImagenesUsuarios)
+                    {
+                        if(elemento.Autor == e.Name)
+                        {
+                            elementosAEliminar.Add(elemento);
+                        }
+                    }
+
+                    foreach (var item in elementosAEliminar)
+                    {
+                        ImagenesUsuarios.Remove(item);
+                    }
+                   
                 }
                 Mensajes.Add(e);
             });
