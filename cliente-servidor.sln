@@ -37,7 +37,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "unit-2", "unit-2", "{4C0ED7
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "http-example", "http-example", "{B58CA08C-13F4-408E-BB1A-C50733322480}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "http-server", "http-server\http-server.csproj", "{B906ED77-37C5-479A-93E3-110D6A4082E2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "http-server", "http-server\http-server.csproj", "{B906ED77-37C5-479A-93E3-110D6A4082E2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "htttp-ejercicio-1", "htttp-ejercicio-1\htttp-ejercicio-1.csproj", "{CE5122B4-ED98-41C9-9797-B02E4FE01195}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -89,6 +91,10 @@ Global
 		{B906ED77-37C5-479A-93E3-110D6A4082E2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B906ED77-37C5-479A-93E3-110D6A4082E2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B906ED77-37C5-479A-93E3-110D6A4082E2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CE5122B4-ED98-41C9-9797-B02E4FE01195}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CE5122B4-ED98-41C9-9797-B02E4FE01195}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CE5122B4-ED98-41C9-9797-B02E4FE01195}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CE5122B4-ED98-41C9-9797-B02E4FE01195}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -110,6 +116,7 @@ Global
 		{1923CE33-E8A2-459D-A894-06D4CE222387} = {6EBA1D4B-62CD-45F8-87B2-16C32C1F22EC}
 		{B58CA08C-13F4-408E-BB1A-C50733322480} = {4C0ED7ED-C715-4D41-983D-AC0135E669C8}
 		{B906ED77-37C5-479A-93E3-110D6A4082E2} = {B58CA08C-13F4-408E-BB1A-C50733322480}
+		{CE5122B4-ED98-41C9-9797-B02E4FE01195} = {4C0ED7ED-C715-4D41-983D-AC0135E669C8}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {2134F099-F74D-4AB1-A8DC-D14434322077}

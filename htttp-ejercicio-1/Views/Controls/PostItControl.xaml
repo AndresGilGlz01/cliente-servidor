@@ -1,0 +1,23 @@
+﻿<UserControl x:Class="htttp_ejercicio_1.Views.Controls.PostItControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:htttp_ejercicio_1.Views.Controls"
+             xmlns:models="clr-namespace:htttp_ejercicio_1.Models"
+             d:DataContext="{d:DesignInstance Type=models:PostIt}"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <Border BorderThickness="1" BorderBrush="Black"
+            Background="Bisque" Padding="5"
+            Width="200" Height="127" RenderTransformOrigin="0.5,0.5">
+        <Border.RenderTransform>
+            <RotateTransform Angle="{Binding Angulo}"/> 
+        </Border.RenderTransform>
+        <StackPanel>
+            <TextBlock Text="{Binding Titulo}" TextAlignment="Center" FontWeight="Bold" FontSize="12" Height="20"/>
+            <TextBlock Text="{Binding Contenido}" TextAlignment="Justify" Height="80" TextWrapping="Wrap" TextTrimming="CharacterEllipsis"/>
+            <TextBlock Text="{Binding Remitente}" TextAlignment="Right" FontSize="10" Height="15"/>
+        </StackPanel>
+    </Border>
+</UserControl>

@@ -1,0 +1,24 @@
+﻿<html>
+<head>
+    <title>Notas de los alumnos</title>
+</head>
+<body>
+    <h1>Nueva nota</h1>
+    
+    <form method="post" action="/insert">
+        
+        <label>Titulo: </label>
+        <input type="text" name="titulo" required />
+
+        <label>Contenido: </label>
+        <input type="text" name="contenido" rows="5" />
+
+        <input type="range" min="0" max="100" name="positionx"/>
+        <input type="range" min="0" max="100" name="posiciony"/>
+
+        <input type="submit" value="Enviar nota"/>
+
+    </form>
+
+</body>
+</html>
