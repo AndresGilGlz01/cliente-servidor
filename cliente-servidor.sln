@@ -39,7 +39,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "http-example", "http-exampl
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "http-server", "http-server\http-server.csproj", "{B906ED77-37C5-479A-93E3-110D6A4082E2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "htttp-ejercicio-1", "htttp-ejercicio-1\htttp-ejercicio-1.csproj", "{CE5122B4-ED98-41C9-9797-B02E4FE01195}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "htttp-ejercicio-1", "htttp-ejercicio-1\htttp-ejercicio-1.csproj", "{CE5122B4-ED98-41C9-9797-B02E4FE01195}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "http-project", "http-project\http-project.csproj", "{2CBADABE-AEC8-472B-AC81-DB1E9BD8CC61}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -95,6 +97,10 @@ Global
 		{CE5122B4-ED98-41C9-9797-B02E4FE01195}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CE5122B4-ED98-41C9-9797-B02E4FE01195}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CE5122B4-ED98-41C9-9797-B02E4FE01195}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2CBADABE-AEC8-472B-AC81-DB1E9BD8CC61}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2CBADABE-AEC8-472B-AC81-DB1E9BD8CC61}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2CBADABE-AEC8-472B-AC81-DB1E9BD8CC61}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2CBADABE-AEC8-472B-AC81-DB1E9BD8CC61}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -117,6 +123,7 @@ Global
 		{B58CA08C-13F4-408E-BB1A-C50733322480} = {4C0ED7ED-C715-4D41-983D-AC0135E669C8}
 		{B906ED77-37C5-479A-93E3-110D6A4082E2} = {B58CA08C-13F4-408E-BB1A-C50733322480}
 		{CE5122B4-ED98-41C9-9797-B02E4FE01195} = {4C0ED7ED-C715-4D41-983D-AC0135E669C8}
+		{2CBADABE-AEC8-472B-AC81-DB1E9BD8CC61} = {4C0ED7ED-C715-4D41-983D-AC0135E669C8}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {2134F099-F74D-4AB1-A8DC-D14434322077}
