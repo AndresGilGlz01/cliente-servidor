@@ -1,0 +1,158 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home</title>
+</head>
+
+<body>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: "Bebas Neue", sans-serif;
+            font-weight: 400;
+            font-style: normal;
+        }
+
+        .header {
+            background-color: #333;
+            padding: 1rem;
+            text-align: center;
+        }
+
+        .header-title {
+            color: #fff;
+            margin: 0;
+        }
+
+        .footer-text {
+            text-align: center;
+            font-size: 0.8rem;
+            color: #333;
+        }
+
+        .main {
+            padding: 1rem;
+        }
+
+        .main-form {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .form-inputs {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .input-submit {
+            background-color: #333;
+            color: #fff;
+            padding: 0.5rem 1rem;
+            border: none;
+            cursor: pointer;
+        }
+    </style>
+
+    <header class="header">
+        <h1 class="header-title">VMS</h1>
+    </header>
+    <main class="main">
+        <form class="main-form" id="myForm">
+
+            <div class="form-inputs" id="inputs"></div>
+            <button type="button" id="agregarInput">Agregar Input</button>
+
+            <button type="button" class="input-submit" onclick="sendJson()">Send</button>
+        </form>
+    </main>
+
+    <footer class="footer">
+        <p class="footer-text">2024 - VMS</p>
+    </footer>
+
+    <script>
+        var contador = 1;
+
+        var pictoramas = [{ 'name': 'None', 'valor': 1 }, { 'name': 'Danger', 'valor': 2 }, { 'name': 'Warning', 'valor' : 3 }]
+        var estatus = [{ 'name': 'Always On', 'valor': 1 }, { 'name': 'Blinking', 'valor': 3}]
+
+        document.getElementById('agregarInput').addEventListener('click', function (event) {
+            event.preventDefault(); // Evita que el formulario se envíe
+
+            var nuevoInput = document.createElement('input');
+            var nuevoLabel = document.createElement('label');
+            var nuevoselect = document.createElement('select');
+            var nuevostatus = document.createElement('select');
+
+            pictoramas.forEach(function (pictorama) {
+                var option = document.createElement('option');
+                option.value = pictorama.valor;
+                option.textContent = pictorama.name;
+                nuevoselect.appendChild(option);
+            });
+
+            estatus.forEach(function (status) {
+                var option = document.createElement('option');
+                option.value = status.valor;
+                option.textContent = status.name;
+                nuevostatus.appendChild(option);
+            });
+
+            nuevoLabel.textContent = 'Texto ' + contador;
+
+            nuevoselect.name = 'pictograma' + contador;
+            nuevoselect.id = 'select1';
+            nuevostatus.id = 'select2'; 
+            nuevoInput.type = 'text';
+            nuevoInput.name = 'texto' + contador;
+            contador++;
+
+            var contenedor = document.getElementById('inputs');
+            contenedor.appendChild(nuevoLabel);
+            contenedor.appendChild(nuevoInput);
+            contenedor.appendChild(nuevoselect);
+            contenedor.appendChild(nuevostatus);
+        });
+
+        function sendJson() {
+            var inputs = document.querySelectorAll('#inputs input[type="text"]');
+            var selects = document.querySelectorAll('#inputs #select1');
+            var statusSelects = document.querySelectorAll('#inputs #select2'); // Cambio de nombre aquí
+            var jsonData = [];
+
+            inputs.forEach(function (input, index) {
+                var texto = input.value;
+                var pictograma = selects[index].value;
+                var selectedStatus = statusSelects[index].value; // Cambio de nombre aquí
+                jsonData.push({ 'message': texto, 'pictorama': pictograma, 'status': selectedStatus }); // Utiliza selectedStatus aquí
+            });
+
+            var xhr = new XMLHttpRequest();
+            xhr.open('POST', '/vms/', true);
+            xhr.setRequestHeader('Content-Type', 'application/json');
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
+                    console.log('Datos enviados correctamente');
+                }
+            };
+            xhr.send(JSON.stringify(jsonData));
+        }
+
+    </script>
+</body>
+
+</html>

@@ -29,6 +29,7 @@
                 </Style>
             </TextBlock.Style>
         </TextBlock>
+        <TextBlock Text="{Binding Vms.Message}"/>
         <ContentControl>
             <ContentControl.Style>
                 <Style TargetType="ContentControl">
