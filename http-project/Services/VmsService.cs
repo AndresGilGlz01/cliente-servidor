@@ -16,6 +16,8 @@ public class VmsService
 
     public event EventHandler<IEnumerable<RequestMessageDto>>? OnMessageReceived;
 
+    private CancellationTokenSource _cancellationTokenSource = new();
+
     public VmsService()
     {
         _listener.Prefixes.Add("http://*:6300/vms/");
@@ -23,8 +25,6 @@ public class VmsService
 
     public void Start()
     {
-        if (_listener.IsListening) return;
-
         _listener.Start();
 
         var thread = new Thread(Listen)
@@ -32,12 +32,14 @@ public class VmsService
             IsBackground = true
         };
 
-        thread.Start();
+        thread.Start(_cancellationTokenSource.Token);
     }
 
-    private void Listen()
+    private void Listen(object cancellationTokenObj)
     {
-        while (true)
+        var cancellationToken = (CancellationToken)cancellationTokenObj;
+
+        while (!cancellationToken.IsCancellationRequested)
         {
             var context = _listener.GetContext();
 
@@ -77,11 +79,17 @@ public class VmsService
                 context.Response.StatusCode = 404;
                 context.Response.Close();
             }
+
+            if (_cancellationTokenSource.IsCancellationRequested)
+            {
+                return;
+            }
         }
     }
 
     public void Stop()
     {
-        _listener.Stop();
+        _cancellationTokenSource.Cancel();
+        _cancellationTokenSource = new();
     }
 }

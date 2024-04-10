@@ -15,20 +15,18 @@ public partial class MainViewModel : ObservableObject
     [ObservableProperty]
     private bool _isServiceRunning;
 
-    private System.Timers.Timer _timer;
-
     [ObservableProperty]
     private VMS _vms = new();
 
-    private Thread ShowingThread;
+    private Thread? ShowingThread;
     private IEnumerable<Models.DTOs.RequestMessageDto> _messages;
+
+    private CancellationTokenSource _cancellationTokenSource = new CancellationTokenSource();
 
     public MainViewModel()
     {
         _vmsService = new();
         _vmsService.OnMessageReceived += _vmsService_OnMessageReceived;
-
-        _timer = new(5000);
     }
 
     private void _vmsService_OnMessageReceived(object? sender, IEnumerable<Models.DTOs.RequestMessageDto> e)
@@ -37,9 +35,11 @@ public partial class MainViewModel : ObservableObject
 
         _messages = e;
 
-        ShowingThread = new Thread(() =>
+        ShowingThread = new Thread((object cancellationTokenObj) =>
         {
-            while (count > 0)
+            var cancellationToken = (CancellationToken)cancellationTokenObj;
+
+            while (!cancellationToken.IsCancellationRequested && count > 0)
             {
                 Vms.Message = _messages.ElementAt(count - 1).Message;
                 Vms.Pictorama = _messages.ElementAt(count - 1).Pictorama.ToString();
@@ -52,13 +52,15 @@ public partial class MainViewModel : ObservableObject
                 count--;
 
                 if (count == 0) count = _messages.Count();
+
+                if (cancellationToken.IsCancellationRequested) break;
             }
         })
         {
             IsBackground = true
         };
 
-        if (!ShowingThread.IsAlive) ShowingThread.Start();
+        if (!ShowingThread.IsAlive) ShowingThread.Start(_cancellationTokenSource.Token);
     }
 
     [RelayCommand]
@@ -73,7 +75,9 @@ public partial class MainViewModel : ObservableObject
     public void StopService()
     {
         _vmsService.Stop();
-
+        _cancellationTokenSource.Cancel();
+        _cancellationTokenSource = new();
+        Vms = new();
         IsServiceRunning = false;
     }
 }

@@ -13,6 +13,42 @@
     <Window.Resources>
         <Button x:Key="StartServiceButton" Content="Start service" Command="{Binding StartServiceCommand}"/>
         <Button x:Key="StopServiceButton" Content="Stop service" Command="{Binding StopServiceCommand}"/>
+        <StackPanel x:Key="Content">
+            <TextBlock Text="{Binding Vms.Message}">
+                <TextBlock.Style>
+                    <Style TargetType="TextBlock">
+                        <Setter Property="Background" Value="Black"/>
+                        <Setter Property="FontSize" Value="20"/>
+                        <Setter Property="Foreground" Value="White"/>
+                        <Setter Property="HorizontalAlignment" Value="Center"/>
+                        <Setter Property="FontFamily" Value="/Assets/Fonts/DS-DIGI.ttf#DS-DIGITAL"/>
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding Vms.Pictorama}" Value="Danger">
+                                <Setter Property="Foreground" Value="Red"/>
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding Vms.Pictorama}" Value="Warning">
+                                <Setter Property="Foreground" Value="Yellow"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </TextBlock.Style>
+            </TextBlock>
+            <Image Height="50" Width="50">
+                <Image.Style>
+                    <Style TargetType="Image">
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding Vms.Pictorama}" Value="Danger">
+                                <Setter Property="Source" Value="/Assets/Img/danger.png"/>
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding Vms.Pictorama}" Value="Warning">
+                                <Setter Property="Source" Value="/Assets/Img/warning.png"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Image.Style>
+            </Image>
+
+        </StackPanel>
     </Window.Resources>
     <StackPanel>
         <TextBlock>
@@ -29,39 +65,17 @@
                 </Style>
             </TextBlock.Style>
         </TextBlock>
-        <TextBlock Text="{Binding Vms.Message}">
-            <TextBlock.Style>
-                <Style TargetType="TextBlock">
-                    <Setter Property="Background" Value="Black"/>
-                    <Setter Property="FontSize" Value="20"/>
-                    <Setter Property="Foreground" Value="White"/>
-                    <Setter Property="HorizontalAlignment" Value="Center"/>
-                    <Setter Property="FontFamily" Value="/Assets/Fonts/DS-DIGI.ttf#DS-DIGITAL"/>
+        <ContentControl>
+            <ContentControl.Style>
+                <Style TargetType="ContentControl">
                     <Style.Triggers>
-                        <DataTrigger Binding="{Binding Vms.Pictorama}" Value="Danger">
-                            <Setter Property="Foreground" Value="Red"/>
-                        </DataTrigger>
-                        <DataTrigger Binding="{Binding Vms.Pictorama}" Value="Warning">
-                            <Setter Property="Foreground" Value="Yellow"/>
+                        <DataTrigger Binding="{Binding IsServiceRunning}" Value="true">
+                            <Setter Property="Content" Value="{StaticResource Content}"/>
                         </DataTrigger>
                     </Style.Triggers>
                 </Style>
-            </TextBlock.Style>
-        </TextBlock>
-        <Image Height="50" Width="50">
-            <Image.Style>
-                <Style TargetType="Image">
-                    <Style.Triggers>
-                        <DataTrigger Binding="{Binding Vms.Pictorama}" Value="Danger">
-                            <Setter Property="Source" Value="/Assets/Img/danger.png"/>
-                        </DataTrigger>
-                        <DataTrigger Binding="{Binding Vms.Pictorama}" Value="Warning">
-                            <Setter Property="Source" Value="/Assets/Img/warning.png"/>
-                        </DataTrigger>
-                    </Style.Triggers>
-                </Style>
-            </Image.Style>
-        </Image>
+            </ContentControl.Style>
+        </ContentControl>
         <ContentControl>
             <ContentControl.Style>
                 <Style TargetType="ContentControl">
