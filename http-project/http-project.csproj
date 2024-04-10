@@ -10,6 +10,8 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Assets\Img\danger.png" />
+    <None Remove="Assets\Img\warning.png" />
     <None Remove="Assets\Index.html" />
   </ItemGroup>
 
@@ -19,6 +21,12 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Resource Include="Assets\Img\danger.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Img\warning.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
     <Content Include="Assets\Index.html">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

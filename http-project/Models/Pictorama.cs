@@ -2,7 +2,7 @@
 
 public enum Pictorama : byte
 {
-    Ninguno = 0,
-    Danger = 1,
-    Warning = 2,
+    Ninguno = 1,
+    Danger = 2,
+    Warning = 3,
 }

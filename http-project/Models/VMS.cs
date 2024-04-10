@@ -3,4 +3,5 @@
 public class VMS
 {
     public string Message { get; set; } = null!;
+    public string Pictorama { get; set; } = null!;
 }

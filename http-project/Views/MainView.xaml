@@ -30,6 +30,20 @@
             </TextBlock.Style>
         </TextBlock>
         <TextBlock Text="{Binding Vms.Message}"/>
+        <Image Height="50" Width="50">
+            <Image.Style>
+                <Style TargetType="Image">
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding Vms.Pictorama}" Value="Danger">
+                            <Setter Property="Source" Value="/Assets/Img/danger.png"/>
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding Vms.Pictorama}" Value="Warning">
+                            <Setter Property="Source" Value="/Assets/Img/warning.png"/>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </Image.Style>
+        </Image>
         <ContentControl>
             <ContentControl.Style>
                 <Style TargetType="ContentControl">

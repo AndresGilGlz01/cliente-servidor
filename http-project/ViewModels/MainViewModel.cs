@@ -20,6 +20,9 @@ public partial class MainViewModel : ObservableObject
     [ObservableProperty]
     private VMS _vms = new();
 
+    private Thread ShowingThread;
+    private IEnumerable<Models.DTOs.RequestMessageDto> _messages;
+
     public MainViewModel()
     {
         _vmsService = new();
@@ -32,24 +35,29 @@ public partial class MainViewModel : ObservableObject
     {
         var count = e.Count();
 
-        var thread = new Thread(() =>
+        _messages = e;
+
+        ShowingThread = new Thread(() =>
         {
-            do
+            while (count > 0)
             {
-                Vms.Message = e.ElementAt(count - 1).Message;
+                Vms.Message = _messages.ElementAt(count - 1).Message;
+                Vms.Pictorama = _messages.ElementAt(count - 1).Pictorama.ToString();
                 OnPropertyChanged(nameof(Vms));
 
                 // Wait for 1 second
-                System.Threading.Thread.Sleep(1000);
+                System.Threading.Thread.Sleep(5000);
 
                 count--;
 
-                if (count == 0) count = e.Count();
-            } while (count > 0);
-        });
+                if (count == 0) count = _messages.Count();
+            }
+        })
+        {
+            IsBackground = true
+        };
 
-        thread.IsBackground = true;
-        thread.Start();
+        if (!ShowingThread.IsAlive) ShowingThread.Start();
     }
 
     [RelayCommand]
