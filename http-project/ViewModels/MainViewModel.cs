@@ -43,9 +43,10 @@ public partial class MainViewModel : ObservableObject
             {
                 Vms.Message = _messages.ElementAt(count - 1).Message;
                 Vms.Pictorama = _messages.ElementAt(count - 1).Pictorama.ToString();
+                Vms.Status = _messages.ElementAt(count - 1).Status.ToString();
+
                 OnPropertyChanged(nameof(Vms));
 
-                // Wait for 1 second
                 System.Threading.Thread.Sleep(5000);
 
                 count--;

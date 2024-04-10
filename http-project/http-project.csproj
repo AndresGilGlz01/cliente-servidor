@@ -10,6 +10,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Assets\Fonts\DS-DIGI.TTF" />
+    <None Remove="Assets\Fonts\DS-DIGIB.TTF" />
+    <None Remove="Assets\Fonts\DS-DIGII.TTF" />
+    <None Remove="Assets\Fonts\DS-DIGIT.TTF" />
     <None Remove="Assets\Img\danger.png" />
     <None Remove="Assets\Img\warning.png" />
     <None Remove="Assets\Index.html" />
@@ -21,6 +25,15 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Resource Include="Assets\Fonts\DS-DIGI.TTF">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Fonts\DS-DIGIB.TTF">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Fonts\DS-DIGII.TTF">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
     <Resource Include="Assets\Img\danger.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>

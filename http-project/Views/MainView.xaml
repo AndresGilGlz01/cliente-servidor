@@ -29,7 +29,25 @@
                 </Style>
             </TextBlock.Style>
         </TextBlock>
-        <TextBlock Text="{Binding Vms.Message}"/>
+        <TextBlock Text="{Binding Vms.Message}">
+            <TextBlock.Style>
+                <Style TargetType="TextBlock">
+                    <Setter Property="Background" Value="Black"/>
+                    <Setter Property="FontSize" Value="20"/>
+                    <Setter Property="Foreground" Value="White"/>
+                    <Setter Property="HorizontalAlignment" Value="Center"/>
+                    <Setter Property="FontFamily" Value="/Assets/Fonts/DS-DIGI.ttf#DS-DIGITAL"/>
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding Vms.Pictorama}" Value="Danger">
+                            <Setter Property="Foreground" Value="Red"/>
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding Vms.Pictorama}" Value="Warning">
+                            <Setter Property="Foreground" Value="Yellow"/>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </TextBlock.Style>
+        </TextBlock>
         <Image Height="50" Width="50">
             <Image.Style>
                 <Style TargetType="Image">
