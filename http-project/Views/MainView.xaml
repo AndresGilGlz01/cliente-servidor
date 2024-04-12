@@ -111,11 +111,11 @@
                 <Style TargetType="TextBlock">
                     <Style.Triggers>
                         <DataTrigger Binding="{Binding IsServiceRunning}" Value="true">
-                            <Setter Property="Text" Value="Is running!"/>
+                            <Setter Property="Text" Value="Its running!"/>
                             <Setter Property="Foreground" Value="Lime"></Setter>
                         </DataTrigger>
                         <DataTrigger Binding="{Binding IsServiceRunning}" Value="false">
-                            <Setter Property="Text" Value="Is not running!"/>
+                            <Setter Property="Text" Value="Its not running!"/>
                             <Setter Property="Foreground" Value="OrangeRed"></Setter>
                         </DataTrigger>
                     </Style.Triggers>
