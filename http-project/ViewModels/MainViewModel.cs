@@ -2,8 +2,11 @@
 using CommunityToolkit.Mvvm.Input;
 
 using http_project.Models;
+using http_project.Models.DTOs;
 using http_project.Services;
 
+using System.IO;
+using System.Text.Json;
 using System.Timers;
 
 namespace http_project.ViewModels;
@@ -29,11 +32,31 @@ public partial class MainViewModel : ObservableObject
         _vmsService.OnMessageReceived += _vmsService_OnMessageReceived;
     }
 
+    private void Serialize()
+    {
+        var json = JsonSerializer.Serialize(_messages);
+        File.WriteAllText("vms.json", json);
+    }
+
+    private void Deserialize()
+    {
+        if (File.Exists("vms.json"))
+        {
+            var json = File.ReadAllText("vms.json");
+            _messages = JsonSerializer.Deserialize<IEnumerable<RequestMessageDto>>(json)
+                ?? [];
+
+            _vmsService_OnMessageReceived(this, _messages);
+        }
+    }
+
     private void _vmsService_OnMessageReceived(object? sender, IEnumerable<Models.DTOs.RequestMessageDto> e)
     {
         var count = e.Count();
 
         _messages = e;
+
+        Serialize();
 
         ShowingThread = new Thread((object cancellationTokenObj) =>
         {
@@ -67,6 +90,8 @@ public partial class MainViewModel : ObservableObject
     public void StartService()
     {
         _vmsService.Start();
+
+        Deserialize();
 
         IsServiceRunning = true;
     }
