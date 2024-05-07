@@ -17,5 +17,6 @@
         public DateTime FechaActualizacion { get; set; }
 
         public int Estado { get; set; }
+        public string Departamento { get;set; }=null!;
     }
 }

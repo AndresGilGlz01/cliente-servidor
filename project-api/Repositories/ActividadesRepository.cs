@@ -11,9 +11,9 @@ namespace project_api.Repositories
         {
             context = ctx;
         }
-        public  IEnumerable<Actividades> GetActividades()
+        public  IEnumerable<ActividadesDto> GetActividades()
         {
-            return (IEnumerable<Actividades>) context.Actividades.OrderBy(x=>x.FechaCreacion).Select(x => new ActividadesDto()
+            return context.Actividades.OrderBy(x => x.FechaCreacion).Include(x => x.IdDepartamentoNavigation).Select(x => new ActividadesDto()
             {
                 Descripcion = x.Descripcion,
                 Id = x.Id,
@@ -22,7 +22,9 @@ namespace project_api.Repositories
                 Titulo = x.Titulo,
                 Estado = x.Estado,
                 IdDepartamento = x.IdDepartamento,
-            }); 
+                Departamento = x.IdDepartamentoNavigation.Nombre
+
+            }) ; 
         }
         public Actividades? GetById(int id)
         {

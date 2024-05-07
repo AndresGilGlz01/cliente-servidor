@@ -12,25 +12,26 @@ namespace project_api.Controllers
     public class ActividadesController : ControllerBase
     {
         private ActividadesRepository _repository;
+        private readonly ActividadValidator validator;
 
-        public ActividadesController(ActividadesRepository repository)
+        public ActividadesController(ActividadesRepository repository, ActividadValidator validator)
         {
             _repository = repository;
+            this.validator = validator;
         }
-        ActividadValidator validator = new();
+
         [HttpGet]
         public IActionResult Get()
         {
-            ActividadesDto datos = new();
-            datos = (ActividadesDto)_repository.GetActividades();
+            var datos = _repository.GetActividades();
             return Ok(datos);
 
         }
         [HttpGet("{id}")]
         public IActionResult Get(int id)
         {
-           var datos = _repository.GetById(id);
-            if(datos != null)
+            var datos = _repository.GetById(id);
+            if (datos != null)
             {
 
                 return Ok(datos);
@@ -41,8 +42,8 @@ namespace project_api.Controllers
         [HttpPost]
         public IActionResult Post(ActividadesDto dto)
         {
-            var results=validator.Validate(dto);
-            if(results.IsValid)
+            var results = validator.Validate(dto);
+            if (results.IsValid)
             {
 
                 Actividades act = new Actividades()
@@ -60,6 +61,46 @@ namespace project_api.Controllers
             }
             return BadRequest(results.Errors.Select(x => x.ErrorMessage));
         }
-        
+
+        [HttpPut]
+
+        public IActionResult Put(ActividadesDto dto)
+        {
+            var vali = validator.Validate(dto);
+            if (vali.IsValid)
+            {
+                var act = _repository.GetById(dto.Id);
+                if (act == null || act.Estado == 1)
+                {
+                    return NotFound();
+                }
+                else
+                {
+
+                    act.Titulo = dto.Titulo;
+                    act.Estado = dto.Estado;
+                    act.FechaActualizacion = dto.FechaActualizacion;
+                    act.Descripcion = dto.Descripcion;
+                    act.IdDepartamento = dto.IdDepartamento;
+                    act.FechaRealizacion = dto.FechaRealizacion;
+                    _repository.Update(act);
+                    return Ok();
+
+                }
+            }
+            return BadRequest(vali.Errors.Select(x => x.ErrorMessage));
+        }
+
+        [HttpDelete("{id}")]
+        public IActionResult Delete(int id)
+        {
+            var act = _repository.GetById(id);
+            if (act == null || act.Estado == 1) { return NotFound(); }
+            act.Estado = 1;
+            act.FechaActualizacion=DateTime.UtcNow;
+            _repository.Update(act);
+            return Ok();
+        }
+
     }
 }
