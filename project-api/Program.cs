@@ -13,6 +13,7 @@ builder.Services.AddDbContext<ItesrcneActividadesContext>
 builder.Services.AddTransient<ActividadesRepository>();
 builder.Services.AddTransient<DepartamentosRepository>();
 builder.Services.AddTransient<ActividadValidator>();
+builder.Services.AddTransient<DepartamentosValidator>();
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
