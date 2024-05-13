@@ -25,5 +25,7 @@ namespace project_api.Helpers
                 return !string.Equals(storedHash, hashedNewPassword, StringComparison.OrdinalIgnoreCase);
             }
         }
+
+        
     }
 }

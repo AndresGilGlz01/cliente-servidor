@@ -12,6 +12,10 @@ namespace project_api.Repositories
         {
             context = ctx;
         }
+        public Departamentos? Get(string email)
+        {
+            return context.Departamentos.Where(x => x.Username == email).FirstOrDefault();
+        }
 
         public IEnumerable<DepartamentosDto> GetDeparamentos()
         {
