@@ -39,8 +39,10 @@ namespace project_api.Controllers
             return BadRequest();
 
         }
+
+
         [HttpPost]
-        public IActionResult Post(ActividadesDto dto)
+        public IActionResult Post(ActividadesDto? dto)
         {
             var results = validator.Validate(dto);
             if (results.IsValid)
@@ -55,9 +57,15 @@ namespace project_api.Controllers
                     FechaActualizacion = DateTime.UtcNow,
                     IdDepartamento = dto.IdDepartamento,
                     Descripcion = dto.Descripcion,
+                    FechaRealizacion = System.DateOnly.FromDateTime(DateTime.Today)
+
                 };
+
+                // Conversión manual de fechaRealizacion si no es nulo
                 _repository.Insert(act);
-                return Ok(act);
+                return Ok();
+
+
             }
             return BadRequest(results.Errors.Select(x => x.ErrorMessage));
         }
@@ -70,7 +78,7 @@ namespace project_api.Controllers
             if (vali.IsValid)
             {
                 var act = _repository.GetById(dto.Id);
-                if (act == null || act.Estado == 1)
+                if (act == null||act.Estado==1)
                 {
                     return NotFound();
                 }
@@ -79,10 +87,10 @@ namespace project_api.Controllers
 
                     act.Titulo = dto.Titulo;
                     act.Estado = dto.Estado;
-                    act.FechaActualizacion = dto.FechaActualizacion;
+                    act.FechaActualizacion = DateTime.UtcNow;
                     act.Descripcion = dto.Descripcion;
                     act.IdDepartamento = dto.IdDepartamento;
-                    act.FechaRealizacion = dto.FechaRealizacion;
+                    
                     _repository.Update(act);
                     return Ok();
 
@@ -95,7 +103,7 @@ namespace project_api.Controllers
         public IActionResult Delete(int id)
         {
             var act = _repository.GetById(id);
-            if (act == null || act.Estado == 1) { return NotFound(); }
+            if (act == null||act.Estado==1) { return NotFound(); }
             act.Estado = 1;
             act.FechaActualizacion=DateTime.UtcNow;
             _repository.Update(act);

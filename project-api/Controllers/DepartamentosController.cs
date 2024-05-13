@@ -1,9 +1,11 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using project_api.Helpers;
 using project_api.Models.Dtos;
 using project_api.Models.Entities;
 using project_api.Repositories;
 using project_api.Validators;
+using System.Xml;
 
 namespace project_api.Controllers
 {
@@ -42,6 +44,7 @@ namespace project_api.Controllers
             var results = _validator.Validate(dto);
             if (results.IsValid)
             {
+                dto.Password=Encrypter.HashPassword(dto.Password);
                 Departamentos deo = new Departamentos()
                 {
                     Id = 0,
@@ -67,10 +70,17 @@ namespace project_api.Controllers
                 var dep=_departamentosRepository.GetById(dto.Id);
                 if(dep != null)
                 {
+                    var encrypter = new Encrypter();
                     dep.Username = dto.Username;
-                    dep.Password = dto.Password;
+                    
+                    
                     dep.Nombre = dto.Nombre;
                     dep.IdSuperior = dto.IdSuperior;
+                    if (encrypter.IsPasswordChanged(dep.Password, dto.Password))
+                    {
+                        dto.Password = Encrypter.HashPassword(dto.Password);
+                        dep.Password=dto.Password;
+                    }
                     _departamentosRepository.Update(dep);
                     return Ok(dep);
                 }
