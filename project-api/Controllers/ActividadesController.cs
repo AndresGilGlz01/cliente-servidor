@@ -44,30 +44,44 @@ namespace project_api.Controllers
         [HttpPost]
         public IActionResult Post(ActividadesDto? dto)
         {
-            var results = validator.Validate(dto);
-            if (results.IsValid)
+            if (dto != null)
             {
 
-                Actividades act = new Actividades()
+                var results = validator.Validate(dto);
+                if (results.IsValid)
                 {
-                    Id = 0,
-                    Estado = 0,
-                    Titulo = dto.Titulo,
-                    FechaCreacion = DateTime.UtcNow,
-                    FechaActualizacion = DateTime.UtcNow,
-                    IdDepartamento = dto.IdDepartamento,
-                    Descripcion = dto.Descripcion,
-                    FechaRealizacion = System.DateOnly.FromDateTime(DateTime.Today)
+                    DateOnly? fecha = null;
+                    if (dto.FechaRealizacion != null)
+                    {
+                        fecha = System.DateOnly.FromDateTime(dto.FechaRealizacion.Value.Date);
+                    }
+                    else
+                    {
+                        fecha = System.DateOnly.FromDateTime(DateTime.Today);
+                    }
 
-                };
+                    Actividades act = new Actividades()
+                    {
+                        Id = 0,
+                        Estado = 0,
+                        Titulo = dto.Titulo,
+                        FechaCreacion = DateTime.UtcNow,
+                        FechaActualizacion = DateTime.UtcNow,
+                        IdDepartamento = dto.IdDepartamento,
+                        Descripcion = dto.Descripcion,
+                        FechaRealizacion = fecha
 
-                // Conversión manual de fechaRealizacion si no es nulo
-                _repository.Insert(act);
-                return Ok();
+                    };
+
+                    // Conversión manual de fechaRealizacion si no es nulo
+                    _repository.Insert(act);
+                    return Ok();
 
 
+                }
+                return BadRequest(results.Errors.Select(x => x.ErrorMessage));
             }
-            return BadRequest(results.Errors.Select(x => x.ErrorMessage));
+            return BadRequest();
         }
 
         [HttpPut]
@@ -78,7 +92,7 @@ namespace project_api.Controllers
             if (vali.IsValid)
             {
                 var act = _repository.GetById(dto.Id);
-                if (act == null||act.Estado==1)
+                if (act == null || act.Estado == 1)
                 {
                     return NotFound();
                 }
@@ -90,7 +104,7 @@ namespace project_api.Controllers
                     act.FechaActualizacion = DateTime.UtcNow;
                     act.Descripcion = dto.Descripcion;
                     act.IdDepartamento = dto.IdDepartamento;
-                    
+
                     _repository.Update(act);
                     return Ok();
 
@@ -103,9 +117,12 @@ namespace project_api.Controllers
         public IActionResult Delete(int id)
         {
             var act = _repository.GetById(id);
-            if (act == null||act.Estado==1) { return NotFound(); }
+            if (act == null || act.Estado == 1)
+            {
+                return NotFound();
+            }
             act.Estado = 1;
-            act.FechaActualizacion=DateTime.UtcNow;
+            act.FechaActualizacion = DateTime.UtcNow;
             _repository.Update(act);
             return Ok();
         }
