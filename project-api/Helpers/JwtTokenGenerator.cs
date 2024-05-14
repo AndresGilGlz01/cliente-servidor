@@ -7,27 +7,38 @@ namespace project_api.Helpers
 {
     public class JwtTokenGenerator
     {
+        
+        private readonly IConfiguration configuration;
+        public JwtTokenGenerator(IConfiguration conf)
+        {
+   
+           
+            configuration = conf;
+        }
         public string GetToken(Departamentos dep)
         {
+            var Iss = configuration["JwtSettings:Issuer"];
+            var aud = configuration["JwtSettings:Audience"];
+            var key = configuration["JwtSettings:SecretKey"];
             List<Claim> claims = new List<Claim>();
             
             claims.Add(new Claim(ClaimTypes.Name, dep.Nombre));
             claims.Add(new Claim("Id", dep.Id.ToString()));
-            claims.Add(new Claim(JwtRegisteredClaimNames.Iss, "Saludos"));
-            claims.Add(new Claim(JwtRegisteredClaimNames.Aud, "prueba"));
+            claims.Add(new Claim(JwtRegisteredClaimNames.Iss, Iss));
+            claims.Add(new Claim(JwtRegisteredClaimNames.Aud, aud));
             claims.Add(new Claim(JwtRegisteredClaimNames.Iat, DateTime.Now.ToString()));
             claims.Add(new Claim(JwtRegisteredClaimNames.Exp, DateTime.Now.AddMinutes(5).ToString()));
             JwtSecurityTokenHandler handler = new JwtSecurityTokenHandler();
             var token = new SecurityTokenDescriptor()
             {
                 Subject = new ClaimsIdentity(claims),
-                Issuer = "Saludos",
-                Audience = "prueba",
+                Issuer = Iss,
+                Audience = aud,
                 IssuedAt = DateTime.Now,
                 Expires = DateTime.Now.AddMinutes(5),
                 NotBefore = DateTime.Now.AddMinutes(-1),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(System.Text.Encoding.UTF8
-            .GetBytes("ESTAESMILLAVEDECIFRADODELTOKEN2024")), SecurityAlgorithms.HmacSha256)
+            .GetBytes(key)), SecurityAlgorithms.HmacSha256)
             };
 
 
