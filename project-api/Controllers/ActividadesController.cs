@@ -57,7 +57,7 @@ namespace project_api.Controllers
                     }
                     else
                     {
-                        fecha = System.DateOnly.FromDateTime(DateTime.Today);
+                        fecha = null;
                     }
 
                     Actividades act = new Actividades()

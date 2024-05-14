@@ -6,7 +6,7 @@
         {
             string hashedInput = Encrypter.HashPassword(password);
                 
-            return hashedInput.Equals(hashedPassword, StringComparison.OrdinalIgnoreCase);
+            return hashedInput.ToLower().Equals(hashedPassword.ToLower(), StringComparison.OrdinalIgnoreCase);
         }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using project_api.Helpers;
+using project_api.Models.Dtos;
 using project_api.Repositories;
 
 namespace project_api.Controllers
@@ -15,16 +16,22 @@ namespace project_api.Controllers
             departamentosRepository = repo;
         }
         [HttpPost]
-        public IActionResult Login(string email,string password)
+        public IActionResult Login(LoginDto login)
         {
-            var pass=Encrypter.HashPassword(password);
-            var dep = departamentosRepository.Get(email);
-            if(dep != null)
+            var dep = departamentosRepository.Get(login.Email);
+            if (dep != null)
             {
-               bool ver=Verifier.VerifyPassword(pass,dep.Password);
-                if(ver)
+                
+                bool ver = Verifier.VerifyPassword(login.Password, dep.Password);
+                if (ver)
                 {
-                    return Ok();
+                    JwtTokenGenerator jwttoken=new JwtTokenGenerator();
+                    var token=jwttoken.GetToken(dep);
+                    return Ok(token);
+                }
+                else
+                {
+                    return BadRequest("Credenciales incorrectas");
                 }
             }
             return BadRequest();
