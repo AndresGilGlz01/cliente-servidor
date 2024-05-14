@@ -1,5 +1,7 @@
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Tokens;
 using project_api.Models.Entities;
 using project_api.Repositories;
 using project_api.Validators;
@@ -13,7 +15,15 @@ builder.Services.AddDbContext<ItesrcneActividadesContext>
 builder.Services.AddTransient<ActividadesRepository>();
 builder.Services.AddTransient<DepartamentosRepository>();
 builder.Services.AddTransient<ActividadValidator>();
+builder.Services.AddTransient<DepartamentosValidator>();
 builder.Services.AddControllers();
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(x =>
+{
+    x.Audience = "prueba";
+    x.TokenValidationParameters.IssuerSigningKey = new SymmetricSecurityKey(System.Text.Encoding.UTF8
+            .GetBytes("ESTAESMILLAVEDECIFRADODELTOKEN2024"));
+    x.TokenValidationParameters.ValidIssuer = "Saludos";
+});
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -28,7 +38,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();

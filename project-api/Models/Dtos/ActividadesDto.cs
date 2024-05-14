@@ -8,10 +8,8 @@
 
         public string? Descripcion { get; set; }
 
-        public DateOnly? FechaRealizacion { get; set; }
-
         public int IdDepartamento { get; set; }
-
+        public DateTime? FechaRealizacion { get; set; }
         public DateTime FechaCreacion { get; set; }
 
         public DateTime FechaActualizacion { get; set; }
