@@ -21,7 +21,7 @@ namespace project_api.Controllers
         [HttpPost]
         public IActionResult Login(LoginDto login)
         {
-            var dep = departamentosRepository.Get(login.Email);
+            var dep = departamentosRepository.Get(login.UserName);
             if (dep != null)
             {
                 
