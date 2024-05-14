@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/styles/normalize.css">
+    <link rel="stylesheet" href="/styles/main.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Reddit+Sans:ital,wght@0,200..900;1,200..900&display=swap" rel="stylesheet">
+    <title>Inicio de sesión - Sistema Gestor de Actividades</title>
+</head>
+
+<body>
+
+    <header class="header login-header">
+        <h1 class="header-title">Sistema Gestor de Actividades</h1>
+    </header>
+
+    <main class="main">
+        <section class="login">
+            <h2 class="login-title">Inicio de sesión</h2>
+            <form action="/login" method="POST" class="login-form">
+                <label for="email" class="login-label">Correo electrónico</label>
+                <input type="email" name="email" id="email" class="login-input" required>
+                <label for="password" class="login-label">Contraseña</label>
+                <input type="password" name="password" id="password" class="login-input" required>
+                <button type="submit" class="login-button">Iniciar sesión</button>
+            </form>
+            <p class="login-error">Mensaje de error</p>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <p class="footer-text">Lorem Ipsum Industries &copy; 2024</p>
+    </footer>
+    
+</body>
+
+<script src="/scripts/main.js"></script>
+</body>
+
+</html>
