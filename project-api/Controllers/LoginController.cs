@@ -29,7 +29,7 @@ namespace project_api.Controllers
                 bool ver = Verifier.VerifyPassword(login.Password, dep.Password);
                 if (ver)
                 {
-                    if(dep.Nombre=="Direccion General")
+                    if(dep.Nombre=="Director General")
                     {
                         role = "Admin";
                     }

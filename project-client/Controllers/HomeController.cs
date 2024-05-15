@@ -4,7 +4,9 @@ using Microsoft.AspNetCore.Mvc;
 using project_client.Models;
 
 using System.Diagnostics;
+using System.IdentityModel.Tokens.Jwt;
 using System.Net;
+using System.Security.Claims;
 using System.Text;
 using System.Text.Json;
 
@@ -48,7 +50,40 @@ namespace project_client.Controllers
                 }
 
             }
-            return RedirectToAction();
+            else
+            {
+                var token = await response.Content.ReadAsStringAsync();
+                HttpContext.Response.Cookies.Append("AuthToken", token, new CookieOptions { HttpOnly = true, Secure = true });
+
+                var handler = new JwtSecurityTokenHandler();
+                var jwtToken = handler.ReadJwtToken(token);
+                foreach (var claim in jwtToken.Claims)
+                {
+                    Debug.WriteLine($"Claim Type: {claim.Type}, Claim Value: {claim.Value}");
+                }
+                var roleClaim = jwtToken.Claims.FirstOrDefault(claim => claim.Type == ClaimTypes.Role);
+
+                if (roleClaim == null)
+                {
+                    // Si no se encuentra una reclamación de rol, maneja el error apropiadamente.
+                    ModelState.AddModelError("", "No se encontró ninguna reclamación de rol en el token.");
+                    return View(login);
+                }
+
+                var role = roleClaim.Value;
+
+                if (role == "Admin")
+                {
+                    return RedirectToAction("Index", "Admin", new { area = "Admin" });
+                }
+                else if (role == "Usuario")
+                {
+                    return RedirectToAction("UserAction", "User", new { area = "Usuario" });
+                }
+            }
+
+            return RedirectToAction("Index");
+           
         }
 
 
