@@ -61,7 +61,7 @@ namespace project_client.Controllers
                 {
                     Debug.WriteLine($"Claim Type: {claim.Type}, Claim Value: {claim.Value}");
                 }
-                var roleClaim = jwtToken.Claims.FirstOrDefault(claim => claim.Type == ClaimTypes.Role);
+                var roleClaim = jwtToken.Claims.FirstOrDefault(claim => claim.Type == "Role");
 
                 if (roleClaim == null)
                 {
