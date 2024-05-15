@@ -17,12 +17,13 @@ builder.Services.AddTransient<DepartamentosRepository>();
 builder.Services.AddTransient<ActividadValidator>();
 builder.Services.AddTransient<DepartamentosValidator>();
 builder.Services.AddControllers();
+var key = builder.Configuration["JwtSettings:SecretKey"];
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(x =>
 {
-    x.Audience = "prueba";
+    x.Audience = builder.Configuration["JwtSettings:Audience"] ;
     x.TokenValidationParameters.IssuerSigningKey = new SymmetricSecurityKey(System.Text.Encoding.UTF8
-            .GetBytes("ESTAESMILLAVEDECIFRADODELTOKEN2024"));
-    x.TokenValidationParameters.ValidIssuer = "Saludos";
+            .GetBytes(key));
+    x.TokenValidationParameters.ValidIssuer = builder.Configuration["JwtSettings:Issuer"];
 });
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();

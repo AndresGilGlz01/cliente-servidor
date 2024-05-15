@@ -11,21 +11,24 @@ namespace project_api.Controllers
     public class LoginController : ControllerBase
     {
         private readonly DepartamentosRepository departamentosRepository;
-        public LoginController(DepartamentosRepository repo)
+        private readonly IConfiguration _configuration;
+        public LoginController(DepartamentosRepository repo, IConfiguration configuration)
         {
             departamentosRepository = repo;
+            _configuration = configuration;
+
         }
         [HttpPost]
         public IActionResult Login(LoginDto login)
         {
-            var dep = departamentosRepository.Get(login.Email);
+            var dep = departamentosRepository.Get(login.UserName);
             if (dep != null)
             {
                 
                 bool ver = Verifier.VerifyPassword(login.Password, dep.Password);
                 if (ver)
                 {
-                    JwtTokenGenerator jwttoken=new JwtTokenGenerator();
+                    JwtTokenGenerator jwttoken=new JwtTokenGenerator(_configuration);
                     var token=jwttoken.GetToken(dep);
                     return Ok(token);
                 }

@@ -1,6 +1,6 @@
-﻿namespace project_api.Models.Dtos
+﻿namespace project_client.Models
 {
-    public class LoginDto
+    public class LoginViewModel
     {
         public string UserName { get; set; } = null!;
         public string Password { get; set; } = null!;

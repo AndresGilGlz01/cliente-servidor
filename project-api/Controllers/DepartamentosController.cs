@@ -79,7 +79,7 @@ namespace project_api.Controllers
                     if (encrypter.IsPasswordChanged(dep.Password, dto.Password))
                     {
                         dto.Password = Encrypter.HashPassword(dto.Password);
-                        dep.Password=dto.Password;
+                        dep.Password=dto.Password.ToLower();
                     }
                     _departamentosRepository.Update(dep);
                     return Ok(dep);
