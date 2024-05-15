@@ -39,8 +39,6 @@ namespace project_api.Controllers
             return BadRequest();
 
         }
-
-
         [HttpPost]
         public IActionResult Post(ActividadesDto? dto)
         {

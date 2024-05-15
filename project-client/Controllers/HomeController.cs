@@ -57,10 +57,7 @@ namespace project_client.Controllers
 
                 var handler = new JwtSecurityTokenHandler();
                 var jwtToken = handler.ReadJwtToken(token);
-                foreach (var claim in jwtToken.Claims)
-                {
-                    Debug.WriteLine($"Claim Type: {claim.Type}, Claim Value: {claim.Value}");
-                }
+               
                 var roleClaim = jwtToken.Claims.FirstOrDefault(claim => claim.Type == "Role");
 
                 if (roleClaim == null)
@@ -74,7 +71,7 @@ namespace project_client.Controllers
 
                 if (role == "Admin")
                 {
-                    return RedirectToAction("Index", "Admin", new { area = "Admin" });
+                    return RedirectToAction("Index", "Home", new { area = "Admin" });
                 }
                 else if (role == "Usuario")
                 {
