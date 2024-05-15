@@ -1,0 +1,134 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="~/styles/normalize.css">
+    <link rel="stylesheet" href="~/styles/main.css">
+    <script src="https://cdn.tiny.cloud/1/r9ntmf320hcycx0ci473rmxopso22j6woj4ikx9nq5kbaq84/tinymce/7/tinymce.min.js"referrerpolicy="origin"></script>
+    <script>
+        tinymce.init({
+            selector: '#mytextarea'
+        });
+    </script>
+    <title>Home - Sistema Gestor de Actividades</title>
+</head>
+
+<body>
+    <header class="header">
+        <div class="search">
+            <form action="~/search" method="post" class="search-form">
+                <input type="search" placeholder="Buscar..." name="search" id="search" class="search-input">
+                <svg class="search-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" width="24px">
+                    <path d="M784-120 532-372q-30 24-69 38t-83 14q-109 0-184.5-75.5T120-580q0-109 75.5-184.5T380-840q109 0 184.5 75.5T640-580q0 44-14 83t-38 69l252 252-56 56ZM380-400q75 0 127.5-52.5T560-580q0-75-52.5-127.5T380-760q-75 0-127.5 52.5T200-580q0 75 52.5 127.5T380-400Z" />
+                </svg>
+            </form>
+        </div>
+        <div class="header-profile">
+            <span class="header-profile-name">
+                Adriana Ramírez Hernández
+                <span class="small-text">
+                    Depto. Ingeniería en Sistemas Computacionales
+                </span>
+            </span>
+            <svg class="header-profile-expand" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" width="24px">
+                <path d="M480-360 280-560h400L480-360Z" />
+            </svg>
+            <div class="profile-menu">
+                <a href="~/logout">Cerrar sesión</a>
+            </div>
+        </div>
+    </header>
+    <main class="main">
+
+        <svg class="up-button" id="up-button" xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960">
+            <path d="M440-160v-487L216-423l-56-57 320-320 320 320-56 57-224-224v487h-80Z" />
+        </svg>
+
+        <form class="actividad-form" method="post" action="agregarActividad">
+
+            <div class="actividad-form-content">
+
+                <div class="actividad-left">
+
+                    <input type="hidden" name="id" id="id">
+
+                    <label class="actividad-form-label" for="titulo">Título</label>
+                    <input class="actividad-form-input" type="text" name="titulo" id="titulo" required>
+
+                    <label class="actividad-form-label" for="departamento">Departamento</label>
+                    <select class="actividad-form-input" name="departamento" id="departamento" required>
+                        <option>departamento 1</option>
+                        <option>departamento 2</option>
+                        <option>departamento 3</option>
+                        <option>departamento 4</option>
+                        <option>departamento 5</option>
+                    </select>
+
+                    <label class="actividad-form-label" for="fechaRealizacion">Fecha de realizacion</label>
+                    <input class="actividad-form-input" type="date" name="fechaRealizacion" id="fechaRealizacion">
+
+                </div>
+
+                <div class="actividad-right">
+                    <label class="actividad-form-label" for="imagen" style="text-align: center;">Imagen</label>
+                    <input class="actividad-form-input" style="display: none;" type="file" name="imagen" id="imagen"
+                           accept="image/*" required>
+
+                    <div class="actividad-form-img-preview">
+                        <img src="~/img/preview-img.svg" height="100%" alt="imagen" class="actividad-form-img">
+                    </div>
+
+                </div>
+            </div>
+            <label class="actividad-form-label" for="descripcion">Descripción</label>
+            <textarea id="mytextarea" class="actividad-form-input" name="descripcion" required></textarea>
+
+            <p class="error-message">
+                Error: No se pudo agregar la actividad
+            </p>
+
+            <div class="actividad-form-buttons">
+                <a href="~/home/" class="actividad-form-submit cancel">Cancelar</a>
+                <input type="submit" class="actividad-form-submit" value="Agregar actividad">
+            </div>
+
+            <script>
+                let preview = document.querySelector('.actividad-form-img-preview img');
+                let input = document.querySelector('.actividad-form-input[type="file"]');
+                input.addEventListener('change', function () {
+                    let file = input.files[0];
+                    let reader = new FileReader();
+                    reader.onload = function (e) {
+                        preview.src = e.target.result;
+                    }
+                    reader.readAsDataURL(file);
+                });
+                document.querySelector('.actividad-form-img-preview').addEventListener('click', function () {
+                    input.click();
+                });
+            </script>
+
+        </form>
+
+        <style>
+            .tox-tinymce {
+                min-height: 300px !important;
+            }
+        </style>
+
+    </main>
+
+    <footer class="footer">
+        <p>Lorem Ipsum Industries</p>
+    </footer>
+
+    <script src="~/scripts/main.js"></script>
+</body>
+
+</html>
