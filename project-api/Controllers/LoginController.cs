@@ -22,14 +22,23 @@ namespace project_api.Controllers
         public IActionResult Login(LoginDto login)
         {
             var dep = departamentosRepository.Get(login.UserName);
+            string role;
             if (dep != null)
             {
                 
                 bool ver = Verifier.VerifyPassword(login.Password, dep.Password);
                 if (ver)
                 {
+                    if(dep.Nombre=="Direccion General")
+                    {
+                        role = "Admin";
+                    }
+                    else
+                    {
+                        role = "Usuario";
+                    }
                     JwtTokenGenerator jwttoken=new JwtTokenGenerator(_configuration);
-                    var token=jwttoken.GetToken(dep);
+                    var token=jwttoken.GetToken(dep,role);
                     return Ok(token);
                 }
                 else
