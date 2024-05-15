@@ -57,7 +57,7 @@ namespace project_api.Controllers
                     }
                     else
                     {
-                        fecha = null;
+                        fecha = System.DateOnly.FromDateTime(DateTime.Today);
                     }
 
                     Actividades act = new Actividades()
@@ -73,7 +73,7 @@ namespace project_api.Controllers
 
                     };
 
-                    // Conversión manual de fechaRealizacion si no es nulo
+                    
                     _repository.Insert(act);
                     return Ok();
 
@@ -92,7 +92,7 @@ namespace project_api.Controllers
             if (vali.IsValid)
             {
                 var act = _repository.GetById(dto.Id);
-                if (act == null || act.Estado == 1)
+                if (act == null || act.Estado == 3)
                 {
                     return NotFound();
                 }
@@ -117,11 +117,11 @@ namespace project_api.Controllers
         public IActionResult Delete(int id)
         {
             var act = _repository.GetById(id);
-            if (act == null || act.Estado == 1)
+            if (act == null || act.Estado == 3)
             {
                 return NotFound();
             }
-            act.Estado = 1;
+            act.Estado = 3;
             act.FechaActualizacion = DateTime.UtcNow;
             _repository.Update(act);
             return Ok();
