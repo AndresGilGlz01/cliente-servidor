@@ -20,10 +20,36 @@
             selector: '#mytextarea'
         });
     </script>
-    <title>@TempData["Title"] - Sistema Gestor de Actividades</title>
+    <title>Agregar actividad - Sistema Gestor de Actividades</title>
 </head>
 
 <body>
+
+    <header class="header">
+        <div class="search">
+            <form action="/buscar" method="post" class="search-form">
+                <!--Hacer esto con JS -->
+                <input type="search" placeholder="Buscar..." name="search" id="search" class="search-input">
+                <svg class="search-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" width="24px">
+                    <path d="M784-120 532-372q-30 24-69 38t-83 14q-109 0-184.5-75.5T120-580q0-109 75.5-184.5T380-840q109 0 184.5 75.5T640-580q0 44-14 83t-38 69l252 252-56 56ZM380-400q75 0 127.5-52.5T560-580q0-75-52.5-127.5T380-760q-75 0-127.5 52.5T200-580q0 75 52.5 127.5T380-400Z" />
+                </svg>
+            </form>
+        </div>
+        <div class="header-profile">
+            <span class="header-profile-name">
+                @User.Identity.Name
+                <span class="small-text">
+                    Depto. Ingeniería en Sistemas Computacionales
+                </span>
+            </span>
+            <svg class="header-profile-expand" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" width="24px">
+                <path d="M480-360 280-560h400L480-360Z" />
+            </svg>
+            <div class="profile-menu">
+                <a href="/cerrar-sesion">Cerrar sesión</a>
+            </div>
+        </div>
+    </header>
 
     <main class="main">
 
