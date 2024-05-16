@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using project_client.Areas.Admin.Models;
+using System.Security.Claims;
 
 namespace project_client.Areas.Admin.Controllers;
 
@@ -34,6 +35,27 @@ public class HomeController : Controller
             List<ActividadesViewModel> acts=actividades.ToList();
             return View(acts);
             }
+        }
+        return View(null);
+    }
+    [HttpGet]
+    public async Task<IActionResult> Agregar()
+    {
+        AgregarActividadViewModel actividadViewModel = new AgregarActividadViewModel();
+        httpClient.BaseAddress = new Uri("https://sga.api.labsystec.net/");
+        var userid= HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+        var response = await httpClient.GetAsync($"/api/Departamentos/{userid}");
+        if (response.IsSuccessStatusCode)
+        {
+            var content = await response.Content.ReadAsStringAsync();
+           
+            var depas = JsonConvert.DeserializeObject<List<Departamentos>>(content);
+            if(depas != null)
+            {
+                actividadViewModel.Departamentos = depas;
+            return View(actividadViewModel);
+            }
+           
         }
         return View(null);
     }

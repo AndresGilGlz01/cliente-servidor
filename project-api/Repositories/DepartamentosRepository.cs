@@ -28,7 +28,10 @@ namespace project_api.Repositories
                 Username = d.Username,
             });
         }
-
+        public IEnumerable<Departamentos> GetSub(int id)
+        {
+            return context.Departamentos.Where(x => x.IdSuperior == id);
+        }
         public Departamentos? GetById(int id)
         {
             return context.Departamentos.Find(id);
