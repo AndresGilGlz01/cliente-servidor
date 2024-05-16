@@ -33,8 +33,19 @@ namespace project_api.Controllers
             var datos = _repository.GetById(id);
             if (datos != null)
             {
-
-                return Ok(datos);
+                var dto = new ActividadesDto()
+                {
+                    Id = datos.Id,
+                    Titulo = datos.Titulo,
+                    Estado = datos.Estado,
+                    FechaCreacion = datos.FechaCreacion,
+                    FechaActualizacion = datos.FechaActualizacion,
+                    FechaRealizacion = datos.FechaRealizacion != null ? datos.FechaRealizacion.Value.ToDateTime(new TimeOnly()) : null,
+                    IdDepartamento = datos.IdDepartamento,
+                    Descripcion = datos.Descripcion,
+                    Departamento = datos.IdDepartamentoNavigation.Nombre,
+                };
+                return Ok(dto);
             }
             return BadRequest();
 

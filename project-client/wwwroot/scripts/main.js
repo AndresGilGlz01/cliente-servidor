@@ -41,6 +41,8 @@ actividades.forEach((actividad) => {
 
         let response = await request.json();
 
+        console.log(response);
+
         let descripcion = response.descripcion;
         let estado = response.estado;
         let fechaActualizacion = response.fechaActualizacion;
@@ -67,8 +69,7 @@ actividades.forEach((actividad) => {
         let detailsDescription = document.querySelector('#mytextarea');
         let image = document.querySelector('.details-img');
 
-        // set image src
-        image.src = `https://sga.api.labsystec.net/api/imagenes/${id}.png`;
+        image.src = `https://sga.api.labsystec.net/images/${id}.png`;
 
         tinymce.activeEditor.setContent(descripcion);
 

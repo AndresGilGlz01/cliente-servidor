@@ -28,7 +28,7 @@ namespace project_api.Repositories
         }
         public Actividades? GetById(int id)
         {
-            return context.Actividades.Find(id);
+            return context.Actividades.Include(x => x.IdDepartamentoNavigation).FirstOrDefault(x => x.Id == id);
         }
     }
 }
