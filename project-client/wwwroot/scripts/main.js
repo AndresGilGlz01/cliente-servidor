@@ -44,20 +44,29 @@ actividades.forEach((actividad) => {
         console.log(response);
 
         let descripcion = response.descripcion;
+        let departamento = response.departamento;
         let estado = response.estado;
         let fechaActualizacion = response.fechaActualizacion;
         let fechaCreacion = response.fechaCreacion;
         let fechaRealizacion = response.fechaRealizacion;
         let titulo = response.titulo;
 
+        // formatear fechas
+        let fechaCreacionDate = new Date(fechaCreacion);
+        let fechaActualizacionDate = new Date(fechaActualizacion);
+        let fechaRealizacionDate = new Date(fechaRealizacion);
+
+        fechaCreacion = fechaCreacionDate.toLocaleDateString();
+        fechaActualizacion = fechaActualizacionDate.toLocaleDateString();
+        fechaRealizacion = fechaRealizacionDate.toLocaleDateString();
+
         let detailsTitle = document.querySelector('.details-title');
 
         let template = `
         ${titulo} <br>
                 <a class="details-dpto" href="javascript:">
-                    Depto. Ingeniería
-                    Sistemas Computacionales
-                </a>
+                    ${departamento}
+                </a> <br>
                 <span class="details-date details-date-create">Creado el ${fechaCreacion}</span>
                 <span class="details-date">
                     &middot; Ultima
@@ -70,6 +79,11 @@ actividades.forEach((actividad) => {
         let image = document.querySelector('.details-img');
 
         image.src = `https://sga.api.labsystec.net/images/${id}.png`;
+
+        // verificar si la imagen existe
+        image.onerror = function() {
+            image.src = `https://sga.api.labsystec.net/images/0.png`;
+        }
 
         tinymce.activeEditor.setContent(descripcion);
 
