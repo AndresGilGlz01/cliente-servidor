@@ -7,7 +7,7 @@
     <path d="M440-160v-487L216-423l-56-57 320-320 320 320-56 57-224-224v487h-80Z" />
 </svg>
 
-<form class="actividad-form" method="post" action="agregarActividad">
+<form class="actividad-form" method="post" action="_/Admin/Home/Agregar">
 
     <div class="actividad-form-content">
 
@@ -48,11 +48,11 @@
     <textarea id="mytextarea" class="actividad-form-input" asp-for="Descripcion" required></textarea>
 
     <p class="error-message">
-        @Html.ValidationSummary();
+        @Html.ValidationSummary(true)
     </p>
 
     <div class="actividad-form-buttons">
-        <a href="~/Home/" class="actividad-form-submit cancel">Cancelar</a>
+        <a href="~/Admin/Home/" class="actividad-form-submit cancel">Cancelar</a>
         <input type="submit" class="actividad-form-submit" value="Agregar actividad">
     </div>
 
