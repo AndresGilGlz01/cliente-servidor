@@ -57,9 +57,9 @@
 
             <div class="buttons">
 
-            <div class="capturar" id="btnCapturar">
-                <a href="~/Admin/Home/Agregar" class="capturar-text">Capturar</a>
-            </div>
+                <div class="capturar" id="btnCapturar">
+                    <a href="~/Admin/Home/Agregar" class="capturar-text">Capturar</a>
+                </div>
 
                 <div class="filtros" id="aside-open">
                     <span class="capturar-text">Filtros</span>
@@ -77,7 +77,7 @@
                     @foreach (var item in Model)
                     {
 
-                        <div class="actividad">
+                        <div class="actividad" data-id="@item.Id">
                             <div class="actividad-header">
                                 <span class="actividad-title">
                                     @item.Titulo <span class="actividad-title-depto">
@@ -135,7 +135,7 @@
                     Depto. Ingeniería
                     Sistemas Computacionales
                 </a>
-                <span class="details-date">Creado el 30/12/2001</span>
+                <span class="details-date details-date-create">Creado el 30/12/2001</span>
                 <span class="details-date">
                     &middot; Ultima
                     actualizacion el 01/01/2002
