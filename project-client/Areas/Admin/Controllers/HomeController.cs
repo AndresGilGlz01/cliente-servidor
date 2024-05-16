@@ -14,10 +14,12 @@ namespace project_client.Areas.Admin.Controllers;
 public class HomeController : Controller
 {
     private readonly HttpClient httpClient;
+    private readonly IWebHostEnvironment webHostEnvironment;
 
-    public HomeController(HttpClient httpClient)
+    public HomeController(HttpClient httpClient, IWebHostEnvironment webHost)
     {
         this.httpClient = httpClient;
+        webHostEnvironment = webHost;
     }
 
     public async Task<IActionResult> IndexAsync()
@@ -77,11 +79,15 @@ public class HomeController : Controller
 
                 vm.IdDepartamento = int.Parse(userid);
             }
-            var converter = new ConverterToBase64();
+
+
+            var converter = new ConverterToBase64(webHostEnvironment);
 
             // Suponiendo que tienes una propiedad 'Imagen' en tu ViewModel que contiene la imagen como un byte array
             // Aquí debes reemplazar 'vm.Imagen' con la propiedad real que contiene la imagen en tu ViewModel
-            var imagenBase64 = converter.ImageToBase64(vm.Archivo);
+            var ruta = converter.SaveFile(vm.Archivo);
+            var imagenBase64=converter.ImageToBase64(ruta);
+            string imagenBase64Comprimida = converter.CompressBase64(imagenBase64);
             var actdto = new AddActDto()
             {
                 Titulo = vm.Titulo,
@@ -91,7 +97,8 @@ public class HomeController : Controller
                 FechaRealizacion = vm.FechaRealizacion,
                 IdDepartamento = vm.IdDepartamento,
                 Estado = 0,
-                Imagen = imagenBase64
+                Imagen = imagenBase64Comprimida,
+                Id = 0
             };
             var loginjson = System.Text.Json.JsonSerializer.Serialize(actdto);
             var content = new StringContent(loginjson, Encoding.UTF8, "application/json");

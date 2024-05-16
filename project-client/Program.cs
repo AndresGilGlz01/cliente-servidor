@@ -13,6 +13,7 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
 builder.Services.AddAuthorization();
 builder.Services.AddTransient<HttpClient>();
 
+
 var app = builder.Build();
 
 app.UseDeveloperExceptionPage();
