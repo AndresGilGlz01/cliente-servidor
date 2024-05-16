@@ -136,4 +136,35 @@ public class HomeController : Controller
         }
         return View(vm);
     }
+
+    [HttpGet("Admin/home/editar/{id}")]
+    public async Task<IActionResult> Editar(int id)
+    {
+
+       
+        GetActividadViewModel act = new();
+        httpClient.BaseAddress = new Uri("https://sga.api.labsystec.net/");
+        var r = await httpClient.GetAsync($"/api/actividades/{id}");
+        if (r.IsSuccessStatusCode)
+        {
+            var con= await r.Content.ReadAsStringAsync();
+            act.Actividad = JsonConvert.DeserializeObject<Actividad>(con); ;
+            
+        }
+        var userid = User.Claims.First(x => x.Type == ClaimTypes.NameIdentifier).Value;
+        var response = await httpClient.GetAsync($"/api/Departamentos/{userid}");
+        if (response.IsSuccessStatusCode)
+        {
+            var content = await response.Content.ReadAsStringAsync();
+
+            var depas = Newtonsoft.Json.JsonConvert.DeserializeObject<List<Departamentos>>(content);
+            if (depas != null)
+            {
+                act.Departamentos = depas;
+                return View(act);
+            }
+
+        }
+        return View(null);
+    }
 }
