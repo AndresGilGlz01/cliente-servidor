@@ -12,6 +12,7 @@
 
         public DateTime FechaActualizacion { get; set; }
         public List<Departamentos> Departamentos { get; set; }=null!;
+        public IFormFile? Archivo { get; set; }
     }
     public class Departamentos
     {

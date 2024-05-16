@@ -1,9 +1,11 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using project_client.Areas.Admin.Models;
+using project_client.Helpers;
 using System.Security.Claims;
+using System.Text;
+
 
 namespace project_client.Areas.Admin.Controllers;
 
@@ -51,7 +53,7 @@ public class HomeController : Controller
         {
             var content = await response.Content.ReadAsStringAsync();
            
-            var depas = JsonConvert.DeserializeObject<List<Departamentos>>(content);
+            var depas = Newtonsoft.Json.JsonConvert.DeserializeObject<List<Departamentos>>(content);
             if(depas != null)
             {
                 actividadViewModel.Departamentos = depas;
@@ -63,9 +65,38 @@ public class HomeController : Controller
     }
 
     [HttpPost]
-    public IActionResult Agregar(AgregarActividadViewModel vm)
+    public async Task<IActionResult> AgregarAsync(AgregarActividadViewModel vm)
     {
+        httpClient.BaseAddress = new Uri("https://sga.api.labsystec.net/");
+        if (vm != null)
+        {
 
+            if (vm.IdDepartamento == 0)
+            {
+                var userid = User.Claims.First(x => x.Type == ClaimTypes.NameIdentifier).Value;
+
+                vm.IdDepartamento = int.Parse(userid);
+            }
+            var actdto = new AddActDto()
+            {
+                Titulo = vm.Titulo,
+                FechaActualizacion = vm.FechaActualizacion,
+                Descripcion = vm.Descripcion,
+                FechaCreacion = vm.FechaCreacion,
+                FechaRealizacion = vm.FechaRealizacion,
+                IdDepartamento = vm.IdDepartamento,
+                Estado = 0,
+            };
+            var loginjson = System.Text.Json.JsonSerializer.Serialize(actdto);
+            var content = new StringContent(loginjson, Encoding.UTF8, "application/json");
+            var response = await httpClient.PostAsync("/api/Actividades", content);
+            var converter = new ConverterToBase64();
+
+            // Suponiendo que tienes una propiedad 'Imagen' en tu ViewModel que contiene la imagen como un byte array
+            // Aquí debes reemplazar 'vm.Imagen' con la propiedad real que contiene la imagen en tu ViewModel
+            var imagenBase64 = converter.ImageToBase64(vm.Archivo);
+            return RedirectToAction("Index");
+        }
         return View(vm);
     }
 }

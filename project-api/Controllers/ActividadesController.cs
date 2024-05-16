@@ -68,14 +68,21 @@ namespace project_api.Controllers
                     {
                         fecha = System.DateOnly.FromDateTime(DateTime.Today);
                     }
-
+                    if (dto.FechaCreacion == DateTime.MinValue)
+                    {
+                        dto.FechaCreacion=DateTime.UtcNow;
+                    }
+                    if(dto.FechaActualizacion == DateTime.MinValue)
+                    {
+                        dto.FechaActualizacion=DateTime.UtcNow;
+                    }
                     Actividades act = new Actividades()
                     {
                         Id = 0,
-                        Estado = 0,
+                        Estado = 1,
                         Titulo = dto.Titulo,
-                        FechaCreacion = DateTime.UtcNow,
-                        FechaActualizacion = DateTime.UtcNow,
+                        FechaCreacion = dto.FechaCreacion,
+                        FechaActualizacion = dto.FechaActualizacion,
                         IdDepartamento = dto.IdDepartamento,
                         Descripcion = dto.Descripcion,
                         FechaRealizacion = fecha
@@ -101,7 +108,7 @@ namespace project_api.Controllers
             if (vali.IsValid)
             {
                 var act = _repository.GetById(dto.Id);
-                if (act == null || act.Estado == 3)
+                if (act == null || act.Estado == 2)
                 {
                     return NotFound();
                 }
@@ -126,7 +133,7 @@ namespace project_api.Controllers
         public IActionResult Delete(int id)
         {
             var act = _repository.GetById(id);
-            if (act == null || act.Estado == 3)
+            if (act == null || act.Estado == 2)
             {
                 return NotFound();
             }
