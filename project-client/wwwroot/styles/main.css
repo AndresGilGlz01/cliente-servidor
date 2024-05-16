@@ -183,7 +183,6 @@ body {
     border-bottom: 1px solid var(--gray-color);
     padding: 10px;
     min-width: 32%;
-    height: 150px;
     width: 32%;
     transition: background-color ease 0.2ms;
 }
@@ -207,10 +206,7 @@ body {
 }
 
 .actividad-fecha {
-    position: absolute;
     color: #4e4e4e;
-    right: 10px;
-    top: 10px;
     font-size: small;
 }
 
