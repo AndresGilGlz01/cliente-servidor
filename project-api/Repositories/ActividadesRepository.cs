@@ -24,7 +24,7 @@ namespace project_api.Repositories
                 IdDepartamento = x.IdDepartamento,
                 Departamento = x.IdDepartamentoNavigation.Nombre
 
-            }) ; 
+            }) .OrderByDescending(x=>x.FechaActualizacion); 
         }
         public Actividades? GetById(int id)
         {

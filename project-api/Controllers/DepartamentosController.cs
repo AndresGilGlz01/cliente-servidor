@@ -26,11 +26,12 @@ namespace project_api.Controllers
             var datos = _departamentosRepository.GetDeparamentos();
             return Ok(datos);
         }
+       
 
         [HttpGet("{id}")]
         public IActionResult Get(int id)
         {
-            var datos = _departamentosRepository.GetById(id);
+            var datos = _departamentosRepository.GetSub(id);
             if (datos != null)
             {
 
