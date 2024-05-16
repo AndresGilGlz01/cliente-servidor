@@ -4,6 +4,7 @@ using project_api.Models.Dtos;
 using project_api.Models.Entities;
 using project_api.Repositories;
 using project_api.Validators;
+using System.Net.Http;
 
 namespace project_api.Controllers
 {
@@ -43,7 +44,7 @@ namespace project_api.Controllers
                     FechaRealizacion = datos.FechaRealizacion != null ? datos.FechaRealizacion.Value.ToDateTime(new TimeOnly()) : null,
                     IdDepartamento = datos.IdDepartamento,
                     Descripcion = datos.Descripcion,
-                    Departamento = datos.IdDepartamentoNavigation.Nombre,
+                    
                 };
                 return Ok(dto);
             }
@@ -51,8 +52,10 @@ namespace project_api.Controllers
 
         }
         [HttpPost]
-        public IActionResult Post(ActividadesDto? dto)
+        public async Task<IActionResult> Post(ActividadesDto? dto)
         {
+            var http=new HttpClient();
+            http.BaseAddress = new Uri("https://sga.api.labsystec.net/");
             if (dto != null)
             {
 
@@ -60,7 +63,7 @@ namespace project_api.Controllers
                 if (results.IsValid)
                 {
                     DateOnly? fecha = null;
-                    if (dto.FechaRealizacion != null)
+                    if (dto.FechaRealizacion == null)
                     {
                         fecha = System.DateOnly.FromDateTime(dto.FechaRealizacion.Value.Date);
                     }
@@ -68,14 +71,21 @@ namespace project_api.Controllers
                     {
                         fecha = System.DateOnly.FromDateTime(DateTime.Today);
                     }
-
+                    if (dto.FechaCreacion == DateTime.MinValue)
+                    {
+                        dto.FechaCreacion=DateTime.UtcNow;
+                    }
+                    if(dto.FechaActualizacion == DateTime.MinValue)
+                    {
+                        dto.FechaActualizacion=DateTime.UtcNow;
+                    }
                     Actividades act = new Actividades()
                     {
                         Id = 0,
-                        Estado = 0,
+                        Estado = 1,
                         Titulo = dto.Titulo,
-                        FechaCreacion = DateTime.UtcNow,
-                        FechaActualizacion = DateTime.UtcNow,
+                        FechaCreacion = dto.FechaCreacion,
+                        FechaActualizacion = dto.FechaActualizacion,
                         IdDepartamento = dto.IdDepartamento,
                         Descripcion = dto.Descripcion,
                         FechaRealizacion = fecha
@@ -84,6 +94,13 @@ namespace project_api.Controllers
 
                     
                     _repository.Insert(act);
+
+                    var request = new HttpRequestMessage(HttpMethod.Post, 
+                        $"https://sga.api.labsystec.net/{act.Id}");
+                    var content = new StringContent(dto.Imagen, null, "application/json");
+                    request.Content = content;
+                    var response = await http.SendAsync(request);
+                    response.EnsureSuccessStatusCode();
                     return Ok();
 
 
@@ -101,7 +118,7 @@ namespace project_api.Controllers
             if (vali.IsValid)
             {
                 var act = _repository.GetById(dto.Id);
-                if (act == null || act.Estado == 3)
+                if (act == null || act.Estado == 2)
                 {
                     return NotFound();
                 }
@@ -126,7 +143,7 @@ namespace project_api.Controllers
         public IActionResult Delete(int id)
         {
             var act = _repository.GetById(id);
-            if (act == null || act.Estado == 3)
+            if (act == null || act.Estado == 2)
             {
                 return NotFound();
             }

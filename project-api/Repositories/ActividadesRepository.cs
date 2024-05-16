@@ -22,7 +22,7 @@ namespace project_api.Repositories
                 Titulo = x.Titulo,
                 Estado = x.Estado,
                 IdDepartamento = x.IdDepartamento,
-                Departamento = x.IdDepartamentoNavigation.Nombre
+               
 
             }) .OrderByDescending(x=>x.FechaActualizacion); 
         }

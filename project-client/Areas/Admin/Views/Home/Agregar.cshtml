@@ -10,8 +10,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="/styles/normalize.css">
-    <link rel="stylesheet" href="/styles/main.css">
+    <link rel="stylesheet" href="~/styles/normalize.css">
+    <link rel="stylesheet" href="~/styles/main.css">
     <script src="https://cdn.tiny.cloud/1/r9ntmf320hcycx0ci473rmxopso22j6woj4ikx9nq5kbaq84/tinymce/7/tinymce.min.js"
             referrerpolicy="origin"></script>
 
@@ -57,7 +57,7 @@
             <path d="M440-160v-487L216-423l-56-57 320-320 320 320-56 57-224-224v487h-80Z" />
         </svg>
 
-        <form class="actividad-form" method="post" action="_/Admin/Home/Agregar">
+        <form class="actividad-form" method="post" action="~/Admin/Home/Agregar" enctype="multipart/form-data">
 
             <div class="actividad-form-content">
 
@@ -69,7 +69,8 @@
                     <input class="actividad-form-input" type="text" asp-for="Titulo" required>
 
                     <label class="actividad-form-label" for="departamento">Departamento</label>
-                    <select class="actividad-form-input" name="departamento" id="departamento" required>
+                    <select class="actividad-form-input"asp-for="IdDepartamento" required>
+                        <option value="0">Seleccione una Opcion</option>
                         @foreach (var item in Model.Departamentos)
                         {
                             <option value="@item.Id">@item.Nombre</option>
@@ -85,8 +86,8 @@
 
                 <div class="actividad-right">
                     <label class="actividad-form-label" for="imagen" style="text-align: center;">Imagen</label>
-                    <input class="actividad-form-input" style="display: none;" type="file" name="imagen" id="imagen"
-                           accept="image/*" required>
+                    <input class="actividad-form-input" style="display: none;" type="file" 
+                           accept="image/*" asp-for="Archivo">
 
                     <div class="actividad-form-img-preview">
                         <img src="~/img/preview-img.svg" height="100%" alt="imagen" class="actividad-form-img">
@@ -95,7 +96,7 @@
                 </div>
             </div>
             <label class="actividad-form-label" for="descripcion">Descripción</label>
-            <textarea id="mytextarea" class="actividad-form-input" asp-for="Descripcion" required></textarea>
+            <textarea id="mytextarea" class="actividad-form-input" asp-for="Descripcion" ></textarea>
 
             <p class="error-message">
                 @Html.ValidationSummary(true)

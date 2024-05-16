@@ -1,27 +1,31 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using project_client.Areas.Admin.Models;
+using project_client.Helpers;
 using System.Security.Claims;
+using System.Text;
+
 
 namespace project_client.Areas.Admin.Controllers;
 
-[Authorize(Roles ="Admin")]
+[Authorize(Roles = "Admin")]
 [Area("Admin")]
 public class HomeController : Controller
 {
     private readonly HttpClient httpClient;
+    private readonly IWebHostEnvironment webHostEnvironment;
 
-    public HomeController(HttpClient httpClient)
+    public HomeController(HttpClient httpClient, IWebHostEnvironment webHost)
     {
         this.httpClient = httpClient;
+        webHostEnvironment = webHost;
     }
 
     public async Task<IActionResult> IndexAsync()
     {
-        
-        
+
+
         httpClient.BaseAddress = new Uri("https://sga.api.labsystec.net/");
         var response = await httpClient.GetAsync("/api/actividades");
         if (response.IsSuccessStatusCode)
@@ -30,11 +34,11 @@ public class HomeController : Controller
 
             // Deserializar la cadena JSON en una lista de ActividadesViewModel
             var actividades = JsonConvert.DeserializeObject<List<ActividadesViewModel>>(content);
-            if(actividades != null)
+            if (actividades != null)
             {
 
-            List<ActividadesViewModel> acts=actividades.ToList();
-            return View(acts);
+                List<ActividadesViewModel> acts = actividades.ToList();
+                return View(acts);
             }
         }
         return View(null);
@@ -44,28 +48,71 @@ public class HomeController : Controller
     {
         AgregarActividadViewModel actividadViewModel = new AgregarActividadViewModel();
         httpClient.BaseAddress = new Uri("https://sga.api.labsystec.net/");
-       
-        var userid=User.Claims.First(x=>x.Type==ClaimTypes.NameIdentifier).Value;
+
+        var userid = User.Claims.First(x => x.Type == ClaimTypes.NameIdentifier).Value;
         var response = await httpClient.GetAsync($"/api/Departamentos/{userid}");
         if (response.IsSuccessStatusCode)
         {
             var content = await response.Content.ReadAsStringAsync();
-           
-            var depas = JsonConvert.DeserializeObject<List<Departamentos>>(content);
-            if(depas != null)
+
+            var depas = Newtonsoft.Json.JsonConvert.DeserializeObject<List<Departamentos>>(content);
+            if (depas != null)
             {
                 actividadViewModel.Departamentos = depas;
-            return View(actividadViewModel);
+                return View(actividadViewModel);
             }
-           
+
         }
         return View(null);
     }
 
     [HttpPost]
-    public IActionResult Agregar(AgregarActividadViewModel vm)
+    public async Task<IActionResult> AgregarAsync(AgregarActividadViewModel vm)
     {
+        httpClient.BaseAddress = new Uri("https://sga.api.labsystec.net/");
+        if (vm != null)
+        {
 
+            if (vm.IdDepartamento == 0)
+            {
+                var userid = User.Claims.First(x => x.Type == ClaimTypes.NameIdentifier).Value;
+
+                vm.IdDepartamento = int.Parse(userid);
+            }
+
+
+            var converter = new ConverterToBase64(webHostEnvironment);
+
+            // Suponiendo que tienes una propiedad 'Imagen' en tu ViewModel que contiene la imagen como un byte array
+            // Aquí debes reemplazar 'vm.Imagen' con la propiedad real que contiene la imagen en tu ViewModel
+            var ruta = converter.SaveFile(vm.Archivo);
+            var imagenBase64=converter.ImageToBase64(ruta);
+            string imagenBase64Comprimida = converter.CompressBase64(imagenBase64);
+            var actdto = new AddActDto()
+            {
+                Titulo = vm.Titulo,
+                FechaActualizacion = vm.FechaActualizacion,
+                Descripcion = vm.Descripcion,
+                FechaCreacion = vm.FechaCreacion,
+                FechaRealizacion = vm.FechaRealizacion,
+                IdDepartamento = vm.IdDepartamento,
+                Estado = 0,
+                Imagen = imagenBase64Comprimida,
+                Id = 0
+            };
+            var loginjson = System.Text.Json.JsonSerializer.Serialize(actdto);
+            var content = new StringContent(loginjson, Encoding.UTF8, "application/json");
+            var response = await httpClient.PostAsync("/api/Actividades", content);
+            if (response.IsSuccessStatusCode)
+            {
+                
+                return RedirectToAction("Index");
+            }
+            else
+            {
+                return View(vm);
+            }
+        }
         return View(vm);
     }
 }
