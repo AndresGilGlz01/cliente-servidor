@@ -114,6 +114,7 @@ body {
     }
 
 .header-profile-name {
+    min-width: 150px;
     align-self: center;
 }
 

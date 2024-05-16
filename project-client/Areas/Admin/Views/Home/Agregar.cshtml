@@ -1,4 +1,5 @@
-﻿@model project_client.Areas.Admin.Models.AgregarActividadViewModel;
+﻿@using System.Security.Claims
+@model project_client.Areas.Admin.Models.AgregarActividadViewModel;
 @addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
 @{
     Layout = null;
@@ -37,9 +38,9 @@
         </div>
         <div class="header-profile">
             <span class="header-profile-name">
-                @User.Identity.Name
+                @User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Role)?.Value
                 <span class="small-text">
-                    Depto. Ingeniería en Sistemas Computacionales
+                    @User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Name)?.Value
                 </span>
             </span>
             <svg class="header-profile-expand" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" width="24px">

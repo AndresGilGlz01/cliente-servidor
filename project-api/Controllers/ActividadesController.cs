@@ -103,6 +103,9 @@ namespace project_api.Controllers
                     response.EnsureSuccessStatusCode();
                     return Ok();
 
+                    // call a method in other image controller
+
+
 
                 }
                 return BadRequest(results.Errors.Select(x => x.ErrorMessage));

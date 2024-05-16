@@ -85,6 +85,9 @@ actividades.forEach((actividad) => {
             image.src = `https://sga.api.labsystec.net/images/0.png`;
         }
 
+        let btnModificar = document.querySelector('.details-modify'); // <a> tag
+        btnModificar.href = `admin/home/editar/${id}`;
+
         tinymce.activeEditor.setContent(descripcion);
 
         detailsTitle.innerHTML = template;
