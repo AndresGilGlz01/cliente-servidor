@@ -43,7 +43,7 @@ namespace project_api.Controllers
                     FechaRealizacion = datos.FechaRealizacion != null ? datos.FechaRealizacion.Value.ToDateTime(new TimeOnly()) : null,
                     IdDepartamento = datos.IdDepartamento,
                     Descripcion = datos.Descripcion,
-                    Departamento = datos.IdDepartamentoNavigation.Nombre,
+                    
                 };
                 return Ok(dto);
             }
@@ -60,7 +60,7 @@ namespace project_api.Controllers
                 if (results.IsValid)
                 {
                     DateOnly? fecha = null;
-                    if (dto.FechaRealizacion != null)
+                    if (dto.FechaRealizacion == null)
                     {
                         fecha = System.DateOnly.FromDateTime(dto.FechaRealizacion.Value.Date);
                     }
