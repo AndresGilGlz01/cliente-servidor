@@ -95,12 +95,9 @@ namespace project_api.Controllers
                     
                     _repository.Insert(act);
 
-                    var request = new HttpRequestMessage(HttpMethod.Post, 
-                        $"https://sga.api.labsystec.net/{act.Id}");
-                    var content = new StringContent(dto.Imagen, null, "application/json");
-                    request.Content = content;
-                    var response = await http.SendAsync(request);
-                    response.EnsureSuccessStatusCode();
+                    var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images", $"{act.Id}.png");
+                    var bytes = Convert.FromBase64String(dto.Imagen);
+                    System.IO.File.WriteAllBytes(path, bytes);
                     return Ok();
 
 
