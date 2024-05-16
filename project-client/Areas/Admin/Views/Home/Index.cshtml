@@ -1,136 +1,161 @@
 ﻿@model List< project_client.Areas.Admin.Models.ActividadesViewModel>
 @{
-    Layout = "_Layout";
+    Layout = null;
 }
+<!DOCTYPE html>
+<html lang="es">
 
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/styles/normalize.css">
+    <link rel="stylesheet" href="/styles/main.css">
+    <script src="https://cdn.tiny.cloud/1/r9ntmf320hcycx0ci473rmxopso22j6woj4ikx9nq5kbaq84/tinymce/7/tinymce.min.js"
+            referrerpolicy="origin"></script>
 
-    <header class="header">
-        <div class="search">
-            <form action="/buscar" method="post" class="search-form">
-                <!--Hacer esto con JS -->
-                <input type="search" placeholder="Buscar..." name="search" id="search" class="search-input">
-                <svg class="search-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" width="24px">
-                    <path d="M784-120 532-372q-30 24-69 38t-83 14q-109 0-184.5-75.5T120-580q0-109 75.5-184.5T380-840q109 0 184.5 75.5T640-580q0 44-14 83t-38 69l252 252-56 56ZM380-400q75 0 127.5-52.5T560-580q0-75-52.5-127.5T380-760q-75 0-127.5 52.5T200-580q0 75 52.5 127.5T380-400Z" />
-                </svg>
-            </form>
-        </div>
-        <div class="header-profile">
-            <span class="header-profile-name">
-                Adriana Ramírez Hernández
-                <span class="small-text">
-                    Depto. Ingeniería en Sistemas Computacionales
-                </span>
-            </span>
-            <svg class="header-profile-expand" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" width="24px">
-                <path d="M480-360 280-560h400L480-360Z" />
-            </svg>
-            <div class="profile-menu">
-                <a href="/cerrar-sesion">Cerrar sesión</a>
-            </div>
-        </div>
-    </header>
+    <script>
+        tinymce.init({
+            selector: '#mytextarea',
+            menubar: false,
+            toolbar: false,
+            readonly: true,
+            resize: false
+        });
+    </script>
+    <title>Inicio - Sistema Gestor de Actividades</title>
+</head>
+
+<body>
+
     <main class="main">
-
-        <div class="buttons">
-
-            <div class="capturar" id="btnCapturar">
-                <a href="~/home/crearactividad" class="capturar-text">Capturar</a>
+        <header class="header">
+            <div class="search">
+                <form action="/buscar" method="post" class="search-form">
+                    <!--Hacer esto con JS -->
+                    <input type="search" placeholder="Buscar..." name="search" id="search" class="search-input">
+                    <svg class="search-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" width="24px">
+                        <path d="M784-120 532-372q-30 24-69 38t-83 14q-109 0-184.5-75.5T120-580q0-109 75.5-184.5T380-840q109 0 184.5 75.5T640-580q0 44-14 83t-38 69l252 252-56 56ZM380-400q75 0 127.5-52.5T560-580q0-75-52.5-127.5T380-760q-75 0-127.5 52.5T200-580q0 75 52.5 127.5T380-400Z" />
+                    </svg>
+                </form>
             </div>
-
-            <div class="filtros" id="aside-open">
-                <span class="capturar-text">Filtros</span>
-            </div>
-
-        </div>
-
-        <svg class="up-button" id="up-button" xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960">
-            <path d="M440-160v-487L216-423l-56-57 320-320 320 320-56 57-224-224v487h-80Z" />
-        </svg>
-
-        <div class="actividades">
-            <p class="actividades-title">Hoy</p>
-            <div class="actividades-box">
-            @foreach(var item in Model)
-            {
-                
-                <div class="actividad">
-                        <div class="actividad-header">
-                            <span class="actividad-title">
-                                @item.Titulo <span class="actividad-title-depto">
-                                    @item.Departamento
-                                </span>
-                            </span>
-                            <span class="actividad-fecha">@item.FechaCreacion</span>
-                        </div>
-                        <p class="actividad-description">
-                            @item.Descripcion
-                        </p>
+            <div class="header-profile">
+                <span class="header-profile-name">
+                    Adriana Ramírez Hernández
+                    <span class="small-text">
+                        Depto. Ingeniería en Sistemas Computacionales
+                    </span>
+                </span>
+                <svg class="header-profile-expand" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" width="24px">
+                    <path d="M480-360 280-560h400L480-360Z" />
+                </svg>
+                <div class="profile-menu">
+                    <a href="/cerrar-sesion">Cerrar sesión</a>
                 </div>
-            }
+            </div>
+        </header>
+        <main class="main">
 
-                
+            <div class="buttons">
 
-    </main>
+                <div class="capturar" id="btnCapturar">
+                    <a href="~/home/crearactividad" class="capturar-text">Capturar</a>
+                </div>
 
-    <aside class="aside" id="aside">
+                <div class="filtros" id="aside-open">
+                    <span class="capturar-text">Filtros</span>
+                </div>
 
-        <svg class="aside-close" id="aside-close" xmlns="http://www.w3.org/2000/svg" height="24px"
-             viewBox="0 -960 960 960">
-            <path d="m256-200-56-56 224-224-224-224 56-56 224 224 224-224 56 56-224 224 224 224-56 56-224-224-224 224Z" />
-        </svg>
-        <form class="filtros-form">
-
-            <label class="filtros-form-label" for="departamento">Departamento</label>
-
-            <select class="filtros-form-input" name="departamento" id="departamento">
-                <option>departamento 1</option>
-                <option>departamento 2</option>
-                <option>departamento 3</option>
-                <option>departamento 4</option>
-                <option>departamento 5</option>
-            </select>
-
-            <label class="filtros-form-label" for="fechaInicio">Rango de fechas</label>
-
-            <div class="filtros-form-input-dates">
-                <input class="filtros-form-input" type="date" name="fechaInicio" id="fechaInicio">
-                <input class="filtros-form-input" type="date" name="fechaFin" id="fechaFin">
             </div>
 
-            <input type="submit" class="filtros-form-submit" href="javascript:" value="Filtrar">
+            <svg class="up-button" id="up-button" xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960">
+                <path d="M440-160v-487L216-423l-56-57 320-320 320 320-56 57-224-224v487h-80Z" />
+            </svg>
 
-        </form>
+            <div class="actividades">
+                <p class="actividades-title">Hoy</p>
+                <div class="actividades-box">
+                    @foreach (var item in Model)
+                    {
 
-    </aside>
+                        <div class="actividad">
+                            <div class="actividad-header">
+                                <span class="actividad-title">
+                                    @item.Titulo <span class="actividad-title-depto">
+                                        @item.Departamento
+                                    </span>
+                                </span>
+                                <span class="actividad-fecha">@item.FechaCreacion</span>
+                            </div>
+                            <p class="actividad-description">
+                                @item.Descripcion
+                            </p>
+                        </div>
+                    }
+        </main>
 
-    <div class="actividad-details">
-        <svg class="details-close" id="details-close" xmlns="http://www.w3.org/2000/svg" height="24px"
-             viewBox="0 -960 960 960">
-            <path d="m256-200-56-56 224-224-224-224 56-56 224 224 224-224 56 56-224 224 224 224-56 56-224-224-224 224Z" />
-        </svg>
-        <p class="details-title">
-            ¡Eclipse en el Tec! 2024, ven y míralo con nosotros <br>
-            <a class="details-dpto" href="javascript:">
-                Depto. Ingeniería
-                Sistemas Computacionales
-            </a>
-            <span class="details-date">Creado el 30/12/2001</span>
-            <span class="details-date">
-                &middot; Ultima
-                actualizacion el 01/01/2002
-            </span>
-            <span class="details-date"> &middot; Realizado el 03/01/2002</span>
-        </p>
-        <div class="details-body">
-            <img src="~/img/default.svg" alt="evento" class="details-img">
-            <textarea id="mytextarea">Hello, World!</textarea>
+        <aside class="aside" id="aside">
+
+            <svg class="aside-close" id="aside-close" xmlns="http://www.w3.org/2000/svg" height="24px"
+                 viewBox="0 -960 960 960">
+                <path d="m256-200-56-56 224-224-224-224 56-56 224 224 224-224 56 56-224 224 224 224-56 56-224-224-224 224Z" />
+            </svg>
+            <form class="filtros-form">
+
+                <label class="filtros-form-label" for="departamento">Departamento</label>
+
+                <select class="filtros-form-input" name="departamento" id="departamento">
+                    <option>departamento 1</option>
+                    <option>departamento 2</option>
+                    <option>departamento 3</option>
+                    <option>departamento 4</option>
+                    <option>departamento 5</option>
+                </select>
+
+                <label class="filtros-form-label" for="fechaInicio">Rango de fechas</label>
+
+                <div class="filtros-form-input-dates">
+                    <input class="filtros-form-input" type="date" name="fechaInicio" id="fechaInicio">
+                    <input class="filtros-form-input" type="date" name="fechaFin" id="fechaFin">
+                </div>
+
+                <input type="submit" class="filtros-form-submit" href="javascript:" value="Filtrar">
+
+            </form>
+
+        </aside>
+
+        <div class="actividad-details">
+            <svg class="details-close" id="details-close" xmlns="http://www.w3.org/2000/svg" height="24px"
+                 viewBox="0 -960 960 960">
+                <path d="m256-200-56-56 224-224-224-224 56-56 224 224 224-224 56 56-224 224 224 224-56 56-224-224-224 224Z" />
+            </svg>
+            <p class="details-title">
+                ¡Eclipse en el Tec! 2024, ven y míralo con nosotros <br>
+                <a class="details-dpto" href="javascript:">
+                    Depto. Ingeniería
+                    Sistemas Computacionales
+                </a>
+                <span class="details-date">Creado el 30/12/2001</span>
+                <span class="details-date">
+                    &middot; Ultima
+                    actualizacion el 01/01/2002
+                </span>
+                <span class="details-date"> &middot; Realizado el 03/01/2002</span>
+            </p>
+            <div class="details-body">
+                <img src="~/img/default.svg" alt="evento" class="details-img">
+                <textarea id="mytextarea">Hello, World!</textarea>
+            </div>
+
+            <a href="javascript:" class="details-modify">Modificar</a>
+
         </div>
-
-        <a href="javascript:" class="details-modify">Modificar</a>
-
-    </div>
-
-    
+    </main>
+    <footer class="footer">
+        <p>Lorem Ipsum Industries &copy; 2024</p>
+    </footer>
 
     <script src="~/scripts/main.js"></script>
+</body>
 
+</html>
