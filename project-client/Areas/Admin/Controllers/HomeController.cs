@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
+using project_client.Areas.Admin.Models;
 
 namespace project_client.Areas.Admin.Controllers;
 
@@ -7,8 +9,32 @@ namespace project_client.Areas.Admin.Controllers;
 [Area("Admin")]
 public class HomeController : Controller
 {
-    public IActionResult Index()
+    private readonly HttpClient httpClient;
+
+    public HomeController(HttpClient httpClient)
     {
-        return View();
+        this.httpClient = httpClient;
+    }
+
+    public async Task<IActionResult> IndexAsync()
+    {
+        
+        
+        httpClient.BaseAddress = new Uri("https://sga.api.labsystec.net/");
+        var response = await httpClient.GetAsync("/api/actividades");
+        if (response.IsSuccessStatusCode)
+        {
+            var content = await response.Content.ReadAsStringAsync();
+
+            // Deserializar la cadena JSON en una lista de ActividadesViewModel
+            var actividades = JsonConvert.DeserializeObject<List<ActividadesViewModel>>(content);
+            if(actividades != null)
+            {
+
+            List<ActividadesViewModel> acts=actividades.ToList();
+            return View(acts);
+            }
+        }
+        return View(null);
     }
 }

@@ -9,6 +9,7 @@ namespace project_client.Areas.Usuario.Controllers
     {
         public IActionResult Index()
         {
+
             return View();
         }
     }

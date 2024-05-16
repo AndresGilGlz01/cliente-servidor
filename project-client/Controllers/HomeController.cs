@@ -62,7 +62,7 @@ namespace project_client.Controllers
                 var handler = new JwtSecurityTokenHandler();
                 var jwtToken = handler.ReadJwtToken(token);
                
-                var roleClaim = jwtToken.Claims.FirstOrDefault(claim => claim.Type == ClaimTypes.Role);
+                var roleClaim = jwtToken.Claims.FirstOrDefault(claim => claim.Type == "role");
 
                 if (roleClaim == null)
                 {

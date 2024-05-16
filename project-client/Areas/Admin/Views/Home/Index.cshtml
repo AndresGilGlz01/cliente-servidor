@@ -1,26 +1,9 @@
-﻿
-<!DOCTYPE html>
-<html lang="es">
+﻿@model List< project_client.Areas.Admin.Models.ActividadesViewModel>
+@{
+    Layout = "_Layout";
+}
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="~/styles/normalize.css">
-    <link rel="stylesheet" href="~/styles/main.css">
-    <script src="https://cdn.tiny.cloud/1/r9ntmf320hcycx0ci473rmxopso22j6woj4ikx9nq5kbaq84/tinymce/7/tinymce.min.js" referrerpolicy="origin"></script>
-    <script>
-        tinymce.init({
-            selector: '#mytextarea',
-            menubar: false,
-            toolbar: false,
-            readonly: true,
-            resize: false
-        });
-    </script>
-    <title>Home - Sistema Gestor de Actividades</title>
-</head>
 
-<body>
     <header class="header">
         <div class="search">
             <form action="/buscar" method="post" class="search-form">
@@ -67,150 +50,25 @@
         <div class="actividades">
             <p class="actividades-title">Hoy</p>
             <div class="actividades-box">
-
+            @foreach(var item in Model)
+            {
+                
                 <div class="actividad">
-                    <div class="actividad-header">
-                        <span class="actividad-title">
-                            Actividad 1 <span class="actividad-title-depto">
-                                Depto. Ingeniería
-                                Sistemas Computacionales
+                        <div class="actividad-header">
+                            <span class="actividad-title">
+                                @item.Titulo <span class="actividad-title-depto">
+                                    @item.Departamento
+                                </span>
                             </span>
-                        </span>
-                        <span class="actividad-fecha">17:30:00</span>
-                    </div>
-                    <p class="actividad-description">
-                        Lorem ipsum dolor sit amet consectetur, adipisicing elit. Dolorem at provident officiis! Tenetur
-                        doloremque ipsam reprehenderit libero necessitatibus nisi eveniet fugiat perferendis facere,
-                        ducimus illum adipisci atque laudantium voluptatem possimus!
-                    </p>
+                            <span class="actividad-fecha">@item.FechaCreacion</span>
+                        </div>
+                        <p class="actividad-description">
+                            @item.Descripcion
+                        </p>
                 </div>
+            }
 
-                <div class="actividad">
-                    <div class="actividad-header">
-                        <span class="actividad-title">
-                            Actividad 2 <span class="actividad-title-depto">
-                                Depto. Ingeniería
-                                Sistemas Computacionales
-                            </span>
-                        </span>
-                        <span class="actividad-fecha">17:30:00</span>
-                    </div>
-                    <p class="actividad-description">
-                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Perferendis adipisci rem, dolorem
-                        maiores ab voluptatum est sit beatae porro pariatur a aspernatur ea possimus asperiores
-                        blanditiis inventore obcaecati exercitationem consectetur!
-                    </p>
-                </div>
-
-            </div>
-        </div>
-        <div class="actividades">
-            <p class="actividades-title">Esta semana</p>
-            <div class="actividades-box">
-
-                <div class="actividad">
-                    <div class="actividad-header">
-                        <span class="actividad-title">
-                            Actividad 3 <span class="actividad-title-depto">
-                                Depto. Ingeniería
-                                Sistemas Computacionales
-                            </span>
-                        </span>
-                        <span class="actividad-fecha">Lunes, 6 de Mayo</span>
-                    </div>
-                    <p class="actividad-description">
-                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Perferendis adipisci rem, dolorem
-                        maiores ab voluptatum est sit beatae porro pariatur a aspernatur ea possimus asperiores
-                        blanditiis inventore obcaecati exercitationem consectetur!
-                    </p>
-                </div>
-
-                <div class="actividad">
-                    <div class="actividad-header">
-                        <span class="actividad-title">
-                            Actividad 4 <span class="actividad-title-depto">
-                                Depto. Ingeniería
-                                Sistemas Computacionales
-                            </span>
-                        </span>
-                        <span class="actividad-fecha">Martes, 7 de Mayo</span>
-                    </div>
-                    <p class="actividad-description">
-                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Perferendis adipisci rem, dolorem
-                        maiores ab voluptatum est sit beatae porro pariatur a aspernatur ea possimus asperiores
-                        blanditiis inventore obcaecati exercitationem consectetur!
-                    </p>
-                </div>
-
-                <div class="actividad">
-                    <div class="actividad-header">
-                        <span class="actividad-title">
-                            Actividad 5 <span class="actividad-title-depto">
-                                Depto. Ingeniería
-                                Sistemas Computacionales
-                            </span>
-                        </span>
-                        <span class="actividad-fecha">Miércoles, 8 de Mayo</span>
-                    </div>
-                    <p class="actividad-description">
-                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Perferendis adipisci rem, dolorem
-                        maiores ab voluptatum est sit beatae porro pariatur a aspernatur ea possimus asperiores
-                        blanditiis inventore obcaecati exercitationem consectetur!
-                    </p>
-                </div>
-
-                <div class="actividad">
-                    <div class="actividad-header">
-                        <span class="actividad-title">
-                            Actividad 6 <span class="actividad-title-depto">
-                                Depto. Ingeniería
-                                Sistemas Computacionales
-                            </span>
-                        </span>
-                        <span class="actividad-fecha">Miércoles, 8 de Mayo</span>
-                    </div>
-                    <p class="actividad-description">
-                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Perferendis adipisci rem, dolorem
-                        maiores ab voluptatum est sit beatae porro pariatur a aspernatur ea possimus asperiores
-                        blanditiis inventore obcaecati exercitationem consectetur!
-                    </p>
-                </div>
-
-                <div class="actividad">
-                    <div class="actividad-header">
-                        <span class="actividad-title">
-                            Actividad 7 <span class="actividad-title-depto">
-                                Depto. Ingeniería
-                                Sistemas Computacionales
-                            </span>
-                        </span>
-                        <span class="actividad-fecha">Miércoles, 8 de Mayo</span>
-                    </div>
-                    <p class="actividad-description">
-                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Perferendis adipisci rem, dolorem
-                        maiores ab voluptatum est sit beatae porro pariatur a aspernatur ea possimus asperiores
-                        blanditiis inventore obcaecati exercitationem consectetur!
-                    </p>
-                </div>
-
-                <div class="actividad">
-                    <div class="actividad-header">
-                        <span class="actividad-title">
-                            Actividad 8 <span class="actividad-title-depto">
-                                Depto. Ingeniería
-                                Sistemas Computacionales
-                            </span>
-                        </span>
-                        <span class="actividad-fecha">Jueves, 9 de Mayo</span>
-                    </div>
-                    <p class="actividad-description">
-                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Perferendis adipisci rem, dolorem
-                        maiores ab voluptatum est sit beatae porro pariatur a aspernatur ea possimus asperiores
-                        blanditiis inventore obcaecati exercitationem consectetur!
-                    </p>
-                </div>
-            </div>
-        </div>
+                
 
     </main>
 
@@ -272,11 +130,7 @@
 
     </div>
 
-    <footer class="footer">
-        <p>Lorem Ipsum Industries</p>
-    </footer>
+    
 
     <script src="~/scripts/main.js"></script>
-</body>
 
-</html>

@@ -11,7 +11,7 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
         options.ExpireTimeSpan = TimeSpan.FromDays(30);
     });
 builder.Services.AddAuthorization();
-builder.Services.AddSingleton<HttpClient>();
+builder.Services.AddTransient<HttpClient>();
 
 var app = builder.Build();
 
