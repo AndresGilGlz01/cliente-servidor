@@ -61,4 +61,11 @@ public class HomeController : Controller
         }
         return View(null);
     }
+
+    [HttpPost]
+    public IActionResult Agregar(AgregarActividadViewModel vm)
+    {
+
+        return View(vm);
+    }
 }
