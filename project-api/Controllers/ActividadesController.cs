@@ -4,6 +4,7 @@ using project_api.Models.Dtos;
 using project_api.Models.Entities;
 using project_api.Repositories;
 using project_api.Validators;
+using System.Net.Http;
 
 namespace project_api.Controllers
 {
@@ -51,8 +52,10 @@ namespace project_api.Controllers
 
         }
         [HttpPost]
-        public IActionResult Post(ActividadesDto? dto)
+        public async IActionResult Post(ActividadesDto? dto)
         {
+            var http=new HttpClient();
+            http.BaseAddress = new Uri("https://sga.api.labsystec.net/");
             if (dto != null)
             {
 
@@ -91,6 +94,13 @@ namespace project_api.Controllers
 
                     
                     _repository.Insert(act);
+
+                    var request = new HttpRequestMessage(HttpMethod.Post, 
+                        $"https://sga.api.labsystec.net/{act.Id}");
+                    var content = new StringContent(dto.Imagen, null, "application/json");
+                    request.Content = content;
+                    var response = await http.SendAsync(request);
+                    response.EnsureSuccessStatusCode();
                     return Ok();
 
 
