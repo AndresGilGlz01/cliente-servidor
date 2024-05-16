@@ -331,18 +331,25 @@ body {
 }
 
 .details-modify,
+.details-delete,
 .filtros-form-submit {
     margin-top: 20px;
     text-decoration: none;
     padding: 10px;
     background-color: var(--primary-color);
     color: var(--light-color);
-    width: 100%;
+    width: 49%;
     display: block;
     border-radius: 50px;
     text-align: center;
     border: none;
     cursor: pointer;
+}
+
+.details-delete {
+    border: 1px solid red;
+    background-color: transparent;
+    color: red;
 }
 
 .filtros-form-input {
@@ -429,6 +436,12 @@ body {
 .details-date {
     color: #4e4e4e;
     font-size: small;
+}
+
+.details-btns {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
 }
 
 .login-title {

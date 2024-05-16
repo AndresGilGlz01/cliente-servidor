@@ -1,10 +1,9 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
+
 using project_api.Models.Dtos;
 using project_api.Models.Entities;
 using project_api.Repositories;
 using project_api.Validators;
-using System.Net.Http;
 
 namespace project_api.Controllers
 {
@@ -44,7 +43,7 @@ namespace project_api.Controllers
                     FechaRealizacion = datos.FechaRealizacion != null ? datos.FechaRealizacion.Value.ToDateTime(new TimeOnly()) : null,
                     IdDepartamento = datos.IdDepartamento,
                     Descripcion = datos.Descripcion,
-                    
+                    Departamento = datos.IdDepartamentoNavigation.Nombre,
                 };
                 return Ok(dto);
             }

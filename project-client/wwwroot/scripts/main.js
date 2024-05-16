@@ -85,8 +85,11 @@ actividades.forEach((actividad) => {
             image.src = `https://sga.api.labsystec.net/images/0.png`;
         }
 
-        let btnModificar = document.querySelector('.details-modify'); // <a> tag
+        let btnModificar = document.querySelector('.details-modify');
+        let btnEliminar = document.querySelector('.details-delete');
+
         btnModificar.href = `admin/home/editar/${id}`;
+        btnEliminar.href = `admin/home/eliminar/${id}`;
 
         tinymce.activeEditor.setContent(descripcion);
 
