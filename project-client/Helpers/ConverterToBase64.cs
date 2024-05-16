@@ -40,7 +40,7 @@ namespace project_client.Helpers
                 return null;
             }
         }
-        public string SaveFile(IFormFile file)
+        public string SaveFile(IFormFile? file)
         {
             // Genera un nombre de archivo único
             var fileName = Guid.NewGuid().ToString() + Path.GetExtension(file.FileName);

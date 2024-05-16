@@ -54,6 +54,9 @@ namespace project_api.Controllers
         [HttpPost]
         public async Task<IActionResult> Post(ActividadesDto? dto)
         {
+            try
+            {
+
             var http=new HttpClient();
             http.BaseAddress = new Uri("https://sga.api.labsystec.net/");
             if (dto != null)
@@ -95,12 +98,9 @@ namespace project_api.Controllers
                     
                     _repository.Insert(act);
 
-                    var request = new HttpRequestMessage(HttpMethod.Post, 
-                        $"https://sga.api.labsystec.net/{act.Id}");
-                    var content = new StringContent(dto.Imagen, null, "application/json");
-                    request.Content = content;
-                    var response = await http.SendAsync(request);
-                    response.EnsureSuccessStatusCode();
+                    var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images", $"{act.Id}.png");
+                    var bytes = Convert.FromBase64String(dto.Imagen);
+                    System.IO.File.WriteAllBytes(path, bytes);
                     return Ok();
 
                     // call a method in other image controller
@@ -109,6 +109,12 @@ namespace project_api.Controllers
 
                 }
                 return BadRequest(results.Errors.Select(x => x.ErrorMessage));
+            }
+            }
+            catch
+            {
+
+                return BadRequest();
             }
             return BadRequest();
         }
