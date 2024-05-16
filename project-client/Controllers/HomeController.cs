@@ -1,3 +1,5 @@
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 
@@ -6,9 +8,11 @@ using project_client.Models;
 using System.Diagnostics;
 using System.IdentityModel.Tokens.Jwt;
 using System.Net;
+using System.Net.Http.Headers;
 using System.Security.Claims;
 using System.Text;
 using System.Text.Json;
+using Microsoft.AspNetCore.Authentication.Cookies;
 
 namespace project_client.Controllers
 {
@@ -53,7 +57,7 @@ namespace project_client.Controllers
             else
             {
                 var token = await response.Content.ReadAsStringAsync();
-                HttpContext.Response.Cookies.Append("AuthToken", token, new CookieOptions { HttpOnly = true, Secure = true });
+                //HttpContext.Response.Cookies.Append("AuthToken", token, new CookieOptions { HttpOnly = true, Secure = true });
 
                 var handler = new JwtSecurityTokenHandler();
                 var jwtToken = handler.ReadJwtToken(token);
@@ -67,8 +71,16 @@ namespace project_client.Controllers
                     return View(login);
                 }
 
-                var role = roleClaim.Value;
+                var claims = new List<Claim>
+                {
+                    new (ClaimTypes.Role, "Admin"),
+                };
 
+                var identity = new ClaimsIdentity(claims, "login");
+
+                await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(identity));
+
+                var role = roleClaim.Value;
                 if (role == "Admin")
                 {
                     return RedirectToAction("Index", "Home", new { area = "Admin" });
