@@ -87,7 +87,7 @@ public class HomeController : Controller
             // Aquí debes reemplazar 'vm.Imagen' con la propiedad real que contiene la imagen en tu ViewModel
             var ruta = converter.SaveFile(vm.Archivo);
             var imagenBase64=converter.ImageToBase64(ruta);
-            string imagenBase64Comprimida = converter.CompressBase64(imagenBase64);
+            
             var actdto = new AddActDto()
             {
                 Titulo = vm.Titulo,
@@ -97,7 +97,7 @@ public class HomeController : Controller
                 FechaRealizacion = vm.FechaRealizacion,
                 IdDepartamento = vm.IdDepartamento,
                 Estado = 0,
-                Imagen = imagenBase64Comprimida,
+                Imagen = imagenBase64,
                 Id = 0
             };
             var loginjson = System.Text.Json.JsonSerializer.Serialize(actdto);
