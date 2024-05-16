@@ -9,6 +9,7 @@ namespace project_api.Validators
         public ActividadValidator()
         {
             RuleFor(x => x.Titulo).NotEmpty().WithMessage("Debe ingresar un titulo");
+            
             RuleFor(x => x.IdDepartamento).NotNull().WithMessage("Debe ingresar un departamento");
         }
     }

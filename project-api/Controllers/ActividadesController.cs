@@ -54,6 +54,9 @@ namespace project_api.Controllers
         [HttpPost]
         public async Task<IActionResult> Post(ActividadesDto? dto)
         {
+            try
+            {
+
             var http=new HttpClient();
             http.BaseAddress = new Uri("https://sga.api.labsystec.net/");
             if (dto != null)
@@ -103,6 +106,12 @@ namespace project_api.Controllers
 
                 }
                 return BadRequest(results.Errors.Select(x => x.ErrorMessage));
+            }
+            }
+            catch
+            {
+
+                return BadRequest();
             }
             return BadRequest();
         }

@@ -85,8 +85,14 @@ public class HomeController : Controller
 
             // Suponiendo que tienes una propiedad 'Imagen' en tu ViewModel que contiene la imagen como un byte array
             // Aquí debes reemplazar 'vm.Imagen' con la propiedad real que contiene la imagen en tu ViewModel
-            var ruta = converter.SaveFile(vm.Archivo);
-            var imagenBase64=converter.ImageToBase64(ruta);
+            var imagenBase64="";
+            if (vm.Archivo != null)
+            {
+
+                var ruta = converter.SaveFile(vm.Archivo);
+                imagenBase64=converter.ImageToBase64(ruta);
+            }
+            
             
             var actdto = new AddActDto()
             {
@@ -110,6 +116,21 @@ public class HomeController : Controller
             }
             else
             {
+                var userid = User.Claims.First(x => x.Type == ClaimTypes.NameIdentifier).Value;
+                var rresponse = await httpClient.GetAsync($"/api/Departamentos/{userid}");
+                if (rresponse.IsSuccessStatusCode)
+                {
+                     var content2 = await rresponse.Content.ReadAsStringAsync();
+
+                    var depas = Newtonsoft.Json.JsonConvert.DeserializeObject<List<Departamentos>>(content2);
+                    if (depas != null)
+                    {
+                        vm.Departamentos = depas;
+                    }
+
+                }
+                var error= await response.Content.ReadAsStringAsync();
+                ModelState.AddModelError("", error);
                 return View(vm);
             }
         }
