@@ -24,8 +24,8 @@ namespace project_api.Helpers
             List<Claim> claims = new List<Claim>();
 
             claims.Add(new Claim(ClaimTypes.Name, dep.Nombre));
-            claims.Add(new Claim("Id", dep.Id.ToString()));
-            claims.Add(new Claim("Role", role));
+            claims.Add(new Claim(ClaimTypes.NameIdentifier, dep.Id.ToString()));
+            claims.Add(new Claim(ClaimTypes.Role, role));
             claims.Add(new Claim(JwtRegisteredClaimNames.Iss, Iss));
             claims.Add(new Claim(JwtRegisteredClaimNames.Aud, aud));
             claims.Add(new Claim(JwtRegisteredClaimNames.Iat, DateTime.Now.ToString()));

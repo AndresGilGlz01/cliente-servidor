@@ -62,7 +62,7 @@ namespace project_client.Controllers
                 var handler = new JwtSecurityTokenHandler();
                 var jwtToken = handler.ReadJwtToken(token);
                
-                var roleClaim = jwtToken.Claims.FirstOrDefault(claim => claim.Type == "Role");
+                var roleClaim = jwtToken.Claims.FirstOrDefault(claim => claim.Type == ClaimTypes.Role);
 
                 if (roleClaim == null)
                 {
@@ -71,23 +71,23 @@ namespace project_client.Controllers
                     return View(login);
                 }
 
+                var role = roleClaim.Value;
                 var claims = new List<Claim>
                 {
-                    new (ClaimTypes.Role, "Admin"),
+                    new (ClaimTypes.Role, role),
                 };
 
                 var identity = new ClaimsIdentity(claims, "login");
 
                 await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(identity));
 
-                var role = roleClaim.Value;
                 if (role == "Admin")
                 {
                     return RedirectToAction("Index", "Home", new { area = "Admin" });
                 }
                 else if (role == "Usuario")
                 {
-                    return RedirectToAction("UserAction", "User", new { area = "Usuario" });
+                    return RedirectToAction("Index", "Home", new { area = "Usuario" });
                 }
             }
 
