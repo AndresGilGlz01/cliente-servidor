@@ -52,7 +52,7 @@ namespace project_api.Controllers
 
         }
         [HttpPost]
-        public async IActionResult Post(ActividadesDto? dto)
+        public async Task<IActionResult> Post(ActividadesDto? dto)
         {
             var http=new HttpClient();
             http.BaseAddress = new Uri("https://sga.api.labsystec.net/");
