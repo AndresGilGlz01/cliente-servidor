@@ -65,7 +65,7 @@ namespace project_api.Controllers
                 if (results.IsValid)
                 {
                     DateOnly? fecha = null;
-                    if (dto.FechaRealizacion == null)
+                    if (dto.FechaRealizacion != null)
                     {
                         fecha = System.DateOnly.FromDateTime(dto.FechaRealizacion.Value.Date);
                     }
@@ -132,7 +132,7 @@ namespace project_api.Controllers
                 else
                 {
                     DateOnly? fecha = null;
-                    if (dto.FechaRealizacion == null)
+                    if (dto.FechaRealizacion != null)
                     {
                         fecha = System.DateOnly.FromDateTime(dto.FechaRealizacion.Value.Date);
                     }
@@ -148,7 +148,7 @@ namespace project_api.Controllers
                     act.FechaRealizacion = fecha;
 
                     _repository.Update(act);
-                    var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images", $"{act.Id}.png");
+                    var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images", $"{dto.Id}.png");
                     var bytes = Convert.FromBase64String(dto.Imagen);
                     System.IO.File.WriteAllBytes(path, bytes);
                     return Ok();
@@ -166,7 +166,7 @@ namespace project_api.Controllers
             {
                 return NotFound();
             }
-            act.Estado = 3;
+            act.Estado =2;
             act.FechaActualizacion = DateTime.UtcNow;
             _repository.Update(act);
             return Ok();

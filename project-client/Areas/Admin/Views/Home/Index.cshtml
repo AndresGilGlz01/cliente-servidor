@@ -77,20 +77,23 @@
             <div class="actividades-box">
                 @foreach (var item in Model)
                 {
-
-                    <div class="actividad" data-id="@item.Id">
-                        <div class="actividad-header">
-                            <span class="actividad-title">
-                                @item.Titulo <span class="actividad-title-depto">
-                                    @item.Departamento
+                    if (item.Estado != 2)
+                    {
+                        
+                        <div class="actividad" data-id="@item.Id">
+                            <div class="actividad-header">
+                                <span class="actividad-title">
+                                    @item.Titulo <span class="actividad-title-depto">
+                                        @item.Departamento
+                                    </span>
                                 </span>
-                            </span>
-                            <span class="actividad-fecha">@item.FechaCreacion</span>
+                                <span class="actividad-fecha">@item.FechaCreacion</span>
+                            </div>
+                            <p class="actividad-description">
+                                @item.Descripcion
+                            </p>
                         </div>
-                        <p class="actividad-description">
-                            @item.Descripcion
-                        </p>
-                    </div>
+                    }
                 }
 
                 <script>

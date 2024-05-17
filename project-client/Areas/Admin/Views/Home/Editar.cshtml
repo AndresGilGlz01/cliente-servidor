@@ -64,7 +64,7 @@
 
                 <div class="actividad-left">
 
-                    <input type="hidden" name="id" id="id">
+                    <input type="hidden" asp-for="Actividad.Id">
 
                     <label class="actividad-form-label" for="titulo">Título</label>
                     <input class="actividad-form-input" type="text" asp-for="Actividad.Titulo" required>
@@ -72,7 +72,7 @@
                     
 
                     <label class="actividad-form-label" for="fechaRealizacion">Fecha de realizacion</label>
-                    <label class="actividad-form-input" >@Model.Actividad.FechaRealizacion.Value.ToString("dd/MM/yyyy")</label>
+                    <label class="actividad-form-input" asp-for="Actividad.FechaRealizacion">@Model.Actividad.FechaRealizacion.Value.ToString("dd/MM/yyyy")</label>
 
                 </div>
 
@@ -96,7 +96,7 @@
 
             <div class="actividad-form-buttons">
                 <a href="~/Admin/Home/" class="actividad-form-submit cancel">Cancelar</a>
-                <input type="submit" class="actividad-form-submit" value="Agregar actividad">
+                <input type="submit" class="actividad-form-submit" value="Editar actividad">
             </div>
 
             <script>

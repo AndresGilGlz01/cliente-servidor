@@ -26,8 +26,17 @@ namespace project_api.Controllers
             var datos = _departamentosRepository.GetDeparamentos();
             return Ok(datos);
         }
-       
-
+        [HttpGet("/api/departamento/{id}")]   
+        public IActionResult GetDepa(int id)
+        {
+            var datos = _departamentosRepository.Get(id);
+            if (datos != null)
+            {
+                return Ok(datos);
+            }
+            return NotFound();
+        }
+        
         [HttpGet("{id}")]
         public IActionResult Get(int id)
         {
