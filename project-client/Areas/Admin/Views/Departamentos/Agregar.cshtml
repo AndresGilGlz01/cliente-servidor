@@ -55,17 +55,10 @@
             <div class="actividad-form-content">
 
                 <div class="actividad-left">
-
                     <input type="hidden" name="id" id="id">
-
+                    
                     <label class="actividad-form-label" for="Nombre">Nombre</label>
                     <input class="actividad-form-input" type="text" asp-for="Nombre" required>
-
-                    <label class="actividad-form-label" for="Username">Nombre de usuario</label>
-                    <input class="actividad-form-input" type="text" asp-for="Username" required>
-
-                    <label class="actividad-form-label" for="Password">Contraseña</label>
-                    <input class="actividad-form-input" type="text" asp-for="Password" required>
 
                     <label class="actividad-form-label" for="IdDepartamentoSuperior">Departamento superior</label>
                     <select class="actividad-form-input" asp-for="IdDepartamentoSuperior" required>
@@ -76,6 +69,14 @@
                         }
                     </select>
 
+                </div>
+
+                <div class="actividad-right" style="gap: 0px">
+                    <label class="actividad-form-label" for="Username">Nombre de usuario</label>
+                    <input class="actividad-form-input" type="text" asp-for="Username" required>
+
+                    <label class="actividad-form-label" for="Password">Contraseña</label>
+                    <input class="actividad-form-input" type="text" asp-for="Password" required>
                 </div>
             </div>
 
