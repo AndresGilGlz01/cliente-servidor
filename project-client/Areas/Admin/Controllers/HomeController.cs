@@ -144,6 +144,8 @@ public class HomeController : Controller
 
         GetActividadViewModel act = new();
         httpClient.BaseAddress = new Uri("https://sga.api.labsystec.net/");
+
+
         var r = await httpClient.GetAsync($"/api/actividades/{id}");
         if (r.IsSuccessStatusCode)
         {
@@ -160,32 +162,53 @@ public class HomeController : Controller
     [HttpPost]
     public async Task<IActionResult> Editar(GetActividadViewModel act)
     {
-
-
         
         httpClient.BaseAddress = new Uri("https://sga.api.labsystec.net/");
 
-        var r = await httpClient.PutAsync($"/api/actividades/{act}",);
-        if (r.IsSuccessStatusCode)
-        {
-            var con = await r.Content.ReadAsStringAsync();
-            act.Actividad = JsonConvert.DeserializeObject<Actividad>(con); ;
+        // Convertir el objeto act a JSON
+        var converter = new ConverterToBase64(webHostEnvironment);
 
+        // Suponiendo que tienes una propiedad 'Imagen' en tu ViewModel que contiene la imagen como un byte array
+        // Aquí debes reemplazar 'vm.Imagen' con la propiedad real que contiene la imagen en tu ViewModel
+        var imagenBase64 = "";
+        if (act.Actividad.Archivo != null)
+        {
+
+            var ruta = converter.SaveFile(act.Actividad.Archivo);
+            imagenBase64 = converter.ImageToBase64(ruta);
         }
-        var userid = User.Claims.First(x => x.Type == ClaimTypes.NameIdentifier).Value;
-        var response = await httpClient.GetAsync($"/api/Departamentos/{userid}");
+        if (act.Actividad.IdDepartamento == 0)
+        {
+            var userid = User.Claims.First(x => x.Type == ClaimTypes.NameIdentifier).Value;
+
+            act.Actividad.IdDepartamento = int.Parse(userid);
+        }
+        var acti=new AddActDto()
+        {
+            Id=act.Actividad.Id,
+            Descripcion=act.Actividad.Descripcion,
+            Titulo=act.Actividad.Titulo,
+            IdDepartamento=act.Actividad.IdDepartamento,
+            FechaCreacion=act.Actividad.FechaCreacion,
+            FechaRealizacion=act.Actividad.FechaRealizacion,
+            Imagen=imagenBase64
+
+        };
+
+        var jsonContent = new StringContent(JsonConvert.SerializeObject(acti), Encoding.UTF8, "application/json");
+        
+        // Hacer la solicitud PUT a la API
+        var response = await httpClient.PutAsync("/api/actividades", jsonContent);
+
         if (response.IsSuccessStatusCode)
         {
             var content = await response.Content.ReadAsStringAsync();
+            act.Actividad = JsonConvert.DeserializeObject<Actividad>(content);
 
-            var depas = Newtonsoft.Json.JsonConvert.DeserializeObject<List<Departamentos>>(content);
-            if (depas != null)
-            {
-                act.Departamentos = depas;
-                return View(act);
-            }
-
+            // Puedes retornar la vista adecuada si es necesario
+            return RedirectToAction("Index");
         }
+
         return View(null);
     }
 }

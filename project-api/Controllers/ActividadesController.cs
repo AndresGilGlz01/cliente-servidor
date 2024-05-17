@@ -131,14 +131,26 @@ namespace project_api.Controllers
                 }
                 else
                 {
-
+                    DateOnly? fecha = null;
+                    if (dto.FechaRealizacion == null)
+                    {
+                        fecha = System.DateOnly.FromDateTime(dto.FechaRealizacion.Value.Date);
+                    }
+                    else
+                    {
+                        fecha = System.DateOnly.FromDateTime(DateTime.Today);
+                    }
                     act.Titulo = dto.Titulo;
                     act.Estado = dto.Estado;
                     act.FechaActualizacion = DateTime.UtcNow;
                     act.Descripcion = dto.Descripcion;
                     act.IdDepartamento = dto.IdDepartamento;
+                    act.FechaRealizacion = fecha;
 
                     _repository.Update(act);
+                    var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images", $"{act.Id}.png");
+                    var bytes = Convert.FromBase64String(dto.Imagen);
+                    System.IO.File.WriteAllBytes(path, bytes);
                     return Ok();
 
                 }

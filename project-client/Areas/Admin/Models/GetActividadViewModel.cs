@@ -3,7 +3,7 @@
     public class GetActividadViewModel
     {
         public Actividad? Actividad { get; set; }
-        p
+        
     }
     public class Actividad
     {
