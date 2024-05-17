@@ -65,7 +65,7 @@ namespace project_api.Controllers
                 if (results.IsValid)
                 {
                     DateOnly? fecha = null;
-                    if (dto.FechaRealizacion == null)
+                    if (dto.FechaRealizacion != null)
                     {
                         fecha = System.DateOnly.FromDateTime(dto.FechaRealizacion.Value.Date);
                     }
@@ -132,7 +132,7 @@ namespace project_api.Controllers
                 else
                 {
                     DateOnly? fecha = null;
-                    if (dto.FechaRealizacion == null)
+                    if (dto.FechaRealizacion != null)
                     {
                         fecha = System.DateOnly.FromDateTime(dto.FechaRealizacion.Value.Date);
                     }
