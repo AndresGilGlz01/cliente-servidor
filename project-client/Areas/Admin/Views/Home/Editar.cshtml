@@ -90,9 +90,9 @@
             <label class="actividad-form-label" for="descripcion">Descripción</label>
             <textarea id="mytextarea" class="actividad-form-input" asp-for="Actividad.Descripcion"></textarea>
 
-            <p class="error-message">
-                @Html.ValidationSummary(true)
-            </p>
+            <br />
+
+            @Html.ValidationSummary(true)
 
             <div class="actividad-form-buttons">
                 <a href="~/Admin/Home/" class="actividad-form-submit cancel">Cancelar</a>

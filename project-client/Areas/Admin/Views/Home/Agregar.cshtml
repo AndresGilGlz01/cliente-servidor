@@ -70,7 +70,7 @@
                     <input class="actividad-form-input" type="text" asp-for="Titulo" required>
 
                     <label class="actividad-form-label" for="departamento">Departamento</label>
-                   
+
 
                     <label class="actividad-form-label" for="fechaRealizacion">Fecha de realizacion</label>
                     <input class="actividad-form-input" type="date" asp-for="FechaRealizacion">
@@ -79,7 +79,7 @@
 
                 <div class="actividad-right">
                     <label class="actividad-form-label" for="imagen" style="text-align: center;">Imagen</label>
-                    <input class="actividad-form-input" style="display: none;" type="file" 
+                    <input class="actividad-form-input" style="display: none;" type="file"
                            accept="image/*" asp-for="Archivo">
 
                     <div class="actividad-form-img-preview">
@@ -89,11 +89,11 @@
                 </div>
             </div>
             <label class="actividad-form-label" for="descripcion">Descripción</label>
-            <textarea id="mytextarea" class="actividad-form-input" asp-for="Descripcion" ></textarea>
+            <textarea id="mytextarea" class="actividad-form-input" asp-for="Descripcion"></textarea>
 
-            <p class="error-message">
-                @Html.ValidationSummary(true)
-            </p>
+            <br />
+
+            @Html.ValidationSummary(true)
 
             <div class="actividad-form-buttons">
                 <a href="~/Admin/Home/" class="actividad-form-submit cancel">Cancelar</a>
