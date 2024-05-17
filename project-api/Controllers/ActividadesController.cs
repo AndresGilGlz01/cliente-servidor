@@ -166,7 +166,7 @@ namespace project_api.Controllers
             {
                 return NotFound();
             }
-            act.Estado = 3;
+            act.Estado =2;
             act.FechaActualizacion = DateTime.UtcNow;
             _repository.Update(act);
             return Ok();
