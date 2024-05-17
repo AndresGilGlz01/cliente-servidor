@@ -12,6 +12,11 @@ public class DepartamentosController : Controller
 {
     readonly HttpClient httpClient = new();
 
+    public IActionResult Index()
+    {
+        return View();
+    }
+
     public async Task<IActionResult> Agregar()
     {
         var viewModel = new AgregarDepartamentoViewModel();
@@ -56,5 +61,9 @@ public class DepartamentosController : Controller
         viewModel.DepartamentoSuperior = departamento.DepartamentoSuperior;
 
         return View(viewModel);
+    }
+    public IActionResult Eliminar(int id)
+    {
+        return View();
     }
 }
