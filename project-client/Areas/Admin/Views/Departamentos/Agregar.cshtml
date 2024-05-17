@@ -1,0 +1,117 @@
+﻿@using System.Security.Claims
+@model project_client.Areas.Admin.Models.AgregarDepartamentoViewModel;
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="~/styles/normalize.css">
+    <link rel="stylesheet" href="~/styles/main.css">
+    <title>Agregar departamento - Sistema Gestor de Actividades</title>
+</head>
+
+<body>
+
+    <header class="header">
+        <div class="search">
+            <form action="/buscar" method="post" class="search-form">
+                <!--Hacer esto con JS -->
+                <input type="search" placeholder="Buscar..." name="search" id="search" class="search-input">
+                <svg class="search-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" width="24px">
+                    <path d="M784-120 532-372q-30 24-69 38t-83 14q-109 0-184.5-75.5T120-580q0-109 75.5-184.5T380-840q109 0 184.5 75.5T640-580q0 44-14 83t-38 69l252 252-56 56ZM380-400q75 0 127.5-52.5T560-580q0-75-52.5-127.5T380-760q-75 0-127.5 52.5T200-580q0 75 52.5 127.5T380-400Z" />
+                </svg>
+            </form>
+        </div>
+        <div class="header-profile">
+            <span class="header-profile-name">
+                @User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Role)?.Value
+                <span class="small-text">
+                    @User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Name)?.Value
+                </span>
+            </span>
+            <svg class="header-profile-expand" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" width="24px">
+                <path d="M480-360 280-560h400L480-360Z" />
+            </svg>
+            <div class="profile-menu">
+                <a href="/cerrar-sesion">Cerrar sesión</a>
+            </div>
+        </div>
+    </header>
+
+    <main class="main">
+
+        <svg class="up-button" id="up-button" xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960">
+            <path d="M440-160v-487L216-423l-56-57 320-320 320 320-56 57-224-224v487h-80Z" />
+        </svg>
+
+        <form class="actividad-form" method="post" action="~/admin/departamentos/agregar" enctype="multipart/form-data">
+
+            <div class="actividad-form-content">
+
+                <div class="actividad-left">
+
+                    <input type="hidden" name="id" id="id">
+
+                    <label class="actividad-form-label" for="Nombre">Nombre</label>
+                    <input class="actividad-form-input" type="text" asp-for="Nombre" required>
+
+                    <label class="actividad-form-label" for="Username">Nombre de usuario</label>
+                    <input class="actividad-form-input" type="text" asp-for="Username" required>
+
+                    <label class="actividad-form-label" for="Password">Contraseña</label>
+                    <input class="actividad-form-input" type="text" asp-for="Password" required>
+
+                    <label class="actividad-form-label" for="IdDepartamentoSuperior">Departamento superior</label>
+                    <select class="actividad-form-input" asp-for="IdDepartamentoSuperior" required>
+                        <option value="0">Ningúno</option>
+                        @foreach (var departamento in Model.Departamentos)
+                        {
+                            <option value="@departamento.Id">@departamento.Nombre</option>
+                        }
+                    </select>
+
+                </div>
+            </div>
+
+            <p class="error-message">
+                @Html.ValidationSummary(true)
+            </p>
+
+            <div class="actividad-form-buttons">
+                <a href="~/admin/home" class="actividad-form-submit cancel">Cancelar</a>
+                <input type="submit" class="actividad-form-submit" value="Agregar departamento">
+            </div>
+
+            <script>
+                let preview = document.querySelector('.actividad-form-img-preview img');
+                let input = document.querySelector('.actividad-form-input[type="file"]');
+                input.addEventListener('change', function () {
+                    let file = input.files[0];
+                    let reader = new FileReader();
+                    reader.onload = function (e) {
+                        preview.src = e.target.result;
+                    }
+                    reader.readAsDataURL(file);
+                });
+                document.querySelector('.actividad-form-img-preview').addEventListener('click', function () {
+                    input.click();
+                });
+            </script>
+
+        </form>
+
+    </main>
+    <footer class="footer">
+        <p>Lorem Ipsum Industries &copy; 2024</p>
+    </footer>
+
+    <script src="~/scripts/main.js"></script>
+</body>
+
+</html>
