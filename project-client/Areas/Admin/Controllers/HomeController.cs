@@ -73,7 +73,7 @@ public class HomeController : Controller
         if (vm != null)
         {
 
-            if (vm.IdDepartamento == 0)
+            if (vm.IdDepartamento == 0||vm.IdDepartamento==null)
             {
                 var userid = User.Claims.First(x => x.Type == ClaimTypes.NameIdentifier).Value;
 
@@ -101,7 +101,7 @@ public class HomeController : Controller
                 Descripcion = vm.Descripcion,
                 FechaCreacion = vm.FechaCreacion,
                 FechaRealizacion = vm.FechaRealizacion,
-                IdDepartamento = vm.IdDepartamento,
+                IdDepartamento = vm.IdDepartamento??0,
                 Estado = 0,
                 Imagen = imagenBase64,
                 Id = 0
@@ -177,7 +177,7 @@ public class HomeController : Controller
             var ruta = converter.SaveFile(act.Actividad.Archivo);
             imagenBase64 = converter.ImageToBase64(ruta);
         }
-        if (act.Actividad.IdDepartamento == 0)
+        if (act.Actividad.IdDepartamento == 0|| act.Actividad.IdDepartamento == null)
         {
             var userid = User.Claims.First(x => x.Type == ClaimTypes.NameIdentifier).Value;
 
@@ -188,7 +188,7 @@ public class HomeController : Controller
             Id=act.Actividad.Id,
             Descripcion=act.Actividad.Descripcion,
             Titulo=act.Actividad.Titulo,
-            IdDepartamento=act.Actividad.IdDepartamento,
+            IdDepartamento=act.Actividad.IdDepartamento??0,
             FechaCreacion=act.Actividad.FechaCreacion,
             FechaRealizacion=act.Actividad.FechaRealizacion,
             Imagen=imagenBase64

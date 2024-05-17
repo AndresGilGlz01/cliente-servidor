@@ -13,7 +13,7 @@
         public DateTime FechaCreacion { get; set; }
 
         public DateTime FechaActualizacion { get; set; }
-        public string Departamento { get; set; } = null!;
+        public string? Departamento { get; set; } = null!;
         public int Estado { get; set; }
         public string Imagen { get; set; }
         
