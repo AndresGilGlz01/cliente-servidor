@@ -82,7 +82,7 @@
                            accept="image/*" asp-for="Actividad.Archivo">
 
                     <div class="actividad-form-img-preview">
-                        <img src="https://sga.api.labsystec.net/images/@(Model.Actividad.Id).png" height="100%" alt="imagen" class="actividad-form-img">
+                        <img src="https://sga.api.labsystec.net/images/@(Model.Actividad.Id).png" asp-append-version height="100%" alt="imagen" class="actividad-form-img">
                     </div>
 
                 </div>
