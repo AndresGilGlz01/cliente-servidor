@@ -70,15 +70,7 @@
                     <input class="actividad-form-input" type="text" asp-for="Titulo" required>
 
                     <label class="actividad-form-label" for="departamento">Departamento</label>
-                    <select class="actividad-form-input"asp-for="IdDepartamento" required>
-                        <option value="0">Seleccione una Opcion</option>
-                        @foreach (var item in Model.Departamentos)
-                        {
-                            <option value="@item.Id">@item.Nombre</option>
-
-                        }
-
-                    </select>
+                   
 
                     <label class="actividad-form-label" for="fechaRealizacion">Fecha de realizacion</label>
                     <input class="actividad-form-input" type="date" asp-for="FechaRealizacion">

@@ -119,7 +119,6 @@ namespace project_api.Controllers
         }
 
         [HttpPut]
-
         public IActionResult Put(ActividadesDto dto)
         {
             var vali = validator.Validate(dto);

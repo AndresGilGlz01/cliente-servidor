@@ -85,15 +85,15 @@ public class HomeController : Controller
 
             // Suponiendo que tienes una propiedad 'Imagen' en tu ViewModel que contiene la imagen como un byte array
             // Aquí debes reemplazar 'vm.Imagen' con la propiedad real que contiene la imagen en tu ViewModel
-            var imagenBase64="";
+            var imagenBase64 = "";
             if (vm.Archivo != null)
             {
 
                 var ruta = converter.SaveFile(vm.Archivo);
-                imagenBase64=converter.ImageToBase64(ruta);
+                imagenBase64 = converter.ImageToBase64(ruta);
             }
-            
-            
+
+
             var actdto = new AddActDto()
             {
                 Titulo = vm.Titulo,
@@ -111,7 +111,7 @@ public class HomeController : Controller
             var response = await httpClient.PostAsync("/api/Actividades", content);
             if (response.IsSuccessStatusCode)
             {
-                
+
                 return RedirectToAction("Index");
             }
             else
@@ -120,7 +120,7 @@ public class HomeController : Controller
                 var rresponse = await httpClient.GetAsync($"/api/Departamentos/{userid}");
                 if (rresponse.IsSuccessStatusCode)
                 {
-                     var content2 = await rresponse.Content.ReadAsStringAsync();
+                    var content2 = await rresponse.Content.ReadAsStringAsync();
 
                     var depas = Newtonsoft.Json.JsonConvert.DeserializeObject<List<Departamentos>>(content2);
                     if (depas != null)
@@ -129,7 +129,7 @@ public class HomeController : Controller
                     }
 
                 }
-                var error= await response.Content.ReadAsStringAsync();
+                var error = await response.Content.ReadAsStringAsync();
                 ModelState.AddModelError("", error);
                 return View(vm);
             }
@@ -141,15 +141,36 @@ public class HomeController : Controller
     public async Task<IActionResult> Editar(int id)
     {
 
-       
+
         GetActividadViewModel act = new();
         httpClient.BaseAddress = new Uri("https://sga.api.labsystec.net/");
         var r = await httpClient.GetAsync($"/api/actividades/{id}");
         if (r.IsSuccessStatusCode)
         {
-            var con= await r.Content.ReadAsStringAsync();
+            var con = await r.Content.ReadAsStringAsync();
             act.Actividad = JsonConvert.DeserializeObject<Actividad>(con); ;
-            
+
+            return View(act);
+        }
+
+
+
+        return View(null);
+    }
+    [HttpPost]
+    public async Task<IActionResult> Editar(GetActividadViewModel act)
+    {
+
+
+        
+        httpClient.BaseAddress = new Uri("https://sga.api.labsystec.net/");
+
+        var r = await httpClient.PutAsync($"/api/actividades/{act}",);
+        if (r.IsSuccessStatusCode)
+        {
+            var con = await r.Content.ReadAsStringAsync();
+            act.Actividad = JsonConvert.DeserializeObject<Actividad>(con); ;
+
         }
         var userid = User.Claims.First(x => x.Type == ClaimTypes.NameIdentifier).Value;
         var response = await httpClient.GetAsync($"/api/Departamentos/{userid}");
