@@ -53,6 +53,7 @@ public class DepartamentosController : Controller
         viewModel.Id = departamento.Id;
         viewModel.Nombre = departamento.Nombre;
         viewModel.Username = departamento.Username;
+        viewModel.DepartamentoSuperior = departamento.DepartamentoSuperior;
 
         return View(viewModel);
     }

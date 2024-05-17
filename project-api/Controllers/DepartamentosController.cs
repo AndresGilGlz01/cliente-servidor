@@ -32,7 +32,16 @@ namespace project_api.Controllers
             var datos = _departamentosRepository.Get(id);
             if (datos != null)
             {
-                return Ok(datos);
+                var dto = new DepartamentosDto()
+                {
+                    Id = datos.Id,
+                    Nombre = datos.Nombre,
+                    Username = datos.Username,
+                    Password = datos.Password,
+                    DepartamentoSuperior = datos.IdSuperior != null ? _departamentosRepository.GetById(datos.IdSuperior.Value)?.Nombre : null,
+                    IdSuperior = datos.IdSuperior
+                };
+                return Ok(dto);
             }
             return NotFound();
         }

@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+
 using project_api.Models.Dtos;
 using project_api.Models.Entities;
 
@@ -19,7 +20,7 @@ namespace project_api.Repositories
 
         public IEnumerable<DepartamentosDto> GetDeparamentos()
         {
-            return context.Departamentos.OrderBy(x=>x.Nombre).Select(d => new DepartamentosDto
+            return context.Departamentos.OrderBy(x => x.Nombre).Select(d => new DepartamentosDto
             {
                 Id = d.Id,
                 IdSuperior = d.IdSuperior,
@@ -34,7 +35,7 @@ namespace project_api.Repositories
         }
         public Departamentos? GetById(int id)
         {
-            return context.Departamentos.Find(id);
+            return context.Departamentos.Include(x => x.IdSuperiorNavigation).FirstOrDefault(x => x.Id == id);
         }
     }
 }
