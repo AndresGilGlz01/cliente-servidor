@@ -206,9 +206,19 @@ public class HomeController : Controller
             // Puedes retornar la vista adecuada si es necesario
             return RedirectToAction("Index");
         }
-            //var content = await response.Content.ReadAsStringAsync();
-            //act.Actividad = JsonConvert.DeserializeObject<Actividad>(content);
+        else
+        {
 
-        return View(null);
+            var r = await httpClient.GetAsync($"/api/actividades/{act.Actividad.Id}");
+            if (r.IsSuccessStatusCode)
+            {
+                var con = await r.Content.ReadAsStringAsync();
+                act.Actividad = JsonConvert.DeserializeObject<Actividad>(con); ;
+
+                return View(act);
+            }
+        }
+        return View(act);
+        
     }
 }

@@ -148,7 +148,7 @@ namespace project_api.Controllers
                     act.FechaRealizacion = fecha;
 
                     _repository.Update(act);
-                    var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images", $"{act.Id}.png");
+                    var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images", $"{dto.Id}.png");
                     var bytes = Convert.FromBase64String(dto.Imagen);
                     System.IO.File.WriteAllBytes(path, bytes);
                     return Ok();
