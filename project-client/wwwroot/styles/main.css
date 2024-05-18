@@ -112,6 +112,7 @@ body {
     padding: 0px 15px;
     border-radius: 5px;
     display: flex;
+    z-index: 3;
     transition: background-color ease-in 0.2s;
     position: relative;
 }

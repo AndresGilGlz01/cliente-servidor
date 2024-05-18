@@ -80,18 +80,14 @@ actividades.forEach((actividad) => {
 
         image.src = `https://sga.api.labsystec.net/images/${id}.png`;
 
-        // verificar si la imagen existe
         image.onerror = function() {
             image.src = `https://sga.api.labsystec.net/images/0.png`;
         }
 
-        let btnModificar = document.querySelector('.details-modify');
-        let btnEliminar = document.querySelector('.details-delete');
+        document.querySelector('.details-modify').href = `admin/home/editar/${id}`;
+        document.querySelector('.details-delete').href = `admin/home/eliminar/${id}`;
 
-        btnModificar.href = `admin/home/editar/${id}`;
-        btnEliminar.href = `admin/home/eliminar/${id}`;
-
-        tinymce.activeEditor.setContent(descripcion);
+        document.querySelector('.details-body-description').innerHTML = descripcion;
 
         detailsTitle.innerHTML = template;
     });

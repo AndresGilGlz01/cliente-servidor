@@ -13,18 +13,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="/styles/normalize.css">
     <link rel="stylesheet" href="/styles/main.css">
-    <script src="https://cdn.tiny.cloud/1/r9ntmf320hcycx0ci473rmxopso22j6woj4ikx9nq5kbaq84/tinymce/7/tinymce.min.js"
-            referrerpolicy="origin"></script>
-
-    <script>
-        tinymce.init({
-            selector: '#mytextarea',
-            menubar: false,
-            toolbar: false,
-            readonly: true,
-            resize: false
-        });
-    </script>
     <title>Inicio - Sistema Gestor de Actividades</title>
 </head>
 
@@ -51,6 +39,7 @@
                 <path d="M480-360 280-560h400L480-360Z" />
             </svg>
             <div class="profile-menu">
+                <a href="/admin/departamentos">Departamentos</a>
                 <a href="/cerrar-sesion">Cerrar sesión</a>
             </div>
         </div>
@@ -97,21 +86,6 @@
                         </div>
                     }
                 }
-
-                <script>
-
-                    // setTimeout(() => {
-                    //     let points = document.querySelectorAll(".tox:not([dir=rtl])");
-
-                    //     console.log(points);
-
-                    // }, 3000);
-                    
-                </script>
-
-                <style>
-
-                </style>
     </main>
 
     <aside class="aside" id="aside">
@@ -165,17 +139,14 @@
         </p>
         <div class="details-body">
             <img src="https://sga.api.labsystec.net/images/0.png" asp-append-version  alt="evento" class="details-img">
-            <textarea id="mytextarea">Hello, World!</textarea>
+            <p class="details-body-description">Hello, World!</p>
         </div>
         
-            
-
             <div class="details-btns">
                 <a href="javascript:" class="details-delete">Eliminar</a>
                 <a href="javascript:" class="details-modify">Modificar</a>
             </div>
            
-
     </div>
 
     <footer class="footer">
