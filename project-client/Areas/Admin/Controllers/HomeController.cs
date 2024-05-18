@@ -130,7 +130,7 @@ public class HomeController : Controller
             {
 
                 return RedirectToAction("Index");
-            }
+             }
             else
             {
                 var userid = User.Claims.First(x => x.Type == ClaimTypes.NameIdentifier).Value;

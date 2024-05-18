@@ -61,6 +61,8 @@ namespace project_client.Controllers
                
                 var roleClaim = jwtToken.Claims.FirstOrDefault(claim => claim.Type == "role");
                 var userid = jwtToken.Claims.First(x=>x.Type=="nameid").Value;
+                var name = jwtToken.Claims.First(x => x.Type == "unique_name").Value;
+
 
 
                 if (roleClaim == null)
@@ -74,7 +76,8 @@ namespace project_client.Controllers
                 var claims = new List<Claim>
                 {
                     new (ClaimTypes.Role, role),
-                    new (ClaimTypes.NameIdentifier, userid)
+                    new (ClaimTypes.NameIdentifier, userid),
+                    new (ClaimTypes.Name, name)
                 };
 
                 var identity = new ClaimsIdentity(claims, "login");
