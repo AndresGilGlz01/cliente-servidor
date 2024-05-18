@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 
 using project_client.Areas.Admin.Models;
 
@@ -6,7 +7,7 @@ using System.Security.Claims;
 using System.Text.Json;
 
 namespace project_client.Areas.Admin.Controllers;
-
+[Authorize(Roles ="Admin")]
 [Area("Admin")]
 public class DepartamentosController : Controller
 {

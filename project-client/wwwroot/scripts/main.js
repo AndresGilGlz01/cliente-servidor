@@ -30,7 +30,7 @@ actividades.forEach((actividad) => {
 
         let id = actividad.getAttribute('data-id');
 
-        let url = `https://sga.api.labsystec.net/api/actividades/${id}`;
+        let url = `https://sga.api.labsystec.net/api/actividades/GetAct${id}`;
 
         let request = await fetch(url, {
             method: 'GET',
