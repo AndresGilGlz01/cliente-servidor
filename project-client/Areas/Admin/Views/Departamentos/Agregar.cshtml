@@ -50,7 +50,7 @@
             <path d="M440-160v-487L216-423l-56-57 320-320 320 320-56 57-224-224v487h-80Z" />
         </svg>
 
-        <form class="actividad-form" method="post" action="~/admin/departamentos/agregar" enctype="multipart/form-data">
+        <form class="actividad-form" method="post" action="~/admin/departamentos/agregar">
 
             <div class="actividad-form-content">
 
@@ -60,14 +60,14 @@
                     <label class="actividad-form-label" for="Nombre">Nombre</label>
                     <input class="actividad-form-input" type="text" asp-for="Nombre" required>
 
-                    <label class="actividad-form-label" for="IdDepartamentoSuperior">Departamento superior</label>
-                    <select class="actividad-form-input" asp-for="IdDepartamentoSuperior" required>
+                   @*  <label class="actividad-form-label" for="IdDepartamentoSuperior">Departamento superior</label>
+                    <select class="actividad-form-input" asp-for="IdSuperior" required>
                         <option value="0">Ningúno</option>
                         @foreach (var departamento in Model.Departamentos)
                         {
                             <option value="@departamento.Id">@departamento.Nombre</option>
                         }
-                    </select>
+                    </select> *@
 
                 </div>
 

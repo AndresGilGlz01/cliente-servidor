@@ -4,10 +4,11 @@ using Microsoft.AspNetCore.Mvc;
 using project_client.Areas.Admin.Models;
 
 using System.Security.Claims;
+using System.Text;
 using System.Text.Json;
 
 namespace project_client.Areas.Admin.Controllers;
-[Authorize(Roles ="Admin")]
+[Authorize(Roles = "Admin")]
 [Area("Admin")]
 public class DepartamentosController : Controller
 {
@@ -15,7 +16,7 @@ public class DepartamentosController : Controller
 
     public async Task<IActionResult> IndexAsync()
     {
-        DepartamentosViewModel vm= new DepartamentosViewModel();
+        DepartamentosViewModel vm = new DepartamentosViewModel();
         httpClient.BaseAddress = new Uri("https://sga.api.labsystec.net/");
         var userid = User.Claims.First(x => x.Type == ClaimTypes.NameIdentifier).Value;
         var response = await httpClient.GetAsync($"/api/departamentos/{userid}");
@@ -28,13 +29,13 @@ public class DepartamentosController : Controller
             if (depas != null)
             {
 
-                vm.Departamentos= depas;
+                vm.Departamentos = depas;
                 return View(vm);
             }
         }
         return View();
     }
-
+    [HttpGet]
     public async Task<IActionResult> Agregar()
     {
         var viewModel = new AgregarDepartamentoViewModel();
@@ -56,7 +57,60 @@ public class DepartamentosController : Controller
 
         return View(viewModel);
     }
+    [HttpPost]
+    public async Task<IActionResult> Agregar(AgregarDepartamentoViewModel viewModel)
+    {
 
+
+        httpClient.BaseAddress = new Uri("https://sga.api.labsystec.net/");
+        if (viewModel != null)
+        {
+            if (viewModel.IdSuperior == 0)
+            {
+
+                var userid = User.Claims.First(x => x.Type == ClaimTypes.NameIdentifier).Value;
+                viewModel.IdSuperior = int.Parse(userid);
+            }
+
+            var dep = new Departamentos()
+            {
+                Id = 0,
+                IdSuperior = viewModel.IdSuperior,
+                Nombre = viewModel.Nombre,
+                Username = viewModel.Username,
+                Password = viewModel.Password,
+
+            };
+            var loginjson = System.Text.Json.JsonSerializer.Serialize(dep);
+            var content = new StringContent(loginjson, Encoding.UTF8, "application/json");
+            var response = await httpClient.PostAsync("/api/Departamentos", content);
+            if(response.IsSuccessStatusCode)
+            {
+                return RedirectToAction("Index");
+
+            }
+            else
+            {
+                var error = await response.Content.ReadAsStringAsync();
+                ModelState.AddModelError("", error);
+                return View(viewModel);
+            }
+        }
+
+        //var response = await httpClient.GetAsync($"/api/Departamentos/{userid}");
+
+        //if (!response.IsSuccessStatusCode) return View();
+
+        //var content = await response.Content.ReadAsStringAsync();
+
+        //var departamentos = JsonSerializer.Deserialize<IEnumerable<Departamentos>>(content, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+
+        //if (departamentos == null) return View();
+
+        //viewModel.Departamentos = departamentos;
+
+        return View(viewModel);
+    }
     public async Task<IActionResult> Editar(int id)
     {
         var viewModel = new EditarDepartamentoViewModel();
