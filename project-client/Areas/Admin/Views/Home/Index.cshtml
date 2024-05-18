@@ -66,6 +66,7 @@
         <div class="actividades">
             <p class="actividades-title">Hoy</p>
             <div class="actividades-box">
+                <div id="userIdDepartamento" hidden data-user-id="@userIdDepartamento"></div>
                 @foreach (var item in Model)
                 {
                     if (item.Estado != 2)
