@@ -27,7 +27,7 @@ namespace project_api.Controllers
             return Ok(datos);
 
         }
-        [HttpGet("GetAct/{id}")]
+        [HttpGet("/GetAct/{id}")]
         public IActionResult GetAct(int id)
         {
             var datos = _repository.GetById(id);

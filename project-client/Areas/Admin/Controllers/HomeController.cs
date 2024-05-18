@@ -28,7 +28,7 @@ public class HomeController : Controller
 
         httpClient.BaseAddress = new Uri("https://sga.api.labsystec.net/");
         var userid = User.Claims.First(x => x.Type == ClaimTypes.NameIdentifier).Value;
-        var response = await httpClient.GetAsync($"/api/actividades{userid}");
+        var response = await httpClient.GetAsync($"/api/actividades/{userid}");
         if (response.IsSuccessStatusCode)
         {
             var content = await response.Content.ReadAsStringAsync();
