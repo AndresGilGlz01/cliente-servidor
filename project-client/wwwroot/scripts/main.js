@@ -4,6 +4,7 @@ let frmFiltrosForm = document.querySelector("#aside");
 let btnCloseDetails = document.querySelector('#details-close');
 let actividades = document.querySelectorAll('.actividad');
 let actividadDetails = document.querySelector('.actividad-details');
+let userIdDepartamento = parseInt(document.getElementById("userIdDepartamento").dataset.userId || "0");
 
 if (frmFiltrosForm) {
     let btnOpenFiltrosForm = document.querySelector('#aside-open');
@@ -50,6 +51,8 @@ actividades.forEach((actividad) => {
         let fechaCreacion = response.fechaCreacion;
         let fechaRealizacion = response.fechaRealizacion;
         let titulo = response.titulo;
+        let idepa = response.idDepartamento;
+
 
         // formatear fechas
         let fechaCreacionDate = new Date(fechaCreacion);
@@ -87,7 +90,17 @@ actividades.forEach((actividad) => {
         document.querySelector('.details-modify').href = `admin/home/editar/${id}`;
         document.querySelector('.details-delete').href = `admin/home/eliminar/${id}`;
 
-        document.querySelector('.details-body-description').innerHTML = descripcion;
+        if (idepa != userIdDepartamento) {
+            btnModificar.style.display = "none";
+            btnEliminar.style.display = "none";
+        } else {
+            btnModificar.style.display = "block";
+            btnEliminar.style.display = "block";
+            btnModificar.href = `admin/home/editar/${id}`;
+            btnEliminar.href = `admin/home/eliminar/${id}`;
+        }
+
+        tinymce.activeEditor.setContent(descripcion);
 
         detailsTitle.innerHTML = template;
     });
