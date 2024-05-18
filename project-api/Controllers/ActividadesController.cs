@@ -20,15 +20,15 @@ namespace project_api.Controllers
             this.validator = validator;
         }
 
-        [HttpGet]
-        public IActionResult Get()
+        [HttpGet("{id}")]
+        public IActionResult Get(int id)
         {
-            var datos = _repository.GetActividades();
+            var datos = _repository.GetActividades(id);
             return Ok(datos);
 
         }
-        [HttpGet("{id}")]
-        public IActionResult Get(int id)
+        [HttpGet("GetAct/{id}")]
+        public IActionResult GetAct(int id)
         {
             var datos = _repository.GetById(id);
             if (datos != null)

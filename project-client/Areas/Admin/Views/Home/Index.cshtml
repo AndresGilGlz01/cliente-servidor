@@ -68,7 +68,7 @@
             <div class="actividades-box">
                 @foreach (var item in Model)
                 {
-                    if (item.Estado != 2 && item.IdDepartamento==userIdDepartamento)
+                    if (item.Estado != 2)
                     {
                         
                         <div class="actividad" data-id="@item.Id">
