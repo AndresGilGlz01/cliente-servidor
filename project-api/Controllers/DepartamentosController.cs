@@ -15,10 +15,12 @@ namespace project_api.Controllers
     {
         private readonly DepartamentosRepository _departamentosRepository;
         private readonly DepartamentosValidator _validator;
-        public DepartamentosController(DepartamentosRepository repodep, DepartamentosValidator validations)
+        private readonly ActividadesRepository _actividadesRepository;
+        public DepartamentosController(DepartamentosRepository repodep, DepartamentosValidator validations, ActividadesRepository actividadesRepository)
         {
             _departamentosRepository = repodep;
             _validator = validations;
+            _actividadesRepository = actividadesRepository;
         }
         [HttpGet]
         public IActionResult Get()
@@ -118,8 +120,15 @@ namespace project_api.Controllers
             var dep = _departamentosRepository.GetById(id);
             if(dep != null)
             {
+
+                var acts= _actividadesRepository.GetAll().Where(x => x.IdDepartamento == id);
+                foreach(var act in acts)
+                {
+                    _actividadesRepository.Delete(act);
+                }
+                
                 _departamentosRepository.Delete(dep);
-                return Ok(dep);
+                return NoContent();
 
             }
             return NotFound();
