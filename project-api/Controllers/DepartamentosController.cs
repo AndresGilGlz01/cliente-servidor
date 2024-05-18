@@ -54,9 +54,9 @@ namespace project_api.Controllers
             var datos = _departamentosRepository.GetSub(id).Select(x=>new DepartamentosDto()
             {
                 Id=x.Id,
-                IdSuperior=x.IdSuperior,
                 Nombre=x.Nombre,
                 Username = x.Username,
+                IdSuperior=x.IdSuperior,
                 DepartamentoSuperior=x.IdSuperiorNavigation?.Nombre,
                 Password = x.Password,
             });
