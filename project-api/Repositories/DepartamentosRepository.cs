@@ -31,7 +31,7 @@ namespace project_api.Repositories
         }
         public IEnumerable<Departamentos> GetSub(int id)
         {
-            return context.Departamentos.Where(x => x.IdSuperior == id);
+            return context.Departamentos.Where(x => x.IdSuperior == id).Include(x=>x.IdSuperiorNavigation);
         }
         public Departamentos? GetById(int id)
         {

@@ -13,8 +13,25 @@ public class DepartamentosController : Controller
 {
     readonly HttpClient httpClient = new();
 
-    public IActionResult Index()
+    public async Task<IActionResult> IndexAsync()
     {
+        DepartamentosViewModel vm= new DepartamentosViewModel();
+        httpClient.BaseAddress = new Uri("https://sga.api.labsystec.net/");
+        var userid = User.Claims.First(x => x.Type == ClaimTypes.NameIdentifier).Value;
+        var response = await httpClient.GetAsync($"/api/departamentos/{userid}");
+        if (response.IsSuccessStatusCode)
+        {
+            var content = await response.Content.ReadAsStringAsync();
+
+            // Deserializar la cadena JSON en una lista de ActividadesViewModel
+            var depas = JsonSerializer.Deserialize<List<Departamentos>>(content);
+            if (depas != null)
+            {
+
+                vm.Departamentos= depas;
+                return View(vm);
+            }
+        }
         return View();
     }
 

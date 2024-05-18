@@ -51,7 +51,15 @@ namespace project_api.Controllers
         [HttpGet("{id}")]
         public IActionResult Get(int id)
         {
-            var datos = _departamentosRepository.GetSub(id);
+            var datos = _departamentosRepository.GetSub(id).Select(x=>new DepartamentosDto()
+            {
+                Id=x.Id,
+                IdSuperior=x.IdSuperior,
+                Nombre=x.Nombre,
+                Username = x.Username,
+                DepartamentoSuperior=x.IdSuperiorNavigation?.Nombre,
+                Password = x.Password,
+            });
             if (datos != null)
             {
 
