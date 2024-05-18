@@ -1,5 +1,5 @@
 ﻿@using System.Security.Claims
-@model project_client.Areas.Admin.Models.DepartamentosViewModel
+@model List< project_client.Areas.Admin.Models.ActividadesViewModel>
 @addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
 @{
     Layout = null;
@@ -13,7 +13,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="/styles/normalize.css">
     <link rel="stylesheet" href="/styles/main.css">
-    <title>Departamentos - Sistema Gestor de Actividades</title>
+    <title>Borradores - Sistema Gestor de Actividades</title>
 </head>
 
 <body>
@@ -51,7 +51,11 @@
         <div class="buttons">
 
             <div class="capturar" id="btnCapturar">
-                <a href="~/admin/departamentos/agregar" class="capturar-text">Capturar</a>
+                <a href="~/Admin/Home/Agregar" class="capturar-text">Capturar</a>
+            </div>
+
+            <div class="filtros" id="aside-open">
+                <span class="capturar-text">Filtros</span>
             </div>
 
         </div>
@@ -61,29 +65,61 @@
         </svg>
 
         <div class="actividades">
-            <p class="actividades-title">Departamentos</p>
-
+            <p class="actividades-title">Hoy</p>
             <div class="actividades-box">
-                @foreach (var departamento in Model.Departamentos)
+                <div id="userIdDepartamento" hidden data-user-id="@userIdDepartamento"></div>
+                @foreach (var item in Model)
                 {
-                    <div class="actividad" data-id="@departamento.Id">
-                        <div class="actividad-header">
-                            <span class="actividad-title">
-                                @departamento.Nombre <span class="actividad-title-depto">
-                                    @departamento.Username
+                    if (item.Estado != 2)
+                    {
+                        <div class="actividad" data-id="@item.Id">
+                            <div class="actividad-header">
+                                <span class="actividad-title">
+                                    @item.Titulo <span class="actividad-title-depto">
+                                        @item.Departamento
+                                    </span>
                                 </span>
-                            </span>
-                        </div>
-                        @if(departamento.DepartamentoSuperior != null)
-                        {
+                                <span class="actividad-fecha">@item.FechaCreacion</span>
+                            </div>
                             <p class="actividad-description">
-                                @departamento.DepartamentoSuperior
-                            </p>                            
-                        }
-                    </div>
+                                @Html.Raw(item.Descripcion)
+                            </p>
+                        </div>
+                    }
                 }
             </div>
     </main>
+
+    <aside class="aside" id="aside">
+
+        <svg class="aside-close" id="aside-close" xmlns="http://www.w3.org/2000/svg" height="24px"
+             viewBox="0 -960 960 960">
+            <path d="m256-200-56-56 224-224-224-224 56-56 224 224 224-224 56 56-224 224 224 224-56 56-224-224-224 224Z" />
+        </svg>
+        <form class="filtros-form">
+
+            <label class="filtros-form-label" for="departamento">Departamento</label>
+
+            <select class="filtros-form-input" name="departamento" id="departamento">
+                <option>departamento 1</option>
+                <option>departamento 2</option>
+                <option>departamento 3</option>
+                <option>departamento 4</option>
+                <option>departamento 5</option>
+            </select>
+
+            <label class="filtros-form-label" for="fechaInicio">Rango de fechas</label>
+
+            <div class="filtros-form-input-dates">
+                <input class="filtros-form-input" type="date" name="fechaInicio" id="fechaInicio">
+                <input class="filtros-form-input" type="date" name="fechaFin" id="fechaFin">
+            </div>
+
+            <input type="submit" class="filtros-form-submit" href="javascript:" value="Filtrar">
+
+        </form>
+
+    </aside>
 
     <div class="actividad-details">
         <svg class="details-close" id="details-close" xmlns="http://www.w3.org/2000/svg" height="24px"

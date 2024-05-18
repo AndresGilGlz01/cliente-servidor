@@ -39,6 +39,8 @@
                 <path d="M480-360 280-560h400L480-360Z" />
             </svg>
             <div class="profile-menu">
+                <a href="/admin/">Inicio</a>
+                <a href="/admin/home/borradores">Borradores</a>
                 <a href="/cerrar-sesion">Cerrar sesión</a>
             </div>
         </div>
@@ -54,23 +56,6 @@
 
             <div class="actividad-form-content">
 
-                <div class="actividad-left">
-                    <input type="hidden" name="id" id="id">
-
-                    <label class="actividad-form-label" for="Nombre">Nombre</label>
-                    <input class="actividad-form-input" type="text" asp-for="Nombre" required>
-
-                    <label class="actividad-form-label" for="IdDepartamentoSuperior">Departamento superior</label>
-                    <select class="actividad-form-input" asp-for="IdDepartamentoSuperior" required>
-                        <option value="0">Ningúno</option>
-                        @foreach (var departamento in Model.Departamentos)
-                        {
-                            <option value="@departamento.Id">@departamento.Nombre</option>
-                        }
-                    </select>
-
-                </div>
-
                 <div class="actividad-right" style="gap: 0px">
                     <label class="actividad-form-label" for="Username">Nombre de usuario</label>
                     <input class="actividad-form-input" type="text" asp-for="Username" required>
@@ -78,6 +63,15 @@
                     <label class="actividad-form-label" for="Password">Contraseña</label>
                     <input class="actividad-form-input" type="text" asp-for="Password" required>
                 </div>
+
+                <div class="actividad-left">
+                    <input type="hidden" name="id" id="id">
+
+                    <label class="actividad-form-label" for="Nombre">Nombre</label>
+                    <input class="actividad-form-input" type="text" asp-for="Nombre" required>
+
+                </div>
+
             </div>
 
             <br />

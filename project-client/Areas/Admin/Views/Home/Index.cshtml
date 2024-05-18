@@ -39,7 +39,8 @@
                 <path d="M480-360 280-560h400L480-360Z" />
             </svg>
             <div class="profile-menu">
-                <a href="/admin/departamentos">Departamentos</a>
+                <a href="/admin/">Inicio</a>
+                <a href="/admin/home/borradores">Borradores</a>
                 <a href="/cerrar-sesion">Cerrar sesión</a>
             </div>
         </div>
@@ -71,7 +72,7 @@
                 {
                     if (item.Estado != 2)
                     {
-                        
+
                         <div class="actividad" data-id="@item.Id">
                             <div class="actividad-header">
                                 <span class="actividad-title">
@@ -82,11 +83,12 @@
                                 <span class="actividad-fecha">@item.FechaCreacion</span>
                             </div>
                             <p class="actividad-description">
-                                @item.Descripcion
+                                @Html.Raw(item.Descripcion)
                             </p>
                         </div>
                     }
                 }
+            </div>
     </main>
 
     <aside class="aside" id="aside">
@@ -139,15 +141,15 @@
             <span class="details-date"> &middot; Realizado el 03/01/2002</span>
         </p>
         <div class="details-body">
-            <img src="https://sga.api.labsystec.net/images/0.png" asp-append-version  alt="evento" class="details-img">
-            <p class="details-body-description">Hello, World!</p>
+            <img src="https://sga.api.labsystec.net/images/0.png" asp-append-version alt="evento" class="details-img">
+            <p class="details-body-description"></p>
         </div>
-        
-            <div class="details-btns">
-                <a href="javascript:" class="details-delete">Eliminar</a>
-                <a href="javascript:" class="details-modify">Modificar</a>
-            </div>
-           
+
+        <div class="details-btns">
+            <a href="javascript:" class="details-delete">Eliminar</a>
+            <a href="javascript:" class="details-modify">Seguir modificando</a>
+        </div>
+
     </div>
 
     <footer class="footer">

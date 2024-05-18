@@ -48,12 +48,6 @@ public class DepartamentosController : Controller
 
         var content = await response.Content.ReadAsStringAsync();
 
-        var departamentos = JsonSerializer.Deserialize<IEnumerable<Departamentos>>(content, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
-
-        if (departamentos == null) return View();
-
-        viewModel.Departamentos = departamentos;
-
         return View(viewModel);
     }
 

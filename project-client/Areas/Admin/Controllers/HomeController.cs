@@ -24,8 +24,6 @@ public class HomeController : Controller
 
     public async Task<IActionResult> IndexAsync()
     {
-
-
         httpClient.BaseAddress = new Uri("https://sga.api.labsystec.net/");
         var userid = User.Claims.First(x => x.Type == ClaimTypes.NameIdentifier).Value;
         var response = await httpClient.GetAsync($"/api/actividades/{userid}");
@@ -33,17 +31,35 @@ public class HomeController : Controller
         {
             var content = await response.Content.ReadAsStringAsync();
 
-            // Deserializar la cadena JSON en una lista de ActividadesViewModel
             var actividades = JsonConvert.DeserializeObject<List<ActividadesViewModel>>(content);
             if (actividades != null)
             {
-
-                List<ActividadesViewModel> acts = actividades.ToList();
+                List<ActividadesViewModel> acts = actividades.Where(act => act.Estado != 0).ToList();
                 return View(acts);
             }
         }
         return View(null);
     }
+
+    public async Task<IActionResult> Borradores()
+    {
+        httpClient.BaseAddress = new Uri("https://sga.api.labsystec.net/");
+
+        var userid = User.Claims.First(x => x.Type == ClaimTypes.NameIdentifier).Value;
+        var response = await httpClient.GetAsync($"/api/actividades/{userid}");
+
+        if (!response.IsSuccessStatusCode) return View(null);
+
+        var content = await response.Content.ReadAsStringAsync();
+        var actividades = JsonConvert.DeserializeObject<List<ActividadesViewModel>>(content);
+
+        if (actividades == null) return View(null);
+
+        var borradores = actividades.Where(act => act.Estado == 0).ToList();
+        
+        return View(borradores);
+    }
+
     [HttpGet]
     public async Task<IActionResult> Agregar()
     {
@@ -160,6 +176,7 @@ public class HomeController : Controller
 
         return View(null);
     }
+
     [HttpPost]
     public async Task<IActionResult> Editar(GetActividadViewModel act)
     {
@@ -222,7 +239,6 @@ public class HomeController : Controller
         return View(act);
         
     }
-
 
     [HttpGet("admin/home/eliminar/{id}")]
     public async Task<IActionResult> Eliminar(int id)

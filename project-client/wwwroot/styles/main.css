@@ -320,6 +320,7 @@ body {
     }
 
     100% {
+        z-index: 3;
         right: 0;
     }
 }
@@ -397,7 +398,6 @@ body {
 
 .actividad-details {
     position: fixed;
-    z-index: 2;
     width: 80%;
     top: 50%;
     left: 50%;
@@ -628,11 +628,11 @@ body {
 @keyframes open-details {
     0% {
         opacity: 0%;
-        z-index: 2;
+        z-index: 4;
     }
 
     100% {
-        z-index: 2;
+        z-index: 4;
         opacity: 100%;
     }
 }

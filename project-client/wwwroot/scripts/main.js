@@ -87,8 +87,11 @@ actividades.forEach((actividad) => {
             image.src = `https://sga.api.labsystec.net/images/0.png`;
         }
 
-        document.querySelector('.details-modify').href = `admin/home/editar/${id}`;
-        document.querySelector('.details-delete').href = `admin/home/eliminar/${id}`;
+        let btnModificar = document.querySelector('.details-modify');
+        let btnEliminar = document.querySelector('.details-delete');
+
+        btnModificar.href = `admin/home/editar/${id}`;
+        btnEliminar.href = `admin/home/eliminar/${id}`;
 
         if (idepa != userIdDepartamento) {
             btnModificar.style.display = "none";
@@ -100,7 +103,7 @@ actividades.forEach((actividad) => {
             btnEliminar.href = `admin/home/eliminar/${id}`;
         }
 
-        tinymce.activeEditor.setContent(descripcion);
+        document.querySelector('.details-body-description').innerHTML = descripcion;
 
         detailsTitle.innerHTML = template;
     });
