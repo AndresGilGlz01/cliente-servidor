@@ -24,7 +24,7 @@ public class DepartamentosController : Controller
             var content = await response.Content.ReadAsStringAsync();
 
             // Deserializar la cadena JSON en una lista de ActividadesViewModel
-            var depas = JsonSerializer.Deserialize<IEnumerable<Departamentos>>(content);
+            var depas = JsonSerializer.Deserialize<IEnumerable<Departamentos>>(content, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
             if (depas != null)
             {
 
