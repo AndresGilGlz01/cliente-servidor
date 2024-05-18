@@ -147,7 +147,7 @@ public class HomeController : Controller
         httpClient.BaseAddress = new Uri("https://sga.api.labsystec.net/");
 
 
-        var r = await httpClient.GetAsync($"/api/actividades/{id}");
+        var r = await httpClient.GetAsync($"/api/actividades/GetAct/{id}");
         if (r.IsSuccessStatusCode)
         {
             var con = await r.Content.ReadAsStringAsync();
