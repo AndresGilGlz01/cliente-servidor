@@ -1,5 +1,5 @@
 ﻿@using System.Security.Claims
-@model List< project_client.Areas.Admin.Models.ActividadesViewModel>
+@model project_client.Areas.Admin.Models.IndexViewModel
 @addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
 @{
     Layout = null;
@@ -69,7 +69,7 @@
             <p class="actividades-title">Hoy</p>
             <div class="actividades-box">
                 <div id="userIdDepartamento" hidden data-user-id="@userIdDepartamento"></div>
-                @foreach (var item in Model)
+                @foreach (var item in Model.Actividades)
                 {
                     if (item.Estado != 2)
                     {

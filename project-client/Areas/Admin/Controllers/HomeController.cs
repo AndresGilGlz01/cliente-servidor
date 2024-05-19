@@ -1,8 +1,11 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+
 using Newtonsoft.Json;
+
 using project_client.Areas.Admin.Models;
 using project_client.Helpers;
+
 using System.Security.Claims;
 using System.Text;
 
@@ -11,53 +14,68 @@ namespace project_client.Areas.Admin.Controllers;
 
 [Authorize(Roles = "Admin")]
 [Area("Admin")]
-public class HomeController : Controller
+public class HomeController(HttpClient httpClient, IWebHostEnvironment webHost) : Controller
 {
-    private readonly HttpClient httpClient;
-    private readonly IWebHostEnvironment webHostEnvironment;
+    private readonly HttpClient httpClient = httpClient;
+    private readonly IWebHostEnvironment webHostEnvironment = webHost;
 
-    public HomeController(HttpClient httpClient, IWebHostEnvironment webHost)
-    {
-        this.httpClient = httpClient;
-        webHostEnvironment = webHost;
-    }
-
-    public async Task<IActionResult> IndexAsync()
+    [HttpGet]
+    public async Task<IActionResult> Index([FromQuery] string? departamento, [FromQuery] DateTime? fechaInicio, [FromQuery] DateTime? fechaFin)
     {
         httpClient.BaseAddress = new Uri("https://sga.api.labsystec.net/");
-        var userid = User.Claims.First(x => x.Type == ClaimTypes.NameIdentifier).Value;
-        var response = await httpClient.GetAsync($"/api/actividades/{userid}");
-        if (response.IsSuccessStatusCode)
-        {
-            var content = await response.Content.ReadAsStringAsync();
 
-            var actividades = JsonConvert.DeserializeObject<List<ActividadesViewModel>>(content);
-            if (actividades != null)
-            {
-                List<ActividadesViewModel> acts = actividades.Where(act => act.Estado != 0).ToList();
-                return View(acts);
-            }
-        }
-        return View(null);
+        var userid = User.Claims.First(x => x.Type == ClaimTypes.NameIdentifier).Value;
+
+        var reponseActividades = httpClient.GetAsync($"/api/actividades/{userid}");
+        var responseDepartamentos = httpClient.GetAsync($"/api/Departamentos/{userid}");
+
+        Task.WaitAll(reponseActividades, responseDepartamentos);
+
+        if (!reponseActividades.Result.IsSuccessStatusCode ||
+            !responseDepartamentos.Result.IsSuccessStatusCode) return View(null);
+
+        var contentActividades = await reponseActividades.Result.Content.ReadAsStringAsync();
+        var contentDepartamentos = await responseDepartamentos.Result.Content.ReadAsStringAsync();
+
+        var actividades = JsonConvert.DeserializeObject<IEnumerable<Models.IndexViewModel.ActividadModel>>(contentActividades) ?? [];
+        var departamentos = JsonConvert.DeserializeObject<IEnumerable<Models.IndexViewModel.DepartamentoModel>>(contentDepartamentos) ?? [];
+
+        var viewModel = new Models.IndexViewModel
+        {
+            Actividades = actividades.Where(act => act.Estado != 0),
+            Departamentos = departamentos
+        };
+
+        return View(viewModel);
     }
 
+    [HttpGet]
     public async Task<IActionResult> Borradores()
     {
         httpClient.BaseAddress = new Uri("https://sga.api.labsystec.net/");
 
         var userid = User.Claims.First(x => x.Type == ClaimTypes.NameIdentifier).Value;
-        var response = await httpClient.GetAsync($"/api/actividades/{userid}");
+        var reponseActividades = httpClient.GetAsync($"/api/actividades/{userid}");
+        var responseDepartamentos = httpClient.GetAsync($"/api/Departamentos/{userid}");
 
-        if (!response.IsSuccessStatusCode) return View(null);
+        Task.WaitAll(reponseActividades, responseDepartamentos);
 
-        var content = await response.Content.ReadAsStringAsync();
-        var actividades = JsonConvert.DeserializeObject<List<ActividadesViewModel>>(content);
+        if (!reponseActividades.Result.IsSuccessStatusCode ||
+            !responseDepartamentos.Result.IsSuccessStatusCode) return View(null);
 
-        if (actividades == null) return View(null);
+        var contentActividades = await reponseActividades.Result.Content.ReadAsStringAsync();
+        var contentDepartamentos = await responseDepartamentos.Result.Content.ReadAsStringAsync();
 
-        var borradores = actividades.Where(act => act.Estado == 0).ToList();
+        var actividades = JsonConvert.DeserializeObject<IEnumerable<Models.IndexViewModel.ActividadModel>>(contentActividades) ?? [];
+        var departamentos = JsonConvert.DeserializeObject<IEnumerable<Models.IndexViewModel.DepartamentoModel>>(contentDepartamentos) ?? [];
 
-        return View(borradores);
+        var viewModel = new Models.IndexViewModel
+        {
+            Actividades = actividades.Where(act => act.Estado == 0),
+            Departamentos = departamentos
+        };
+
+        return View(viewModel);
     }
 
     [HttpGet]
@@ -90,7 +108,7 @@ public class HomeController : Controller
         if (vm != null)
         {
 
-            if (vm.IdDepartamento == 0||vm.IdDepartamento==null)
+            if (vm.IdDepartamento == 0 || vm.IdDepartamento == null)
             {
                 var userid = User.Claims.First(x => x.Type == ClaimTypes.NameIdentifier).Value;
 
@@ -118,7 +136,7 @@ public class HomeController : Controller
                 Descripcion = vm.Descripcion,
                 FechaCreacion = vm.FechaCreacion,
                 FechaRealizacion = vm.FechaRealizacion,
-                IdDepartamento = vm.IdDepartamento??0,
+                IdDepartamento = vm.IdDepartamento ?? 0,
                 Estado = 0,
                 Imagen = imagenBase64,
                 Id = 0
@@ -130,7 +148,7 @@ public class HomeController : Controller
             {
 
                 return RedirectToAction("Index");
-             }
+            }
             else
             {
                 var userid = User.Claims.First(x => x.Type == ClaimTypes.NameIdentifier).Value;
@@ -154,12 +172,13 @@ public class HomeController : Controller
         return View(vm);
     }
 
-    public async Task<IActionResult> Borrador(AgregarActividadViewModel vmW)
+    [HttpPost]
+    public IActionResult Borrador(AgregarActividadViewModel vmW)
     {
         return View();
     }
 
-    [HttpGet("Admin/home/editar/{id}")]
+    [HttpGet("admin/home/editar/{id}")]
     public async Task<IActionResult> Editar(int id)
     {
 
@@ -185,7 +204,7 @@ public class HomeController : Controller
     [HttpPost]
     public async Task<IActionResult> Editar(GetActividadViewModel act)
     {
-        
+
         httpClient.BaseAddress = new Uri("https://sga.api.labsystec.net/");
 
         // Convertir el objeto act a JSON
@@ -200,26 +219,26 @@ public class HomeController : Controller
             var ruta = converter.SaveFile(act.Actividad.Archivo);
             imagenBase64 = converter.ImageToBase64(ruta);
         }
-        if (act.Actividad.IdDepartamento == 0|| act.Actividad.IdDepartamento == null)
+        if (act.Actividad.IdDepartamento == 0 || act.Actividad.IdDepartamento == null)
         {
             var userid = User.Claims.First(x => x.Type == ClaimTypes.NameIdentifier).Value;
 
             act.Actividad.IdDepartamento = int.Parse(userid);
         }
-        var acti=new AddActDto()
+        var acti = new AddActDto()
         {
-            Id=act.Actividad.Id,
-            Descripcion=act.Actividad.Descripcion,
-            Titulo=act.Actividad.Titulo,
-            IdDepartamento=act.Actividad.IdDepartamento??0,
-            FechaCreacion=act.Actividad.FechaCreacion,
-            FechaRealizacion=act.Actividad.FechaRealizacion,
-            Imagen=imagenBase64
+            Id = act.Actividad.Id,
+            Descripcion = act.Actividad.Descripcion,
+            Titulo = act.Actividad.Titulo,
+            IdDepartamento = act.Actividad.IdDepartamento ?? 0,
+            FechaCreacion = act.Actividad.FechaCreacion,
+            FechaRealizacion = act.Actividad.FechaRealizacion,
+            Imagen = imagenBase64
 
         };
 
         var jsonContent = new StringContent(JsonConvert.SerializeObject(acti), Encoding.UTF8, "application/json");
-        
+
         // Hacer la solicitud PUT a la API
         var response = await httpClient.PutAsync("/api/actividades", jsonContent);
 
@@ -242,7 +261,7 @@ public class HomeController : Controller
             }
         }
         return View(act);
-        
+
     }
 
     [HttpGet("admin/home/eliminar/{id}")]

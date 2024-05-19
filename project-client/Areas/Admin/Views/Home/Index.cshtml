@@ -1,5 +1,5 @@
 ﻿@using System.Security.Claims
-@model List< project_client.Areas.Admin.Models.ActividadesViewModel>
+@model project_client.Areas.Admin.Models.IndexViewModel
 @addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
 @{
     Layout = null;
@@ -52,7 +52,7 @@
         <div class="buttons">
 
             <div class="capturar" id="btnCapturar">
-                <a href="~/Admin/Home/Agregar" class="capturar-text">Capturar</a>
+                <a href="~/admin/home/agregar" class="capturar-text">Capturar</a>
             </div>
 
             <div class="filtros" id="aside-open">
@@ -69,7 +69,7 @@
             <p class="actividades-title">Hoy</p>
             <div class="actividades-box">
                 <div id="userIdDepartamento" hidden data-user-id="@userIdDepartamento"></div>
-                @foreach (var item in Model)
+                @foreach (var item in Model.Actividades)
                 {
                     if (item.Estado != 2)
                     {
@@ -103,11 +103,10 @@
             <label class="filtros-form-label" for="departamento">Departamento</label>
 
             <select class="filtros-form-input" name="departamento" id="departamento">
-                <option>departamento 1</option>
-                <option>departamento 2</option>
-                <option>departamento 3</option>
-                <option>departamento 4</option>
-                <option>departamento 5</option>
+                @foreach (var item in Model.Departamentos)
+                {
+                    <option value="@item.Id">@item.Nombre</option>
+                }
             </select>
 
             <label class="filtros-form-label" for="fechaInicio">Rango de fechas</label>
@@ -148,7 +147,7 @@
 
         <div class="details-btns">
             <a href="javascript:" class="details-delete">Eliminar</a>
-            <a href="javascript:" class="details-modify">Seguir modificando</a>
+            <a href="javascript:" class="details-modify">Modificar</a>
         </div>
 
     </div>

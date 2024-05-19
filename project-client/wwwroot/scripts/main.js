@@ -90,8 +90,8 @@ actividades.forEach((actividad) => {
         let btnModificar = document.querySelector('.details-modify');
         let btnEliminar = document.querySelector('.details-delete');
 
-        btnModificar.href = `admin/home/editar/${id}`;
-        btnEliminar.href = `admin/home/eliminar/${id}`;
+        btnModificar.href = `/admin/home/editar/${id}`;
+        btnEliminar.href = `/admin/home/eliminar/${id}`;
 
         if (idepa != userIdDepartamento) {
             btnModificar.style.display = "none";
@@ -99,8 +99,8 @@ actividades.forEach((actividad) => {
         } else {
             btnModificar.style.display = "block";
             btnEliminar.style.display = "block";
-            btnModificar.href = `admin/home/editar/${id}`;
-            btnEliminar.href = `admin/home/eliminar/${id}`;
+            btnModificar.href = `/admin/home/editar/${id}`;
+            btnEliminar.href = `/admin/home/eliminar/${id}`;
         }
 
         document.querySelector('.details-body-description').innerHTML = descripcion;
