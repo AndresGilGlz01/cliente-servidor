@@ -56,8 +56,7 @@ namespace project_api.Controllers
             try
             {
 
-                var http = new HttpClient();
-                http.BaseAddress = new Uri("https://sga.api.labsystec.net/");
+                
                 if (dto != null)
                 {
 
