@@ -86,8 +86,8 @@ namespace project_api.Controllers
                         Id = 0,
                         Estado = 1,
                         Titulo = dto.Titulo,
-                        FechaCreacion = dto.FechaCreacion,
-                        FechaActualizacion = dto.FechaActualizacion,
+                        FechaCreacion = (DateTime)dto.FechaCreacion,
+                        FechaActualizacion = (DateTime)dto.FechaActualizacion,
                         IdDepartamento = dto.IdDepartamento,
                         Descripcion = dto.Descripcion,
                         FechaRealizacion = fecha
