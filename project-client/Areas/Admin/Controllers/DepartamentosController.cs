@@ -193,9 +193,24 @@ public class DepartamentosController : Controller
 
 
     }
-
-    public IActionResult Eliminar(int id)
+    [HttpGet("/admin/departamentos/eliminar/{id}")]
+    public async Task<IActionResult> EliminarAsync(int id)
     {
-        return View();
+         httpClient.BaseAddress = new Uri("https://sga.api.labsystec.net/");
+
+        // Realiza una solicitud DELETE a la API
+        var response = await httpClient.DeleteAsync($"/api/Departamentos/{id}");
+
+        if (response.IsSuccessStatusCode)
+        {
+            // La actividad se eliminó exitosamente
+            return RedirectToAction("Index"); // Redirige a la página principal o a la lista de actividades
+        }
+        else
+        {
+            // Manejo del error, por ejemplo, mostrar un mensaje de error en la vista
+            ModelState.AddModelError(string.Empty, "Error al eliminar la actividad");
+            return View(); // Muestra la vista actual con el mensaje de error
+        }
     }
 }
