@@ -56,7 +56,7 @@ public class HomeController : Controller
         if (actividades == null) return View(null);
 
         var borradores = actividades.Where(act => act.Estado == 0).ToList();
-        
+
         return View(borradores);
     }
 
@@ -152,6 +152,11 @@ public class HomeController : Controller
             }
         }
         return View(vm);
+    }
+
+    public async Task<IActionResult> Borrador(AgregarActividadViewModel vmW)
+    {
+        return View();
     }
 
     [HttpGet("Admin/home/editar/{id}")]
