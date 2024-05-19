@@ -67,7 +67,7 @@
             <div class="actividades-box">
                 @foreach (var departamento in Model.Departamentos)
                 {
-                    <div class="actividad" data-id="@departamento.Id">
+                    <div class="actividad dpto" data-id="@departamento.Id">
                         <div class="actividad-header">
                             <span class="actividad-title">
                                 @departamento.Nombre <span class="actividad-title-depto">
@@ -81,16 +81,45 @@
                                 @departamento.DepartamentoSuperior
                             </p>
                         }
-                        <a href="~/admin/departamentos/editar/@(departamento.Id)" class="details-dpto">Modificar</a>
+                        <a href="~/admin/departamentos/editar/@(departamento.Id)" class="details-dpto dpto-btn">Modificar</a>
+                        <a onclick="ConfirmElimiarDepartamento(@(departamento.Id))" class="details-dpto dpto-btn">Eliminar</a>
                     </div>
                 }
             </div>
     </main>
 
+    <div class="confirm-delete-departamento">
+        <div class="confirm-delete-departamento-box">
+            <p class="confirm-delete-departamento-title">¿Estás seguro de eliminar este departamento?</p>
+            <div class="confirm-delete-departamento-buttons">
+                <a href="javascript:" class="confirm-delete-departamento-button">Sí</a>
+                <a href="javascript:" class="confirm-delete-departamento-button">No</a>
+            </div>
+        </div>
+    </div>
+
     <footer class="footer">
         <p>Lorem Ipsum Industries &copy; 2024</p>
     </footer>
 
+    <script>
+        function ConfirmElimiarDepartamento(id) {
+            var confirmDelete = document.querySelector('.confirm-delete-departamento');
+            confirmDelete.style.display = 'block';
+            confirmDelete.style.opacity = '100';
+            confirmDelete.style.zIndex = '4';
+
+
+            var confirmDeleteButtons = document.querySelectorAll('.confirm-delete-departamento-button');
+            confirmDeleteButtons[0].addEventListener('click', function () {
+                window.location.href = '/admin/departamentos/eliminar/' + id;
+            });
+
+            confirmDeleteButtons[1].addEventListener('click', function () {
+                confirmDelete.style.display = 'none';
+            });
+        }
+    </script>
     <script src="~/scripts/main.js"></script>
 </body>
 
