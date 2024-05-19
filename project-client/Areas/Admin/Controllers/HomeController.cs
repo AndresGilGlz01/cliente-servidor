@@ -40,6 +40,21 @@ public class HomeController(HttpClient httpClient, IWebHostEnvironment webHost) 
         var actividades = JsonConvert.DeserializeObject<IEnumerable<Models.IndexViewModel.ActividadModel>>(contentActividades) ?? [];
         var departamentos = JsonConvert.DeserializeObject<IEnumerable<Models.IndexViewModel.DepartamentoModel>>(contentDepartamentos) ?? [];
 
+        if (departamento != null)
+        {
+            actividades = actividades.Where(act => act.Departamento == departamento);
+        }
+
+        if (fechaInicio != null)
+        {
+            actividades = actividades.Where(act => act.FechaRealizacion != null && act.FechaRealizacion.Value.ToDateTime(TimeOnly.MinValue) >= fechaInicio);
+        }
+
+        if (fechaFin != null)
+        {
+            actividades = actividades.Where(act => act.FechaRealizacion != null && act.FechaRealizacion.Value.ToDateTime(TimeOnly.MinValue) <= fechaFin);
+        }
+
         var viewModel = new Models.IndexViewModel
         {
             Actividades = actividades.Where(act => act.Estado != 0),
@@ -50,7 +65,7 @@ public class HomeController(HttpClient httpClient, IWebHostEnvironment webHost) 
     }
 
     [HttpGet]
-    public async Task<IActionResult> Borradores()
+    public async Task<IActionResult> Borradores([FromQuery] string? departamento, [FromQuery] DateTime? fechaInicio, [FromQuery] DateTime? fechaFin)
     {
         httpClient.BaseAddress = new Uri("https://sga.api.labsystec.net/");
 

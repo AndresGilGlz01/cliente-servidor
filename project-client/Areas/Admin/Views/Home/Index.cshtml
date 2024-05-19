@@ -105,7 +105,14 @@
             <select class="filtros-form-input" name="departamento" id="departamento">
                 @foreach (var item in Model.Departamentos)
                 {
-                    <option value="@item.Id">@item.Nombre</option>
+                    if (Model.Actividades.FirstOrDefault()?.Departamento == item.Nombre)
+                    {
+                        <option value="@item.Nombre" selected>@item.Nombre</option>
+                    }
+                    else
+                    {
+                        <option value="@item.Nombre">@item.Nombre</option>
+                    }
                 }
             </select>
 
