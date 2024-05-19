@@ -41,6 +41,7 @@
             <div class="profile-menu">
                 <a href="/admin/">Inicio</a>
                 <a href="/admin/home/borradores">Borradores</a>
+                <a href="/admin/departamentos">Departamentos</a>
                 <a href="/cerrar-sesion">Cerrar sesión</a>
             </div>
         </div>
@@ -74,46 +75,17 @@
                                 </span>
                             </span>
                         </div>
-                        @if(departamento.DepartamentoSuperior != null)
+                        @if (departamento.DepartamentoSuperior != null)
                         {
                             <p class="actividad-description">
                                 @departamento.DepartamentoSuperior
-                            </p>                            
+                            </p>
                         }
+                        <a href="~/admin/departamentos/editar/@(departamento.Id)" class="details-dpto">Modificar</a>
                     </div>
                 }
             </div>
     </main>
-
-    <div class="actividad-details">
-        <svg class="details-close" id="details-close" xmlns="http://www.w3.org/2000/svg" height="24px"
-             viewBox="0 -960 960 960">
-            <path d="m256-200-56-56 224-224-224-224 56-56 224 224 224-224 56 56-224 224 224 224-56 56-224-224-224 224Z" />
-        </svg>
-        <p class="details-title">
-            ¡Eclipse en el Tec! 2024, ven y míralo con nosotros <br>
-            <a class="details-dpto" href="javascript:">
-                Depto. Ingeniería
-                Sistemas Computacionales
-            </a>
-            <span class="details-date details-date-create">Creado el 30/12/2001</span>
-            <span class="details-date">
-                &middot; Ultima
-                actualizacion el 01/01/2002
-            </span>
-            <span class="details-date"> &middot; Realizado el 03/01/2002</span>
-        </p>
-        <div class="details-body">
-            <img src="https://sga.api.labsystec.net/images/0.png" asp-append-version alt="evento" class="details-img">
-            <p class="details-body-description">Hello, World!</p>
-        </div>
-
-        <div class="details-btns">
-            <a href="javascript:" class="details-delete">Eliminar</a>
-            <a href="javascript:" class="details-modify">Modificar</a>
-        </div>
-
-    </div>
 
     <footer class="footer">
         <p>Lorem Ipsum Industries &copy; 2024</p>

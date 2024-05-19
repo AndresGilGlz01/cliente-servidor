@@ -59,17 +59,10 @@ public class DepartamentosController : Controller
         httpClient.BaseAddress = new Uri("https://sga.api.labsystec.net/");
         if (viewModel != null)
         {
-            if (viewModel.IdSuperior == 0)
-            {
-
-                var userid = User.Claims.First(x => x.Type == ClaimTypes.NameIdentifier).Value;
-                viewModel.IdSuperior = int.Parse(userid);
-            }
 
             var dep = new Departamentos()
             {
                 Id = 0,
-                IdSuperior = viewModel.IdSuperior,
                 Nombre = viewModel.Nombre,
                 Username = viewModel.Username,
                 Password = viewModel.Password,
@@ -105,6 +98,8 @@ public class DepartamentosController : Controller
 
         return View(viewModel);
     }
+
+    [HttpGet("admin/departamentos/editar/{id}")]
     public async Task<IActionResult> Editar(int id)
     {
         var viewModel = new EditarDepartamentoViewModel();
