@@ -63,8 +63,14 @@
                     <label class="actividad-form-label" for="Nombre">Nombre</label>
                     <input class="actividad-form-input" type="text" asp-for="Nombre" required>
 
-                    <label class="actividad-form-label" for="IdDepartamentoSuperior">Departamento superior</label>
-                    <input class="actividad-form-input" type="text" asp-for="DepartamentoSuperior" disabled>
+                     <label class="actividad-form-label" for="IdDepartamentoSuperior">Cambiar departamento superior</label>
+                    <select class="actividad-form-input" asp-for="IdSuperior" required>
+                    <option value="0">Ningúno</option>
+                    @foreach (var departamento in Model.Departamentos)
+                    {
+                    <option value="@departamento.Id">@departamento.Nombre</option>
+                    }
+                    </select> 
 
                 </div>
 

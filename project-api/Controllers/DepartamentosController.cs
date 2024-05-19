@@ -111,7 +111,7 @@ namespace project_api.Controllers
                         dep.Password=dto.Password.ToLower();
                     }
                     _departamentosRepository.Update(dep);
-                    return Ok(dep);
+                    return Ok();
                 }
                 else
                 {

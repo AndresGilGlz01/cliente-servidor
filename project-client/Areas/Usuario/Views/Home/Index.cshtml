@@ -80,7 +80,7 @@
                                         @item.Departamento
                                     </span>
                                 </span>
-                                <span class="actividad-fecha">@item.FechaCreacion</span>
+                                <span class="actividad-fecha">@item.FechaCreacion.ToString("dd/MM/yyyy")</span>
                             </div>
                             <p class="actividad-description">
                                 @Html.Raw(item.Descripcion)
