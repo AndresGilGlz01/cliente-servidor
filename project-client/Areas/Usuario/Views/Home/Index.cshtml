@@ -83,7 +83,7 @@
                                 <span class="actividad-fecha">@item.FechaCreacion</span>
                             </div>
                             <p class="actividad-description">
-                                @item.Descripcion
+                                @Html.Raw(item.Descripcion)
                             </p>
                         </div>
                     }

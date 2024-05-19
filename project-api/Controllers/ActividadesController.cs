@@ -56,59 +56,67 @@ namespace project_api.Controllers
             try
             {
 
-            var http=new HttpClient();
-            http.BaseAddress = new Uri("https://sga.api.labsystec.net/");
-            if (dto != null)
-            {
-
-                var results = validator.Validate(dto);
-                if (results.IsValid)
+                
+                if (dto != null)
                 {
-                    DateOnly? fecha = null;
-                    if (dto.FechaRealizacion != null)
+
+                    var results = validator.Validate(dto);
+                    if (results.IsValid)
                     {
-                        fecha = System.DateOnly.FromDateTime(dto.FechaRealizacion.Value.Date);
+                        DateOnly? fecha = null;
+                        if (dto.FechaRealizacion != null)
+                        {
+                            fecha = System.DateOnly.FromDateTime(dto.FechaRealizacion.Value.Date);
+                        }
+                        else
+                        {
+                            fecha = System.DateOnly.FromDateTime(DateTime.Today);
+                        }
+                        DateTime now = DateTime.UtcNow;
+                        now=DateTime.Now;
+
+                        if (dto.FechaCreacion == DateTime.MinValue)
+                        {
+                            dto.FechaCreacion = now;
+                        }
+                        if (dto.FechaActualizacion == DateTime.MinValue)
+                        {
+                            dto.FechaActualizacion = now;
+                        }
+
+                        // Verificar si la fecha de creación es mayor que la fecha actual
+                        if (dto.FechaCreacion > now)
+                        {
+                            dto.FechaCreacion = now;
+                        }
+                        Actividades act = new Actividades()
+                        {
+                            Id = 0,
+                            Estado = 1,
+                            Titulo = dto.Titulo,
+                            FechaCreacion = (DateTime)dto.FechaCreacion,
+                            FechaActualizacion = (DateTime)dto.FechaActualizacion,
+                            IdDepartamento = dto.IdDepartamento,
+                            Descripcion = dto.Descripcion,
+                            FechaRealizacion = fecha
+
+                        };
+
+
+                        _repository.Insert(act);
+
+                        var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images", $"{act.Id}.png");
+                        var bytes = Convert.FromBase64String(dto.Imagen);
+                        System.IO.File.WriteAllBytes(path, bytes);
+                        return Ok();
+
+                        // call a method in other image controller
+
+
+
                     }
-                    else
-                    {
-                        fecha = System.DateOnly.FromDateTime(DateTime.Today);
-                    }
-                    if (dto.FechaCreacion == DateTime.MinValue)
-                    {
-                        dto.FechaCreacion=DateTime.UtcNow;
-                    }
-                    if(dto.FechaActualizacion == DateTime.MinValue)
-                    {
-                        dto.FechaActualizacion=DateTime.UtcNow;
-                    }
-                    Actividades act = new Actividades()
-                    {
-                        Id = 0,
-                        Estado = 1,
-                        Titulo = dto.Titulo,
-                        FechaCreacion = dto.FechaCreacion,
-                        FechaActualizacion = dto.FechaActualizacion,
-                        IdDepartamento = dto.IdDepartamento,
-                        Descripcion = dto.Descripcion,
-                        FechaRealizacion = fecha
-
-                    };
-
-                    
-                    _repository.Insert(act);
-
-                    var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images", $"{act.Id}.png");
-                    var bytes = Convert.FromBase64String(dto.Imagen);
-                    System.IO.File.WriteAllBytes(path, bytes);
-                    return Ok();
-
-                    // call a method in other image controller
-
-
-
+                    return BadRequest(results.Errors.Select(x => x.ErrorMessage));
                 }
-                return BadRequest(results.Errors.Select(x => x.ErrorMessage));
-            }
             }
             catch
             {
@@ -166,7 +174,7 @@ namespace project_api.Controllers
             {
                 return NotFound();
             }
-            act.Estado =2;
+            act.Estado = 2;
             act.FechaActualizacion = DateTime.UtcNow;
             _repository.Update(act);
             return Ok();

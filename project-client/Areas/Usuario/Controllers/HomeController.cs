@@ -92,7 +92,10 @@ namespace project_client.Areas.Usuario.Controllers
                     var ruta = converter.SaveFile(vm.Archivo);
                     imagenBase64 = converter.ImageToBase64(ruta);
                 }
-
+                if (vm.FechaCreacion == DateTime.MinValue)
+                {
+                    vm.FechaCreacion=DateTime.UtcNow;
+                }
 
                 var actdto = new AddActDto()
                 {
