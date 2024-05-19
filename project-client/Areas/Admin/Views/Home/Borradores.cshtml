@@ -4,6 +4,8 @@
 @{
     Layout = null;
     var userIdDepartamento = int.Parse(User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value ?? "0");
+    var role = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Role)?.Value;
+
 }
 <!DOCTYPE html>
 <html lang="es">
@@ -69,6 +71,8 @@
             <p class="actividades-title">Hoy</p>
             <div class="actividades-box">
                 <div id="userIdDepartamento" hidden data-user-id="@userIdDepartamento"></div>
+                <div id="role" hidden data-user-role="@role"></div>
+
                 @foreach (var item in Model.Actividades)
                 {
                     if (item.Estado ==0)

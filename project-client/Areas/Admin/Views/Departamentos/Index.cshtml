@@ -4,6 +4,8 @@
 @{
     Layout = null;
     var userIdDepartamento = int.Parse(User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value ?? "0");
+    
+
 }
 <!DOCTYPE html>
 <html lang="es">

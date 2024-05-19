@@ -5,6 +5,8 @@ let btnCloseDetails = document.querySelector('#details-close');
 let actividades = document.querySelectorAll('.actividad');
 let actividadDetails = document.querySelector('.actividad-details');
 let userIdDepartamento = parseInt(document.getElementById("userIdDepartamento").dataset.userId || "0");
+let roleDiv = document.getElementById('role');
+let userrole = roleDiv.getAttribute('data-user-role');
 
 if (frmFiltrosForm) {
     let btnOpenFiltrosForm = document.querySelector('#aside-open');
@@ -90,8 +92,8 @@ actividades.forEach((actividad) => {
         let btnModificar = document.querySelector('.details-modify');
         let btnEliminar = document.querySelector('.details-delete');
 
-        btnModificar.href = `/admin/home/editar/${id}`;
-        btnEliminar.href = `/admin/home/eliminar/${id}`;
+        btnModificar.href = `/${userrole}/home/editar/${id}`;
+        btnEliminar.href = `/${userrole}/home/eliminar/${id}`;
 
         if (idepa != userIdDepartamento) {
             btnModificar.style.display = "none";
@@ -99,8 +101,8 @@ actividades.forEach((actividad) => {
         } else {
             btnModificar.style.display = "block";
             btnEliminar.style.display = "block";
-            btnModificar.href = `/admin/home/editar/${id}`;
-            btnEliminar.href = `/admin/home/eliminar/${id}`;
+            btnModificar.href = `/${userrole}/home/editar/${id}`;
+            btnEliminar.href = `/${userrole}admin/home/eliminar/${id}`;
         }
 
         document.querySelector('.details-body-description').innerHTML = descripcion;
