@@ -25,7 +25,6 @@
   <ItemGroup>
     <Folder Include="Areas\Admin\Data\" />
     <Folder Include="Areas\Usuario\Data\" />
-    <Folder Include="Areas\Usuario\Models\" />
     <Folder Include="wwwroot\uploads\" />
     <Folder Include="wwwroot\views\" />
   </ItemGroup>
