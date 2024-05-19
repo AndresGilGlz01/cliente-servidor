@@ -72,8 +72,8 @@ namespace project_api.Controllers
                         {
                             fecha = System.DateOnly.FromDateTime(DateTime.Today);
                         }
-                        DateTime now = DateTime.UtcNow;
-                        now=DateTime.Now;
+                        DateTime now = DateTime.Now;
+                        
 
                         if (dto.FechaCreacion == DateTime.MinValue)
                         {
