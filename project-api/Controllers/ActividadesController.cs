@@ -86,7 +86,7 @@ namespace project_api.Controllers
                     Actividades act = new Actividades()
                     {
                         Id = 0,
-                        Estado = 1,
+                        Estado = 0,
                         Titulo = dto.Titulo,
                         FechaCreacion = (DateTime)dto.FechaCreacion,
                         FechaActualizacion = (DateTime)dto.FechaActualizacion,
@@ -211,7 +211,7 @@ namespace project_api.Controllers
                         fecha = System.DateOnly.FromDateTime(DateTime.Today);
                     }
                     act.Titulo = dto.Titulo;
-                    act.Estado = dto.Estado;
+                    act.Estado = 1;
                     act.FechaActualizacion = DateTime.UtcNow;
                     act.Descripcion = dto.Descripcion;
                     act.IdDepartamento = dto.IdDepartamento;
