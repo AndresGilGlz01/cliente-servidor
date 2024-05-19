@@ -102,7 +102,7 @@ actividades.forEach((actividad) => {
             btnModificar.style.display = "block";
             btnEliminar.style.display = "block";
             btnModificar.href = `/${userrole}/home/editar/${id}`;
-            btnEliminar.href = `/${userrole}admin/home/eliminar/${id}`;
+            btnEliminar.href = `/${userrole}/home/eliminar/${id}`;
         }
 
         document.querySelector('.details-body-description').innerHTML = descripcion;

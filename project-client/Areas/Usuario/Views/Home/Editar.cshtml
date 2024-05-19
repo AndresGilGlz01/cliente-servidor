@@ -1,5 +1,5 @@
 ﻿@using System.Security.Claims
-@model project_client.Areas.Usuario.Models.AgregarActividadViewModel;
+@model project_client.Areas.Usuario.Models.GetActividadViewModel;
 @addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
 @{
     Layout = null;
@@ -61,47 +61,45 @@
             <path d="M440-160v-487L216-423l-56-57 320-320 320 320-56 57-224-224v487h-80Z" />
         </svg>
 
-        <form class="actividad-form" method="post" action="~/Usuario/Home/Agregar" enctype="multipart/form-data">
+        <form class="actividad-form" method="post" action="~/usuario/home/editar" enctype="multipart/form-data">
 
             <div class="actividad-form-content">
 
                 <div class="actividad-left">
 
-                    <input type="hidden" name="id" id="id">
+                    <input type="hidden" asp-for="Actividad.Id">
 
                     <label class="actividad-form-label" for="titulo">Título</label>
-                    <input class="actividad-form-input" type="text" asp-for="Titulo" required>
+                    <input class="actividad-form-input" type="text" asp-for="Actividad.Titulo" required>
 
-                    
 
 
                     <label class="actividad-form-label" for="fechaRealizacion">Fecha de realizacion</label>
-                    <input class="actividad-form-input" type="date" asp-for="FechaRealizacion">
+                    <label class="actividad-form-input" asp-for="Actividad.FechaRealizacion">@Model.Actividad.FechaRealizacion.Value.ToString("dd/MM/yyyy")</label>
 
                 </div>
 
                 <div class="actividad-right">
                     <label class="actividad-form-label" for="imagen" style="text-align: center;">Imagen</label>
                     <input class="actividad-form-input" style="display: none;" type="file"
-                           accept="image/*" asp-for="Archivo">
+                           accept="image/*" asp-for="Actividad.Archivo">
 
                     <div class="actividad-form-img-preview">
-                        <img src="~/img/preview-img.svg" height="100%" alt="imagen" class="actividad-form-img">
+                        <img src="https://sga.api.labsystec.net/images/@(Model.Actividad.Id).png" asp-append-version height="100%" alt="imagen" class="actividad-form-img">
                     </div>
 
                 </div>
             </div>
             <label class="actividad-form-label" for="descripcion">Descripción</label>
-            <textarea id="mytextarea" class="actividad-form-input" asp-for="Descripcion"></textarea>
+            <textarea id="mytextarea" class="actividad-form-input" asp-for="Actividad.Descripcion"></textarea>
 
             <br />
 
             @Html.ValidationSummary(true)
 
             <div class="actividad-form-buttons">
-                <a href="~/Usuario/" class="actividad-form-submit cancel">Cancelar</a>
-                <input type="submit" class="actividad-form-submit" value="Guardar" asp-action="Borrador">
-                <input type="submit" class="actividad-form-submit" value="Publicar">
+                <a href="~/usuario/" class="actividad-form-submit cancel">Cancelar</a>
+                <input type="submit" class="actividad-form-submit" value="Editar actividad">
             </div>
 
             <script>
