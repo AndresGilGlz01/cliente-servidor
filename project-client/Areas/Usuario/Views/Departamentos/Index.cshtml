@@ -39,9 +39,9 @@
                 <path d="M480-360 280-560h400L480-360Z" />
             </svg>
             <div class="profile-menu">
-                <a href="/admin/">Inicio</a>
-                <a href="/admin/home/borradores">Borradores</a>
-                <a href="/admin/departamentos">Departamentos</a>
+                <a href="/usuario/">Inicio</a>
+                <a href="/usuario/home/borradores">Borradores</a>
+                <a href="/usuario/departamentos">Departamentos</a>
                 <a href="/cerrar-sesion">Cerrar sesión</a>
             </div>
         </div>
@@ -52,7 +52,7 @@
         <div class="buttons">
 
             <div class="capturar" id="btnCapturar">
-                <a href="~/admin/departamentos/agregar" class="capturar-text">Capturar</a>
+                <a href="~/usuario/departamentos/agregar" class="capturar-text">Capturar</a>
             </div>
 
         </div>
@@ -81,7 +81,7 @@
                                 @departamento.DepartamentoSuperior
                             </p>
                         }
-                        <a href="~/admin/departamentos/editar/@(departamento.Id)" class="details-dpto dpto-btn">Modificar</a>
+                        <a href="~/usuario/departamentos/editar/@(departamento.Id)" class="details-dpto dpto-btn">Modificar</a>
                         <a onclick="ConfirmElimiarDepartamento(@(departamento.Id))" class="details-dpto dpto-btn">Eliminar</a>
                     </div>
                 }
@@ -112,7 +112,7 @@
 
             var confirmDeleteButtons = document.querySelectorAll('.confirm-delete-departamento-button');
             confirmDeleteButtons[0].addEventListener('click', function () {
-                window.location.href = '/admin/departamentos/eliminar/' + id;
+                window.location.href = '/usuario/departamentos/eliminar/' + id;
             });
 
             confirmDeleteButtons[1].addEventListener('click', function () {
