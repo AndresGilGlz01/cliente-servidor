@@ -50,13 +50,75 @@ namespace project_api.Controllers
             return BadRequest();
 
         }
+        [HttpPost("Borrador")]
+        public IActionResult Borrador(ActividadesDto dto)
+        {
+            try
+            {
+                if (dto != null)
+                {
+                    DateOnly? fecha = null;
+                    if (dto.FechaRealizacion != null)
+                    {
+                        fecha = System.DateOnly.FromDateTime(dto.FechaRealizacion.Value.Date);
+                    }
+                    else
+                    {
+                        fecha = System.DateOnly.FromDateTime(DateTime.Today);
+                    }
+                    DateTime now = DateTime.Now;
+
+
+                    if (dto.FechaCreacion == DateTime.MinValue)
+                    {
+                        dto.FechaCreacion = now;
+                    }
+                    if (dto.FechaActualizacion == DateTime.MinValue)
+                    {
+                        dto.FechaActualizacion = now;
+                    }
+
+                    // Verificar si la fecha de creación es mayor que la fecha actual
+                    if (dto.FechaCreacion > now)
+                    {
+                        dto.FechaCreacion = now;
+                    }
+                    Actividades act = new Actividades()
+                    {
+                        Id = 0,
+                        Estado = 1,
+                        Titulo = dto.Titulo,
+                        FechaCreacion = (DateTime)dto.FechaCreacion,
+                        FechaActualizacion = (DateTime)dto.FechaActualizacion,
+                        IdDepartamento = dto.IdDepartamento,
+                        Descripcion = dto.Descripcion,
+                        FechaRealizacion = fecha
+
+                    };
+
+
+                    _repository.Insert(act);
+
+                    var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images", $"{act.Id}.png");
+                    var bytes = Convert.FromBase64String(dto.Imagen);
+                    System.IO.File.WriteAllBytes(path, bytes);
+                    return Ok();
+                }
+                return BadRequest();
+            }
+            catch
+            {
+                return BadRequest();
+            }
+        }
+
         [HttpPost]
         public async Task<IActionResult> Post(ActividadesDto? dto)
         {
             try
             {
 
-                
+
                 if (dto != null)
                 {
 
@@ -73,7 +135,7 @@ namespace project_api.Controllers
                             fecha = System.DateOnly.FromDateTime(DateTime.Today);
                         }
                         DateTime now = DateTime.Now;
-                        
+
 
                         if (dto.FechaCreacion == DateTime.MinValue)
                         {
