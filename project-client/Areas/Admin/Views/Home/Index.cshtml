@@ -71,7 +71,7 @@
                 <div id="userIdDepartamento" hidden data-user-id="@userIdDepartamento"></div>
                 @foreach (var item in Model.Actividades)
                 {
-                    if (item.Estado != 2)
+                    if (item.Estado == 1)
                     {
 
                         <div class="actividad" data-id="@item.Id">

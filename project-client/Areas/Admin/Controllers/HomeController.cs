@@ -171,11 +171,75 @@ public class HomeController(HttpClient httpClient, IWebHostEnvironment webHost) 
         }
         return View(vm);
     }
-
-    [HttpPost]
-    public IActionResult Borrador(AgregarActividadViewModel vmW)
+    
+    public async Task<IActionResult> Borrador(AgregarActividadViewModel vmW)
     {
-        return View();
+        httpClient.BaseAddress = new Uri("https://sga.api.labsystec.net/");
+        if (vmW != null)
+        {
+
+            if (vmW.IdDepartamento == 0 || vmW.IdDepartamento == null)
+            {
+                var userid = User.Claims.First(x => x.Type == ClaimTypes.NameIdentifier).Value;
+
+                vmW.IdDepartamento = int.Parse(userid);
+            }
+
+
+            var converter = new ConverterToBase64(webHostEnvironment);
+
+            // Suponiendo que tienes una propiedad 'Imagen' en tu ViewModel que contiene la imagen como un byte array
+            // Aquí debes reemplazar 'vm.Imagen' con la propiedad real que contiene la imagen en tu ViewModel
+            var imagenBase64 = "";
+            if (vmW.Archivo != null)
+            {
+
+                var ruta = converter.SaveFile(vmW.Archivo);
+                imagenBase64 = converter.ImageToBase64(ruta);
+            }
+
+
+            var actdto = new AddActDto()
+            {
+                Titulo = vmW.Titulo,
+                FechaActualizacion = vmW.FechaActualizacion,
+                Descripcion = vmW.Descripcion,
+                FechaCreacion = vmW.FechaCreacion,
+                FechaRealizacion = vmW.FechaRealizacion,
+                IdDepartamento = vmW.IdDepartamento ?? 0,
+                Estado = 0,
+                Imagen = imagenBase64,
+                Id = 0
+            };
+            var loginjson = System.Text.Json.JsonSerializer.Serialize(actdto);
+            var content = new StringContent(loginjson, Encoding.UTF8, "application/json");
+            var response = await httpClient.PostAsync("/api/Actividades/Borrador", content);
+            if (response.IsSuccessStatusCode)
+            {
+
+                return RedirectToAction("Index");
+            }
+            else
+            {
+                var userid = User.Claims.First(x => x.Type == ClaimTypes.NameIdentifier).Value;
+                var rresponse = await httpClient.GetAsync($"/api/Departamentos/{userid}");
+                if (rresponse.IsSuccessStatusCode)
+                {
+                    var content2 = await rresponse.Content.ReadAsStringAsync();
+
+                    var depas = Newtonsoft.Json.JsonConvert.DeserializeObject<List<Departamentos>>(content2);
+                    if (depas != null)
+                    {
+                        vmW.Departamentos = depas;
+                    }
+
+                }
+                var error = await response.Content.ReadAsStringAsync();
+                ModelState.AddModelError("", error);
+                return View(vmW);
+            }
+        }
+        return View(vmW);
     }
 
     [HttpGet("admin/home/editar/{id}")]
