@@ -60,5 +60,10 @@ namespace project_api.Repositories
         {
             return context.Actividades.Include(x => x.IdDepartamentoNavigation).FirstOrDefault(x => x.Id == id);
         }
+
+        public IEnumerable< Actividades> GetAct(int id)
+        {
+            return context.Actividades.Where(x => x.IdDepartamento == id);
+        }
     }
 }
