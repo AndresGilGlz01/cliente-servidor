@@ -188,6 +188,10 @@
 
             let roleDiv = document.getElementById('role');
             let userrole = roleDiv.getAttribute('data-user-role');
+            let userIdDepartamentoDiv = document.getElementById('userIdDepartamento');
+
+            // Obtener el valor del atributo data-user-id
+            let userIdDepartamento = userIdDepartamentoDiv.getAttribute('data-user-id');
 
             let descripcion = response.descripcion;
             let departamento = response.departamento;
@@ -241,7 +245,7 @@
                 btnModificar.style.display = "block";
                 btnEliminar.style.display = "block";
                 btnModificar.href = `/${userrole}/home/editar/${id}`;
-                btnEliminar.href = `/${userrole}admin/home/eliminar/${id}`;
+                btnEliminar.href = `/${userrole}/home/eliminar/${id}`;
             }
 
             document.querySelector('.details-body-description').innerHTML = descripcion;

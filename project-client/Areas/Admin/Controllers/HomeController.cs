@@ -285,7 +285,7 @@ public class HomeController(HttpClient httpClient, IWebHostEnvironment webHost) 
         var token = User.Claims.First(x => x.Type == ClaimTypes.UserData).Value;
         httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
-        var r = await httpClient.GetAsync($"/api/actividades/GetAct/{id}");
+        var r = await httpClient.GetAsync($"/api/actividad/{id}");
         if (r.IsSuccessStatusCode)
         {
             var con = await r.Content.ReadAsStringAsync();

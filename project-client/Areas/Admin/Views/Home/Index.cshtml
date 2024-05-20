@@ -184,7 +184,10 @@
 
             let roleDiv = document.getElementById('role');
             let userrole = roleDiv.getAttribute('data-user-role');
+            let userIdDepartamentoDiv = document.getElementById('userIdDepartamento');
 
+            // Obtener el valor del atributo data-user-id
+            let userIdDepartamento = userIdDepartamentoDiv.getAttribute('data-user-id');
             let descripcion = response.descripcion;
             let departamento = response.departamento;
             let estado = response.estado;
@@ -205,17 +208,17 @@
             let detailsTitle = document.querySelector('.details-title');
 
             let template = `
-                        ${titulo} <br>
-                                <a class="details-dpto" href="javascript:">
-                                    ${departamento}
-                                </a> <br>
-                                <span class="details-date details-date-create">Creado el ${fechaCreacion}</span>
-                                <span class="details-date">
-                                    &middot; Ultima
-                                    actualizacion el ${fechaActualizacion}
-                                </span>
-                                <span class="details-date"> &middot; Realizado el ${fechaRealizacion}</span>
-                        `;
+                                        ${titulo} <br>
+                                                <a class="details-dpto" href="javascript:">
+                                                    ${departamento}
+                                                </a> <br>
+                                                <span class="details-date details-date-create">Creado el ${fechaCreacion}</span>
+                                                <span class="details-date">
+                                                    &middot; Ultima
+                                                    actualizacion el ${fechaActualizacion}
+                                                </span>
+                                                <span class="details-date"> &middot; Realizado el ${fechaRealizacion}</span>
+                                        `;
             let image = document.querySelector('.details-img');
 
             image.src = `https://sga.api.labsystec.net/images/${id}.png`;
@@ -237,7 +240,7 @@
                 btnModificar.style.display = "block";
                 btnEliminar.style.display = "block";
                 btnModificar.href = `/${userrole}/home/editar/${id}`;
-                btnEliminar.href = `/${userrole}admin/home/eliminar/${id}`;
+                btnEliminar.href = `/${userrole}/home/eliminar/${id}`;
             }
 
             document.querySelector('.details-body-description').innerHTML = descripcion;

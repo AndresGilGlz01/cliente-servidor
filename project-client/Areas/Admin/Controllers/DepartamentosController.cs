@@ -112,6 +112,20 @@ public class DepartamentosController : Controller
             {
                 var error = await response.Content.ReadAsStringAsync();
                 ModelState.AddModelError("", error);
+            var response2 = await httpClient.GetAsync($"/api/Departamentos/{userid}");
+            if (response2.IsSuccessStatusCode)
+            {
+                var content2 = await response2.Content.ReadAsStringAsync();
+
+                // Deserializar la cadena JSON en una lista de ActividadesViewModel
+                var depas = JsonSerializer.Deserialize<IEnumerable<Departamentos>>(content2, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+                if (depas != null)
+                {
+
+                    viewModel.Departamentos = depas;
+                    return View(viewModel);
+                }
+            }
                 return View(viewModel);
             }
         }

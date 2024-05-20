@@ -138,8 +138,8 @@ public class DepartamentosController : ControllerBase
             var depas = _departamentosRepository.GetSub(dep.Id);
             foreach (var item in depas)
             {
-                item.IdSuperior = dep.IdSuperior;
-                _departamentosRepository.Update(item);
+               
+                _departamentosRepository.Delete(item);
             }
             _departamentosRepository.Delete(dep);
             return NoContent();
