@@ -70,7 +70,11 @@ public class DepartamentosController : Controller
 
         if (viewModel != null)
         {
-            viewModel.IdSuperior = int.Parse(userid);
+            if (viewModel.IdSuperior == 0)
+            {
+
+                viewModel.IdSuperior = int.Parse(userid);
+            }
             var dep = new Departamentos()
             {
                 Id = 0,
@@ -166,8 +170,7 @@ public class DepartamentosController : Controller
 
         if (vm.IdSuperior == 0)
         {
-            vm.IdSuperior = userid;
-        }
+            vm.IdSuperior = (int)departamento.IdSuperior;        }
         var dto = new EditDepaViewModel()
         {
             Id = vm.Id,
@@ -191,13 +194,13 @@ public class DepartamentosController : Controller
         {
             var error = await response.Content.ReadAsStringAsync();
             ModelState.AddModelError("", error);
-            var response2 = await httpClient.GetAsync($"/api/Departamentos/{userid}");
-            if (response2.IsSuccessStatusCode)
+            var response3 = await httpClient.GetAsync($"/api/Departamentos/{userid}");
+            if (response3.IsSuccessStatusCode)
             {
-                var content2 = await response2.Content.ReadAsStringAsync();
+                var content3 = await response2.Content.ReadAsStringAsync();
 
                 // Deserializar la cadena JSON en una lista de ActividadesViewModel
-                var depas = JsonSerializer.Deserialize<IEnumerable<Departamentos>>(content2, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+                var depas = JsonSerializer.Deserialize<IEnumerable<Departamentos>>(content3, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
                 if (depas != null)
                 {
 
