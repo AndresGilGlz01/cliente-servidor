@@ -5,8 +5,8 @@
     Layout = null;
     var userIdDepartamento = int.Parse(User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value ?? "0");
     var role = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Role)?.Value;
-
 }
+
 <!DOCTYPE html>
 <html lang="es">
 
@@ -43,7 +43,7 @@
             <div class="profile-menu">
                 <a href="/usuario/">Inicio</a>
                 <a href="/usuario/home/borradores">Borradores</a>
-                <a href="/usuario/departamentos">Departamentos</a>
+                
                 <a href="/cerrar-sesion">Cerrar sesión</a>
             </div>
         </div>
@@ -53,41 +53,41 @@
 
         <div class="buttons">
 
-            <div class="capturar" id="btnCapturar">
-                <a href="~/usuario/Home/Agregar" class="capturar-text">Capturar</a>
-            </div>
+            @* <div class="capturar" id="btnCapturar">
+            <a href="~/admin/home/agregar" class="capturar-text">Capturar</a>
+            </div> *@
 
-            <div class="filtros" id="aside-open">
+            <div class="filtros" id="aside-open" onclick="showFilters()">
                 <span class="capturar-text">Filtros</span>
             </div>
 
         </div>
 
-        <svg class="up-button" id="up-button" xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960">
+        <svg onclick="GoTopPage()" class="up-button" id="up-button" xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960">
             <path d="M440-160v-487L216-423l-56-57 320-320 320 320-56 57-224-224v487h-80Z" />
         </svg>
 
         <div class="actividades">
-            <p class="actividades-title">Hoy</p>
+            <p class="actividades-title">Borradores</p>
             <div class="actividades-box">
                 <div id="userIdDepartamento" hidden data-user-id="@userIdDepartamento"></div>
                 <div id="role" hidden data-user-role="@role"></div>
 
-                @foreach (var item in Model.Actividades)
+                @foreach (var actividad in Model.Actividades)
                 {
-                    if (item.Estado == 0 &&item.IdDepartamento==userIdDepartamento)
+                    if (actividad.Estado == 0 && actividad.IdDepartamento == userIdDepartamento)
                     {
-                        <div class="actividad" data-id="@item.Id">
+                        <div class="actividad" data-id="@actividad.Id" onclick="showActividadDetails(@actividad.Id)">
                             <div class="actividad-header">
                                 <span class="actividad-title">
-                                    @item.Titulo <span class="actividad-title-depto">
-                                        @item.Departamento
+                                    @actividad.Titulo <span class="actividad-title-depto">
+                                        @actividad.Departamento
                                     </span>
                                 </span>
-                                <span class="actividad-fecha">@item.FechaCreacion</span>
+                                <span class="actividad-fecha">@actividad.FechaCreacion</span>
                             </div>
                             <p class="actividad-description">
-                                @Html.Raw(item.Descripcion)
+                                @Html.Raw(actividad.Descripcion)
                             </p>
                         </div>
                     }
@@ -106,11 +106,17 @@
             <label class="filtros-form-label" for="departamento">Departamento</label>
 
             <select class="filtros-form-input" name="departamento" id="departamento">
-                <option>departamento 1</option>
-                <option>departamento 2</option>
-                <option>departamento 3</option>
-                <option>departamento 4</option>
-                <option>departamento 5</option>
+                @foreach (var item in Model.Departamentos)
+                {
+                    if (Model.Actividades.FirstOrDefault()?.Departamento == item.Nombre)
+                    {
+                        <option value="@item.Nombre" selected>@item.Nombre</option>
+                    }
+                    else
+                    {
+                        <option value="@item.Nombre">@item.Nombre</option>
+                    }
+                }
             </select>
 
             <label class="filtros-form-label" for="fechaInicio">Rango de fechas</label>
@@ -127,7 +133,7 @@
     </aside>
 
     <div class="actividad-details">
-        <svg class="details-close" id="details-close" xmlns="http://www.w3.org/2000/svg" height="24px"
+        <svg onclick="closeActividadDetails()" class="details-close" id="details-close" xmlns="http://www.w3.org/2000/svg" height="24px"
              viewBox="0 -960 960 960">
             <path d="m256-200-56-56 224-224-224-224 56-56 224 224 224-224 56 56-224 224 224 224-56 56-224-224-224 224Z" />
         </svg>
@@ -150,7 +156,7 @@
         </div>
 
         <div class="details-btns">
-            <a href="javascript:" class="details-delete">Eliminar</a>
+            <a onclick="closeActividadDetails()" class="details-delete">Eliminar</a>
             <a href="javascript:" class="details-modify">Modificar</a>
         </div>
 

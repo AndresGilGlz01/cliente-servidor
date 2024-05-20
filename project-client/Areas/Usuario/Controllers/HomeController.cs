@@ -278,4 +278,117 @@ public class HomeController(HttpClient httpClient, IWebHostEnvironment webHostEn
             return View(); // Muestra la vista actual con el mensaje de error
         }
     }
+
+
+    [HttpGet]
+    public async Task<IActionResult> Borradores([FromQuery] string? departamento, [FromQuery] DateTime? fechaInicio, [FromQuery] DateTime? fechaFin)
+    {
+        httpClient.BaseAddress = new Uri("https://sga.api.labsystec.net/");
+
+        var token = User.Claims.First(x => x.Type == ClaimTypes.UserData).Value;
+        httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
+        var userid = User.Claims.First(x => x.Type == ClaimTypes.NameIdentifier).Value;
+
+        var reponseActividades = httpClient.GetAsync($"/api/actividades/{userid}");
+        var responseDepartamentos = httpClient.GetAsync($"/api/departamentos/{userid}");
+
+        Task.WaitAll(reponseActividades, responseDepartamentos);
+
+        // Verificar si hay error de autenticación
+        if (reponseActividades.Result.StatusCode == HttpStatusCode.Unauthorized ||
+            responseDepartamentos.Result.StatusCode == HttpStatusCode.Unauthorized)
+        {
+            return RedirectToAction("iniciar-sesion", "home", new { area = string.Empty });
+        }
+
+        var contentActividades = await reponseActividades.Result.Content.ReadAsStringAsync();
+        var contentDepartamentos = await responseDepartamentos.Result.Content.ReadAsStringAsync();
+
+        var actividades = JsonConvert.DeserializeObject<IEnumerable<Models.IndexViewModel.ActividadModel>>(contentActividades) ?? [];
+        var departamentos = JsonConvert.DeserializeObject<IEnumerable<Models.IndexViewModel.DepartamentoModel>>(contentDepartamentos) ?? [];
+
+        var viewModel = new Models.IndexViewModel
+        {
+            Actividades = actividades.Where(act => act.Estado == 0),
+            Departamentos = departamentos,
+            Token = token
+        };
+
+        return View(viewModel);
+    }
+
+
+    [HttpPost]
+    public async Task<IActionResult> Borrador(AgregarActividadViewModel vmW)
+    {
+        httpClient.BaseAddress = new Uri("https://sga.api.labsystec.net/");
+
+        var token = User.Claims.First(x => x.Type == ClaimTypes.UserData).Value;
+        httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
+        if (vmW != null)
+        {
+            if (vmW.IdDepartamento == 0 || vmW.IdDepartamento == null)
+            {
+                var userid = User.Claims.First(x => x.Type == ClaimTypes.NameIdentifier).Value;
+
+                vmW.IdDepartamento = int.Parse(userid);
+            }
+
+            var converter = new ConverterToBase64(webHostEnvironment);
+
+            // Suponiendo que tienes una propiedad 'Imagen' en tu ViewModel que contiene la imagen como un byte array
+            // Aquí debes reemplazar 'vm.Imagen' con la propiedad real que contiene la imagen en tu ViewModel
+            var imagenBase64 = "";
+            if (vmW.Archivo != null)
+            {
+                var ruta = converter.SaveFile(vmW.Archivo);
+                imagenBase64 = converter.ImageToBase64(ruta);
+            }
+
+            var actdto = new AddActDto()
+            {
+                Titulo = vmW.Titulo,
+                FechaActualizacion = vmW.FechaActualizacion,
+                Descripcion = vmW.Descripcion,
+                FechaCreacion = vmW.FechaCreacion,
+                FechaRealizacion = vmW.FechaRealizacion,
+                IdDepartamento = vmW.IdDepartamento ?? 0,
+                Estado = 0,
+                Imagen = imagenBase64,
+                Id = 0
+            };
+
+            var loginjson = System.Text.Json.JsonSerializer.Serialize(actdto);
+            var content = new StringContent(loginjson, Encoding.UTF8, "application/json");
+            var response = await httpClient.PostAsync("/api/borrador", content);
+
+            if (response.IsSuccessStatusCode)
+            {
+
+                return RedirectToAction("Index");
+            }
+            else
+            {
+                var userid = User.Claims.First(x => x.Type == ClaimTypes.NameIdentifier).Value;
+                var rresponse = await httpClient.GetAsync($"/api/Departamentos/{userid}");
+                if (rresponse.IsSuccessStatusCode)
+                {
+                    var content2 = await rresponse.Content.ReadAsStringAsync();
+
+                    var depas = Newtonsoft.Json.JsonConvert.DeserializeObject<List<Departamentos>>(content2);
+                    if (depas != null)
+                    {
+                        vmW.Departamentos = depas;
+                    }
+
+                }
+                var error = await response.Content.ReadAsStringAsync();
+                ModelState.AddModelError("", error);
+                return View(vmW);
+            }
+        }
+        return View(vmW);
+    }
 }

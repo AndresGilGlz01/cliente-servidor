@@ -18,20 +18,28 @@ public class LoginController(DepartamentosRepository departamentosRepository, IC
     [HttpPost]
     public IActionResult Login(LoginDto login)
     {
-        var departemento = departamentosRepository.Get(login.UserName);
+        if (login.UserName.Contains("equipo3"))
+        {
 
-        if (departemento is null) return BadRequest("No hay departamentos");
+            var departemento = departamentosRepository.Get(login.UserName);
 
-        var success = Verifier.VerifyPassword(login.Password, departemento.Password);
+            if (departemento is null) return BadRequest("No hay departamentos");
 
-        if (!success) return BadRequest("Credenciales incorrectas");
+            var success = Verifier.VerifyPassword(login.Password, departemento.Password);
+
+            if (!success) return BadRequest("Credenciales incorrectas");
         
-        string role = departemento.Nombre == "Dirección General - Equipo 3" ? "Admin" : "Usuario";
+            string role = departemento.Nombre == "Dirección General - Equipo 3" ? "Admin" : "Usuario";
 
-        var jwttoken = new JwtTokenGenerator(configuration);
+            var jwttoken = new JwtTokenGenerator(configuration);
 
-        var token = jwttoken.GetToken(departemento, role);
+            var token = jwttoken.GetToken(departemento, role);
 
-        return Ok(token);
+            return Ok(token);
+        }
+        else
+        {
+            return BadRequest("Correo incorrecto");
+        }
     }
 }
