@@ -129,18 +129,18 @@ public class DepartamentosController : ControllerBase
         var dep = _departamentosRepository.GetById(id);
         if(dep != null)
         {
-
+            
             var acts= _actividadesRepository.GetAll().Where(x => x.IdDepartamento == id);
             foreach(var act in acts)
             {
                 _actividadesRepository.Delete(act);
             }
-            //var depas = _departamentosRepository.GetSubs(dep.Id);
-            //foreach (var item in depas)
-            //{
+            var depas = _departamentosRepository.GetSubs(dep.Id);
+            foreach (var item in depas)
+            {
                
-            //    _departamentosRepository.Delete(item);
-            //}
+                _departamentosRepository.Delete(item);
+            }
             _departamentosRepository.Delete(dep);
             return NoContent();
 
