@@ -81,7 +81,7 @@ public class DepartamentosController : ControllerBase
                 Nombre = dto.Nombre,
                 Username = dto.Username,
                 Password = dto.Password,
-                IdSuperior = null,
+                IdSuperior = dto.IdSuperior,
             };
 
             _departamentosRepository.Insert(deo);
