@@ -129,6 +129,10 @@ public class ActividadesController(ActividadesRepository repository, ActividadVa
                     {
                         dto.FechaCreacion = now;
                     }
+                    if(dto.FechaRealizacion > now)
+                    {
+                        fecha= System.DateOnly.FromDateTime(now);
+                    }
                     Actividades act = new Actividades()
                     {
                         Id = 0,
@@ -187,6 +191,12 @@ public class ActividadesController(ActividadesRepository repository, ActividadVa
                 else
                 {
                     fecha = System.DateOnly.FromDateTime(DateTime.Today);
+                }
+                DateTime now = DateTime.Now;
+
+                if (dto.FechaRealizacion > now)
+                {
+                    fecha = System.DateOnly.FromDateTime(now);
                 }
                 act.Titulo = dto.Titulo;
                 act.Estado = 1;
