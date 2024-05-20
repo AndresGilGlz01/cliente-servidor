@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 
 using project_client.Areas.Admin.Models;
 
+using System.Net.Http.Headers;
 using System.Security.Claims;
 using System.Text;
 using System.Text.Json;
@@ -16,8 +17,12 @@ public class DepartamentosController : Controller
 
     public async Task<IActionResult> IndexAsync()
     {
-        DepartamentosViewModel vm = new DepartamentosViewModel();
+        var viewModel = new DepartamentosViewModel();
         httpClient.BaseAddress = new Uri("https://sga.api.labsystec.net/");
+
+        var token = User.Claims.First(x => x.Type == ClaimTypes.UserData).Value;
+        httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
         var userid = User.Claims.First(x => x.Type == ClaimTypes.NameIdentifier).Value;
         var response = await httpClient.GetAsync($"/api/departamentos/{userid}");
         if (response.IsSuccessStatusCode)
@@ -29,8 +34,8 @@ public class DepartamentosController : Controller
             if (depas != null)
             {
 
-                vm.Departamentos = depas;
-                return View(vm);
+                viewModel.Departamentos = depas;
+                return View(viewModel);
             }
         }
         return View();
@@ -41,6 +46,9 @@ public class DepartamentosController : Controller
         var viewModel = new AgregarDepartamentoViewModel();
 
         httpClient.BaseAddress = new Uri("https://sga.api.labsystec.net/");
+
+        var token = User.Claims.First(x => x.Type == ClaimTypes.UserData).Value;
+        httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
         var userid = User.Claims.First(x => x.Type == ClaimTypes.NameIdentifier).Value;
         var response = await httpClient.GetAsync($"/api/Departamentos/{userid}");
@@ -56,6 +64,10 @@ public class DepartamentosController : Controller
     {
         var userid = User.Claims.First(x => x.Type == ClaimTypes.NameIdentifier).Value;
         httpClient.BaseAddress = new Uri("https://sga.api.labsystec.net/");
+
+        var token = User.Claims.First(x => x.Type == ClaimTypes.UserData).Value;
+        httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
         if (viewModel != null)
         {
             viewModel.IdSuperior = int.Parse(userid);
@@ -106,6 +118,9 @@ public class DepartamentosController : Controller
 
         httpClient.BaseAddress = new Uri("https://sga.api.labsystec.net/");
 
+        var token = User.Claims.First(x => x.Type == ClaimTypes.UserData).Value;
+        httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
         var response = await httpClient.GetAsync($"/api/departamento/{id}");
 
         if (!response.IsSuccessStatusCode) return View();
@@ -145,7 +160,10 @@ public class DepartamentosController : Controller
         var userid = int.Parse(User.Claims.First(x => x.Type == ClaimTypes.NameIdentifier).Value);
 
         httpClient.BaseAddress = new Uri("https://sga.api.labsystec.net/");
-        
+
+        var token = User.Claims.First(x => x.Type == ClaimTypes.UserData).Value;
+        httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
         if (vm.IdSuperior == 0)
         {
             vm.IdSuperior = userid;
@@ -197,6 +215,9 @@ public class DepartamentosController : Controller
     public async Task<IActionResult> EliminarAsync(int id)
     {
          httpClient.BaseAddress = new Uri("https://sga.api.labsystec.net/");
+
+        var token = User.Claims.First(x => x.Type == ClaimTypes.UserData).Value;
+        httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
         // Realiza una solicitud DELETE a la API
         var response = await httpClient.DeleteAsync($"/api/Departamentos/{id}");

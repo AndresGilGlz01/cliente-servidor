@@ -41,7 +41,7 @@ namespace project_api.Helpers
                 Issuer = Iss,
                 Audience = aud,
                 IssuedAt = DateTime.Now,
-                Expires = DateTime.Now.AddMinutes(5),
+                Expires = DateTime.Now.AddDays(7),
                 NotBefore = DateTime.Now,
                 SigningCredentials = credentials
             };

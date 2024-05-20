@@ -1,52 +1,37 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+
 using project_api.Helpers;
 using project_api.Models.Dtos;
 using project_api.Repositories;
 
-namespace project_api.Controllers
-{
-    [Route("api/[controller]")]
-    [ApiController]
-    public class LoginController : ControllerBase
-    {
-        private readonly DepartamentosRepository departamentosRepository;
-        private readonly IConfiguration _configuration;
-        public LoginController(DepartamentosRepository repo, IConfiguration configuration)
-        {
-            departamentosRepository = repo;
-            _configuration = configuration;
+namespace project_api.Controllers;
 
-        }
-        [HttpPost]
-        public IActionResult Login(LoginDto login)
-        {
-            var dep = departamentosRepository.Get(login.UserName);
-            string role;
-            if (dep != null)
-            {
-                
-                bool ver = Verifier.VerifyPassword(login.Password, dep.Password);
-                if (ver)
-                {
-                    if(dep.Nombre=="Director General")
-                    {
-                        role = "Admin";
-                    }
-                    else
-                    {
-                        role = "Usuario";
-                    }
-                    JwtTokenGenerator jwttoken=new JwtTokenGenerator(_configuration);
-                    var token=jwttoken.GetToken(dep,role);
-                    return Ok(token);
-                }
-                else
-                {
-                    return BadRequest("Credenciales incorrectas");
-                }
-            }
-            return BadRequest();
-        }
+[AllowAnonymous]
+[Route("api/[controller]")]
+[ApiController]
+public class LoginController(DepartamentosRepository departamentosRepository, IConfiguration configuration) : ControllerBase
+{
+    readonly DepartamentosRepository departamentosRepository = departamentosRepository;
+    readonly IConfiguration configuration = configuration;
+
+    [HttpPost]
+    public IActionResult Login(LoginDto login)
+    {
+        var departemento = departamentosRepository.Get(login.UserName);
+
+        if (departemento is null) return BadRequest("No hay departamentos");
+
+        var success = Verifier.VerifyPassword(login.Password, departemento.Password);
+
+        if (!success) return BadRequest("Credenciales incorrectas");
+        
+        string role = departemento.Nombre == "Director General" ? "Admin" : "Usuario";
+
+        var jwttoken = new JwtTokenGenerator(configuration);
+
+        var token = jwttoken.GetToken(departemento, role);
+
+        return Ok(token);
     }
 }

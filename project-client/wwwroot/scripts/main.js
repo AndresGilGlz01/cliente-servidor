@@ -33,7 +33,7 @@ actividades.forEach((actividad) => {
 
         let id = actividad.getAttribute('data-id');
 
-        let url = `https://sga.api.labsystec.net/api/Actividades/GetAct/${id}`;
+        let url = `https://sga.api.labsystec.net/api/actividad/${id}`;
 
         let request = await fetch(url, {
             method: 'GET',
@@ -79,8 +79,6 @@ actividades.forEach((actividad) => {
                 </span>
                 <span class="details-date"> &middot; Realizado el ${fechaRealizacion}</span>
         `;
-
-        let detailsDescription = document.querySelector('#mytextarea');
         let image = document.querySelector('.details-img');
 
         image.src = `https://sga.api.labsystec.net/images/${id}.png`;

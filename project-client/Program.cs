@@ -6,13 +6,13 @@ builder.Services.AddMvc();
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
     .AddCookie(options =>
     {
-        options.LoginPath = "/Home/Login";
+        options.LoginPath = "/iniciar-sesion";
+        options.LogoutPath = "/cerrar-sesion";
         options.Cookie.Name = "ASGcookie";
-        options.ExpireTimeSpan = TimeSpan.FromDays(30);
+        options.ExpireTimeSpan = TimeSpan.FromDays(7);
     });
 builder.Services.AddAuthorization();
-builder.Services.AddTransient<HttpClient>();
-
+builder.Services.AddHttpClient();
 
 var app = builder.Build();
 

@@ -4,6 +4,7 @@ public class IndexViewModel
 {
     public IEnumerable<ActividadModel> Actividades { get; set; } = [];
     public IEnumerable<DepartamentoModel> Departamentos { get; set; } = [];
+    public string Token { get; set; } = null!;
 
     public class DepartamentoModel
     {

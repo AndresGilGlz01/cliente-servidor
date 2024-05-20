@@ -6,9 +6,10 @@ using Newtonsoft.Json;
 using project_client.Areas.Admin.Models;
 using project_client.Helpers;
 
+using System.Net;
+using System.Net.Http.Headers;
 using System.Security.Claims;
 using System.Text;
-
 
 namespace project_client.Areas.Admin.Controllers;
 
@@ -24,15 +25,22 @@ public class HomeController(HttpClient httpClient, IWebHostEnvironment webHost) 
     {
         httpClient.BaseAddress = new Uri("https://sga.api.labsystec.net/");
 
+        var token = User.Claims.First(x => x.Type == ClaimTypes.UserData).Value;
+        httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
         var userid = User.Claims.First(x => x.Type == ClaimTypes.NameIdentifier).Value;
 
         var reponseActividades = httpClient.GetAsync($"/api/actividades/{userid}");
-        var responseDepartamentos = httpClient.GetAsync($"/api/Departamentos/{userid}");
+        var responseDepartamentos = httpClient.GetAsync($"/api/departamentos/{userid}");
 
         Task.WaitAll(reponseActividades, responseDepartamentos);
 
-        if (!reponseActividades.Result.IsSuccessStatusCode ||
-            !responseDepartamentos.Result.IsSuccessStatusCode) return View(null);
+        // Verificar si hay error de autenticación
+        if (reponseActividades.Result.StatusCode == HttpStatusCode.Unauthorized ||
+            responseDepartamentos.Result.StatusCode == HttpStatusCode.Unauthorized)
+        {
+            return RedirectToAction("iniciar-sesion", "home", new { area = "" });
+        }
 
         var contentActividades = await reponseActividades.Result.Content.ReadAsStringAsync();
         var contentDepartamentos = await responseDepartamentos.Result.Content.ReadAsStringAsync();
@@ -40,25 +48,15 @@ public class HomeController(HttpClient httpClient, IWebHostEnvironment webHost) 
         var actividades = JsonConvert.DeserializeObject<IEnumerable<Models.IndexViewModel.ActividadModel>>(contentActividades) ?? [];
         var departamentos = JsonConvert.DeserializeObject<IEnumerable<Models.IndexViewModel.DepartamentoModel>>(contentDepartamentos) ?? [];
 
-        if (departamento != null)
-        {
-            actividades = actividades.Where(act => act.Departamento == departamento);
-        }
-
-        if (fechaInicio != null)
-        {
-            actividades = actividades.Where(act => act.FechaRealizacion != null && act.FechaRealizacion.Value.ToDateTime(TimeOnly.MinValue) >= fechaInicio);
-        }
-
-        if (fechaFin != null)
-        {
-            actividades = actividades.Where(act => act.FechaRealizacion != null && act.FechaRealizacion.Value.ToDateTime(TimeOnly.MinValue) <= fechaFin);
-        }
+        if (departamento != null) actividades = actividades.Where(act => act.Departamento == departamento);
+        if (fechaInicio != null) actividades = actividades.Where(act => act.FechaRealizacion != null && act.FechaRealizacion.Value.ToDateTime(TimeOnly.MinValue) >= fechaInicio);
+        if (fechaFin != null) actividades = actividades.Where(act => act.FechaRealizacion != null && act.FechaRealizacion.Value.ToDateTime(TimeOnly.MinValue) <= fechaFin);
 
         var viewModel = new Models.IndexViewModel
         {
             Actividades = actividades.Where(act => act.Estado != 0),
-            Departamentos = departamentos
+            Departamentos = departamentos,
+            Token = token
         };
 
         return View(viewModel);
@@ -69,14 +67,22 @@ public class HomeController(HttpClient httpClient, IWebHostEnvironment webHost) 
     {
         httpClient.BaseAddress = new Uri("https://sga.api.labsystec.net/");
 
+        var token = User.Claims.First(x => x.Type == ClaimTypes.UserData).Value;
+        httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
         var userid = User.Claims.First(x => x.Type == ClaimTypes.NameIdentifier).Value;
+
         var reponseActividades = httpClient.GetAsync($"/api/actividades/{userid}");
-        var responseDepartamentos = httpClient.GetAsync($"/api/Departamentos/{userid}");
+        var responseDepartamentos = httpClient.GetAsync($"/api/departamentos/{userid}");
 
         Task.WaitAll(reponseActividades, responseDepartamentos);
 
-        if (!reponseActividades.Result.IsSuccessStatusCode ||
-            !responseDepartamentos.Result.IsSuccessStatusCode) return View(null);
+        // Verificar si hay error de autenticación
+        if (reponseActividades.Result.StatusCode == HttpStatusCode.Unauthorized ||
+            responseDepartamentos.Result.StatusCode == HttpStatusCode.Unauthorized)
+        {
+            return RedirectToAction("iniciar-sesion", "home", new { area = string.Empty });
+        }
 
         var contentActividades = await reponseActividades.Result.Content.ReadAsStringAsync();
         var contentDepartamentos = await responseDepartamentos.Result.Content.ReadAsStringAsync();
@@ -87,7 +93,8 @@ public class HomeController(HttpClient httpClient, IWebHostEnvironment webHost) 
         var viewModel = new Models.IndexViewModel
         {
             Actividades = actividades.Where(act => act.Estado == 0),
-            Departamentos = departamentos
+            Departamentos = departamentos,
+            Token = token
         };
 
         return View(viewModel);
@@ -96,8 +103,12 @@ public class HomeController(HttpClient httpClient, IWebHostEnvironment webHost) 
     [HttpGet]
     public async Task<IActionResult> Agregar()
     {
-        AgregarActividadViewModel actividadViewModel = new AgregarActividadViewModel();
+        var actividadViewModel = new AgregarActividadViewModel();
+        
         httpClient.BaseAddress = new Uri("https://sga.api.labsystec.net/");
+
+        var token = User.Claims.First(x => x.Type == ClaimTypes.UserData).Value;
+        httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
         var userid = User.Claims.First(x => x.Type == ClaimTypes.NameIdentifier).Value;
         var response = await httpClient.GetAsync($"/api/Departamentos/{userid}");
@@ -120,6 +131,10 @@ public class HomeController(HttpClient httpClient, IWebHostEnvironment webHost) 
     public async Task<IActionResult> AgregarAsync(AgregarActividadViewModel vm)
     {
         httpClient.BaseAddress = new Uri("https://sga.api.labsystec.net/");
+
+        var token = User.Claims.First(x => x.Type == ClaimTypes.UserData).Value;
+        httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
         if (vm != null)
         {
 
@@ -186,20 +201,23 @@ public class HomeController(HttpClient httpClient, IWebHostEnvironment webHost) 
         }
         return View(vm);
     }
-    
+
+    [HttpPost]
     public async Task<IActionResult> Borrador(AgregarActividadViewModel vmW)
     {
         httpClient.BaseAddress = new Uri("https://sga.api.labsystec.net/");
+
+        var token = User.Claims.First(x => x.Type == ClaimTypes.UserData).Value;
+        httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+        
         if (vmW != null)
         {
-
             if (vmW.IdDepartamento == 0 || vmW.IdDepartamento == null)
             {
                 var userid = User.Claims.First(x => x.Type == ClaimTypes.NameIdentifier).Value;
 
                 vmW.IdDepartamento = int.Parse(userid);
             }
-
 
             var converter = new ConverterToBase64(webHostEnvironment);
 
@@ -208,11 +226,9 @@ public class HomeController(HttpClient httpClient, IWebHostEnvironment webHost) 
             var imagenBase64 = "";
             if (vmW.Archivo != null)
             {
-
                 var ruta = converter.SaveFile(vmW.Archivo);
                 imagenBase64 = converter.ImageToBase64(ruta);
             }
-
 
             var actdto = new AddActDto()
             {
@@ -226,9 +242,11 @@ public class HomeController(HttpClient httpClient, IWebHostEnvironment webHost) 
                 Imagen = imagenBase64,
                 Id = 0
             };
+
             var loginjson = System.Text.Json.JsonSerializer.Serialize(actdto);
             var content = new StringContent(loginjson, Encoding.UTF8, "application/json");
-            var response = await httpClient.PostAsync("/api/Actividades/Borrador", content);
+            var response = await httpClient.PostAsync("/api/borrador", content);
+
             if (response.IsSuccessStatusCode)
             {
 
@@ -260,11 +278,11 @@ public class HomeController(HttpClient httpClient, IWebHostEnvironment webHost) 
     [HttpGet("admin/home/editar/{id}")]
     public async Task<IActionResult> Editar(int id)
     {
-
-
         GetActividadViewModel act = new();
         httpClient.BaseAddress = new Uri("https://sga.api.labsystec.net/");
 
+        var token = User.Claims.First(x => x.Type == ClaimTypes.UserData).Value;
+        httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
         var r = await httpClient.GetAsync($"/api/actividades/GetAct/{id}");
         if (r.IsSuccessStatusCode)
@@ -283,8 +301,10 @@ public class HomeController(HttpClient httpClient, IWebHostEnvironment webHost) 
     [HttpPost]
     public async Task<IActionResult> Editar(GetActividadViewModel act)
     {
-
         httpClient.BaseAddress = new Uri("https://sga.api.labsystec.net/");
+
+        var token = User.Claims.First(x => x.Type == ClaimTypes.UserData).Value;
+        httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
         // Convertir el objeto act a JSON
         var converter = new ConverterToBase64(webHostEnvironment);
@@ -347,6 +367,9 @@ public class HomeController(HttpClient httpClient, IWebHostEnvironment webHost) 
     public async Task<IActionResult> Eliminar(int id)
     {
         httpClient.BaseAddress = new Uri("https://sga.api.labsystec.net/");
+
+        var token = User.Claims.First(x => x.Type == ClaimTypes.UserData).Value;
+        httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
         // Realiza una solicitud DELETE a la API
         var response = await httpClient.DeleteAsync($"/api/Actividades/{id}");
