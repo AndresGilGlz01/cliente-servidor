@@ -135,7 +135,7 @@ public class DepartamentosController : ControllerBase
             {
                 _actividadesRepository.Delete(act);
             }
-            var depas = _departamentosRepository.GetSub(dep.Id);
+            var depas = _departamentosRepository.GetSubs(dep.Id);
             foreach (var item in depas)
             {
                

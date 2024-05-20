@@ -37,5 +37,9 @@ namespace project_api.Repositories
         {
             return context.Departamentos.Include(x => x.IdSuperiorNavigation).FirstOrDefault(x => x.Id == id);
         }
+        public IEnumerable<Departamentos> GetSubS(int id)
+        {
+            return context.Departamentos.Where(x => x.IdSuperior == id ).Include(x => x.IdSuperiorNavigation);
+        }
     }
 }
