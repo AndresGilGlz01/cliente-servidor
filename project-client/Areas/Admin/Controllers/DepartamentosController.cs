@@ -57,6 +57,21 @@ public class DepartamentosController : Controller
 
         var content = await response.Content.ReadAsStringAsync();
 
+        var response2 = await httpClient.GetAsync($"/api/Departamentos/{userid}");
+        if (response2.IsSuccessStatusCode)
+        {
+            var content2 = await response2.Content.ReadAsStringAsync();
+
+            // Deserializar la cadena JSON en una lista de ActividadesViewModel
+            var depas = JsonSerializer.Deserialize<IEnumerable<Departamentos>>(content2, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+            if (depas != null)
+            {
+
+                viewModel.Departamentos = depas;
+                return View(viewModel);
+            }
+        }
+
         return View(viewModel);
     }
     [HttpPost]
@@ -70,6 +85,7 @@ public class DepartamentosController : Controller
 
         if (viewModel != null)
         {
+           
             if (viewModel.IdSuperior == 0)
             {
 
@@ -167,10 +183,16 @@ public class DepartamentosController : Controller
 
         var token = User.Claims.First(x => x.Type == ClaimTypes.UserData).Value;
         httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+        var response2 = await httpClient.GetAsync($"/api/departamento/{vm.Id}");
 
+        if (!response2.IsSuccessStatusCode) return View();
+
+        var content2 = await response2.Content.ReadAsStringAsync();
+
+        var departamento = JsonSerializer.Deserialize<Departamentos>(content2, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
         if (vm.IdSuperior == 0)
         {
-            vm.IdSuperior = (int)departamento.IdSuperior;        }
+            vm.IdSuperior = (int)departamento.IdSuperior; }
         var dto = new EditDepaViewModel()
         {
             Id = vm.Id,
@@ -197,7 +219,7 @@ public class DepartamentosController : Controller
             var response3 = await httpClient.GetAsync($"/api/Departamentos/{userid}");
             if (response3.IsSuccessStatusCode)
             {
-                var content3 = await response2.Content.ReadAsStringAsync();
+                var content3 = await response3.Content.ReadAsStringAsync();
 
                 // Deserializar la cadena JSON en una lista de ActividadesViewModel
                 var depas = JsonSerializer.Deserialize<IEnumerable<Departamentos>>(content3, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });

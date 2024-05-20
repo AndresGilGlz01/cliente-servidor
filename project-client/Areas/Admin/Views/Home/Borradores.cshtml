@@ -53,9 +53,9 @@
 
         <div class="buttons">
 
-            <div class="capturar" id="btnCapturar">
+            @* <div class="capturar" id="btnCapturar">
                 <a href="~/admin/home/agregar" class="capturar-text">Capturar</a>
-            </div>
+            </div> *@
 
             <div class="filtros" id="aside-open" onclick="showFilters()">
                 <span class="capturar-text">Filtros</span>
@@ -75,7 +75,7 @@
 
                 @foreach (var actividad in Model.Actividades)
                 {
-                    if (actividad.Estado == 0)
+                    if (actividad.Estado == 0 && actividad.IdDepartamento==userIdDepartamento)
                     {
                         <div class="actividad" data-id="@actividad.Id" onclick="showActividadDetails(@actividad.Id)">
                             <div class="actividad-header">

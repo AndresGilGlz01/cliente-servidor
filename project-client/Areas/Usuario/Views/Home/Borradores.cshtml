@@ -75,7 +75,7 @@
 
                 @foreach (var item in Model.Actividades)
                 {
-                    if (item.Estado == 0)
+                    if (item.Estado == 0 &&item.IdDepartamento==userIdDepartamento)
                     {
                         <div class="actividad" data-id="@item.Id">
                             <div class="actividad-header">
