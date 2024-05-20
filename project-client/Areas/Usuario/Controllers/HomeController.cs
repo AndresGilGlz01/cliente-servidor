@@ -6,6 +6,7 @@ using Newtonsoft.Json;
 using project_client.Areas.Usuario.Models;
 using project_client.Helpers;
 
+using System.Net;
 using System.Net.Http.Headers;
 using System.Security.Claims;
 using System.Text;
@@ -14,18 +15,13 @@ namespace project_client.Areas.Usuario.Controllers;
 
 [Area("Usuario")]
 [Authorize(Roles ="Usuario")]
-public class HomeController : Controller
+public class HomeController(HttpClient httpClient, IWebHostEnvironment webHostEnvironment) : Controller
 {
+    private readonly HttpClient httpClient = httpClient;
+    private readonly IWebHostEnvironment webHostEnvironment = webHostEnvironment;
 
-    private readonly HttpClient httpClient;
-    private readonly IWebHostEnvironment webHostEnvironment;
-    public HomeController(HttpClient httpClient,IWebHostEnvironment webHostEnvironment)
-    {
-        this.httpClient = httpClient;
-        this.webHostEnvironment = webHostEnvironment;
-    }
-
-    public async Task<IActionResult> IndexAsync()
+    [HttpGet]
+    public async Task<IActionResult> Index([FromQuery] string? departamento, [FromQuery] DateTime? fechaInicio, [FromQuery] DateTime? fechaFin)
     {
         httpClient.BaseAddress = new Uri("https://sga.api.labsystec.net/");
 
@@ -33,22 +29,38 @@ public class HomeController : Controller
         httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
         var userid = User.Claims.First(x => x.Type == ClaimTypes.NameIdentifier).Value;
-        var response = await httpClient.GetAsync($"/api/actividades/{userid}");
-        if (response.IsSuccessStatusCode)
+
+        var reponseActividades = httpClient.GetAsync($"/api/actividades/{userid}");
+        var responseDepartamentos = httpClient.GetAsync($"/api/departamentos/{userid}");
+
+        Task.WaitAll(reponseActividades, responseDepartamentos);
+
+        // Verificar si hay error de autenticación
+        if (reponseActividades.Result.StatusCode == HttpStatusCode.Unauthorized ||
+            responseDepartamentos.Result.StatusCode == HttpStatusCode.Unauthorized)
         {
-            var content = await response.Content.ReadAsStringAsync();
-
-            // Deserializar la cadena JSON en una lista de ActividadesViewModel
-            var actividades = JsonConvert.DeserializeObject<List<ActividadesViewModel>>(content);
-            if (actividades != null)
-            {
-
-                List<ActividadesViewModel> acts = actividades.ToList();
-                return View(acts);
-            }
+            return RedirectToAction("iniciar-sesion", "home", new { area = "" });
         }
-        return View(null);
-       
+
+        var contentActividades = await reponseActividades.Result.Content.ReadAsStringAsync();
+        var contentDepartamentos = await responseDepartamentos.Result.Content.ReadAsStringAsync();
+
+        var actividades = JsonConvert.DeserializeObject<IEnumerable<Models.IndexViewModel.ActividadModel>>(contentActividades) ?? [];
+        var departamentos = JsonConvert.DeserializeObject<IEnumerable<Models.IndexViewModel.DepartamentoModel>>(contentDepartamentos) ?? [];
+
+        // Filtrar actividades
+        if (departamento != null) actividades = actividades.Where(act => act.Departamento == departamento);
+        if (fechaInicio != null) actividades = actividades.Where(act => act.FechaRealizacion != null && act.FechaRealizacion.Value.ToDateTime(TimeOnly.MinValue) >= fechaInicio);
+        if (fechaFin != null) actividades = actividades.Where(act => act.FechaRealizacion != null && act.FechaRealizacion.Value.ToDateTime(TimeOnly.MinValue) <= fechaFin);
+
+        var viewModel = new Models.IndexViewModel
+        {
+            Actividades = actividades.Where(act => act.Estado != 0),
+            Departamentos = departamentos,
+            Token = token
+        };
+
+        return View(viewModel);
     }
 
     [HttpGet]
