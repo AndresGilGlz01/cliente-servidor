@@ -49,7 +49,7 @@ public class HomeController(HttpClient httpClient, IWebHostEnvironment webHost) 
         var departamentos = JsonConvert.DeserializeObject<IEnumerable<Models.IndexViewModel.DepartamentoModel>>(contentDepartamentos) ?? [];
 
         // Filtrar actividades
-        if (departamento != null) actividades = actividades.Where(act => act.Departamento == departamento);
+        //if (departamento != null) actividades = actividades.Where(act => act.Departamento == departamento);
         if (fechaInicio != null) actividades = actividades.Where(act => act.FechaRealizacion != null && act.FechaRealizacion.Value.ToDateTime(TimeOnly.MinValue) >= fechaInicio);
         if (fechaFin != null) actividades = actividades.Where(act => act.FechaRealizacion != null && act.FechaRealizacion.Value.ToDateTime(TimeOnly.MinValue) <= fechaFin);
 
@@ -285,7 +285,7 @@ public class HomeController(HttpClient httpClient, IWebHostEnvironment webHost) 
         var token = User.Claims.First(x => x.Type == ClaimTypes.UserData).Value;
         httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
-        var r = await httpClient.GetAsync($"/api/actividades/GetAct/{id}");
+        var r = await httpClient.GetAsync($"/api/actividad/{id}");
         if (r.IsSuccessStatusCode)
         {
             var con = await r.Content.ReadAsStringAsync();

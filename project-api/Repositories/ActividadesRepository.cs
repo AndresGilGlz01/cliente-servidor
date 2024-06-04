@@ -11,13 +11,10 @@ namespace project_api.Repositories
         {
             context = ctx;
         }
-        public  IEnumerable<ActividadesDto> GetActividades(int idepa)
+        public IEnumerable<ActividadesDto> GetActividades(int idepa)
         {
-            // Obtener los IDs de los departamentos subordinados
-            var departamentosSubordinadosIds = context.Departamentos
-                .Where(d => d.IdSuperior == idepa)
-                .Select(d => d.Id)
-                .ToList();
+            // Obtener los IDs de todos los departamentos subordinados
+            var departamentosSubordinadosIds = GetAllSubordinateDepartmentIds(idepa);
 
             // Incluir el ID del departamento principal
             departamentosSubordinadosIds.Add(idepa);
@@ -40,23 +37,33 @@ namespace project_api.Repositories
                 })
                 .OrderByDescending(x => x.FechaActualizacion)
                 .ToList();
+        }
 
-            //return context.Actividades.OrderBy(x => x.FechaCreacion).Include(x => x.IdDepartamentoNavigation).Select(x => new ActividadesDto()
-            //{
-            //    Descripcion = x.Descripcion,
-            //    Id = x.Id,
-            //    FechaCreacion = x.FechaCreacion,
-            //    FechaActualizacion = x.FechaActualizacion,
-            //    Titulo = x.Titulo,
-            //    Estado = x.Estado,
-            //    IdDepartamento = x.IdDepartamento,
-            //   Departamento=x.IdDepartamentoNavigation.Nombre
 
-            //}) .OrderByDescending(x=>x.FechaActualizacion); 
+        private List<int> GetAllSubordinateDepartmentIds(int parentId)
+        {
+            var subordinateIds = context.Departamentos
+                .Where(d => d.IdSuperior == parentId)
+                .Select(d => d.Id)
+                .ToList();
+
+            var allSubordinateIds = new List<int>(subordinateIds);
+
+            foreach (var id in subordinateIds)
+            {
+                allSubordinateIds.AddRange(GetAllSubordinateDepartmentIds(id));
+            }
+
+            return allSubordinateIds;
         }
         public Actividades? GetById(int id)
         {
             return context.Actividades.Include(x => x.IdDepartamentoNavigation).FirstOrDefault(x => x.Id == id);
+        }
+
+        public IEnumerable< Actividades> GetAct(int id)
+        {
+            return context.Actividades.Where(x => x.IdDepartamento == id);
         }
     }
 }

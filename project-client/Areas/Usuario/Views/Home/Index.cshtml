@@ -43,7 +43,7 @@
             <div class="profile-menu">
                 <a href="/usuario/">Inicio</a>
                 <a href="/usuario/home/borradores">Borradores</a>
-                <a href="/usuario/departamentos">Departamentos</a>
+                
                 <a href="/cerrar-sesion">Cerrar sesión</a>
             </div>
         </div>
@@ -68,7 +68,7 @@
         </svg>
 
         <div class="actividades">
-            <p class="actividades-title">Hoy</p>
+            <p class="actividades-title">Actividades</p>
             <div class="actividades-box">
                 <div id="userIdDepartamento" hidden data-user-id="@userIdDepartamento"></div>
                 <div id="role" hidden data-user-role="@role"></div>
@@ -188,6 +188,10 @@
 
             let roleDiv = document.getElementById('role');
             let userrole = roleDiv.getAttribute('data-user-role');
+            let userIdDepartamentoDiv = document.getElementById('userIdDepartamento');
+
+            // Obtener el valor del atributo data-user-id
+            let userIdDepartamento = userIdDepartamentoDiv.getAttribute('data-user-id');
 
             let descripcion = response.descripcion;
             let departamento = response.departamento;
@@ -241,7 +245,7 @@
                 btnModificar.style.display = "block";
                 btnEliminar.style.display = "block";
                 btnModificar.href = `/${userrole}/home/editar/${id}`;
-                btnEliminar.href = `/${userrole}admin/home/eliminar/${id}`;
+                btnEliminar.href = `/${userrole}/home/eliminar/${id}`;
             }
 
             document.querySelector('.details-body-description').innerHTML = descripcion;

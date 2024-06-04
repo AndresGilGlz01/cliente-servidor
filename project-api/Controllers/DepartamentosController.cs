@@ -127,24 +127,31 @@ public class DepartamentosController : ControllerBase
     public IActionResult Delete(int id)
     {
         var dep = _departamentosRepository.GetById(id);
-        if(dep != null)
+        if (dep == null)
+        {
+            return NotFound();
+
+        }
+        var acts = _actividadesRepository.GetAct(dep.Id).ToList();
+        if (acts.Any())
         {
 
-            var acts= _actividadesRepository.GetAll().Where(x => x.IdDepartamento == id);
-            foreach(var act in acts)
+            foreach (var act in acts)
             {
                 _actividadesRepository.Delete(act);
             }
-            var depas = _departamentosRepository.GetSub(dep.Id);
+        }
+        var depas = _departamentosRepository.GetSubs(dep.Id).ToList();
+        if (depas.Any())
+        {
+
             foreach (var item in depas)
             {
                 item.IdSuperior = dep.IdSuperior;
                 _departamentosRepository.Update(item);
             }
-            _departamentosRepository.Delete(dep);
-            return NoContent();
-
         }
-        return NotFound();
+        _departamentosRepository.Delete(dep);
+        return NoContent();
     }
 }

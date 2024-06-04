@@ -31,11 +31,15 @@ namespace project_api.Repositories
         }
         public IEnumerable<Departamentos> GetSub(int id)
         {
-            return context.Departamentos.Where(x => x.IdSuperior == id).Include(x=>x.IdSuperiorNavigation);
+            return context.Departamentos.Where(x => x.IdSuperior == id || x.Username.Contains("equipo3") && x.Id!=id).Include(x=>x.IdSuperiorNavigation);
         }
         public Departamentos? GetById(int id)
         {
             return context.Departamentos.Include(x => x.IdSuperiorNavigation).FirstOrDefault(x => x.Id == id);
+        }
+        public IEnumerable<Departamentos> GetSubs(int id)
+        {
+            return context.Departamentos.Where(x => x.IdSuperior == id ).Include(x => x.IdSuperiorNavigation);
         }
     }
 }

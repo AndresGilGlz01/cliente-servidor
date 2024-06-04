@@ -53,9 +53,9 @@
 
         <div class="buttons">
 
-            <div class="capturar" id="btnCapturar">
+            @* <div class="capturar" id="btnCapturar">
                 <a href="~/admin/home/agregar" class="capturar-text">Capturar</a>
-            </div>
+            </div> *@
 
             <div class="filtros" id="aside-open" onclick="showFilters()">
                 <span class="capturar-text">Filtros</span>
@@ -68,14 +68,14 @@
         </svg>
 
         <div class="actividades">
-            <p class="actividades-title">Hoy</p>
+            <p class="actividades-title">Borradores</p>
             <div class="actividades-box">
                 <div id="userIdDepartamento" hidden data-user-id="@userIdDepartamento"></div>
                 <div id="role" hidden data-user-role="@role"></div>
 
                 @foreach (var actividad in Model.Actividades)
                 {
-                    if (actividad.Estado == 0)
+                    if (actividad.Estado == 0 && actividad.IdDepartamento==userIdDepartamento)
                     {
                         <div class="actividad" data-id="@actividad.Id" onclick="showActividadDetails(@actividad.Id)">
                             <div class="actividad-header">
@@ -188,7 +188,10 @@
 
             let roleDiv = document.getElementById('role');
             let userrole = roleDiv.getAttribute('data-user-role');
+            let userIdDepartamentoDiv = document.getElementById('userIdDepartamento');
 
+            // Obtener el valor del atributo data-user-id
+            let userIdDepartamento = userIdDepartamentoDiv.getAttribute('data-user-id');
             let descripcion = response.descripcion;
             let departamento = response.departamento;
             let estado = response.estado;
@@ -241,7 +244,7 @@
                 btnModificar.style.display = "block";
                 btnEliminar.style.display = "block";
                 btnModificar.href = `/${userrole}/home/editar/${id}`;
-                btnEliminar.href = `/${userrole}admin/home/eliminar/${id}`;
+                btnEliminar.href = `/${userrole}/home/eliminar/${id}`;
             }
 
             document.querySelector('.details-body-description').innerHTML = descripcion;
