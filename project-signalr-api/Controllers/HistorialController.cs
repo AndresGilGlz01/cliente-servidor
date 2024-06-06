@@ -1,14 +1,35 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 
+using project_signalr_api.Converters;
+using project_signalr_api.Repositories;
+
 namespace project_signalr_api.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public class HistorialController : ControllerBase
+public class HistorialController(HistorialRepository historialRepository) : ControllerBase
 {
-    [HttpGet]
-    public IActionResult GetAll()
+    readonly HistorialRepository historialRepository = historialRepository;
+
+    [HttpGet("{id}")]
+    public async Task<IActionResult> Get(int id)
     {
-        return Ok();
+        var entity = await historialRepository.GetById(id);
+
+        if (entity == null) return NotFound();
+
+        var response = entity.ToResponse();
+
+        return Ok(response);
+    }
+
+    [HttpGet]
+    public async Task<IActionResult> GetAll()
+    {
+        var entities = await historialRepository.GetAll();
+
+        var response = entities.Select(entity => entity.ToResponse());
+
+        return Ok(response);
     }
 }

@@ -21,6 +21,8 @@ builder.Services.AddDbContext<TicketsContext>(options =>
 });
 builder.Services.AddTransient<AdministradorRepository>();
 builder.Services.AddTransient<HistorialRepository>();
+builder.Services.AddTransient<CajaRepository>();
+builder.Services.AddTransient<TurnoRepository>();
 builder.Services.AddTransient<LoginRequestValidator>();
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>
 {
