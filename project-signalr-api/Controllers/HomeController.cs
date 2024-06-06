@@ -6,7 +6,9 @@ using project_signalr_api.Models.Entities;
 using project_signalr_api.Repositories;
 using project_signalr_api.Validators;
 
+using System.Data;
 using System.IdentityModel.Tokens.Jwt;
+using System.Runtime.Intrinsics.Arm;
 using System.Security.Claims;
 using System.Text;
 
@@ -38,22 +40,36 @@ public class HomeController(IConfiguration configuration,
 
     string GenerateJwtToken(Administrador administrador)
     {
-        var tokenHandler = new JwtSecurityTokenHandler();
-        var key = Encoding.ASCII.GetBytes(configuration["Jwt:Key"]!);
+        var issuer = configuration["Jwt:Issuer"];
+        var key = configuration["Jwt:Key"];
+
+        List<Claim> claims =
+        [
+            new Claim(ClaimTypes.Name, administrador.NombreUsuario),
+            new Claim(ClaimTypes.NameIdentifier, administrador.Id.ToString()),
+            new Claim(ClaimTypes.Role, "Administrador"),
+            new Claim(JwtRegisteredClaimNames.Iss, issuer!),
+            new Claim(JwtRegisteredClaimNames.Iat, DateTime.Now.ToString()),
+            new Claim(JwtRegisteredClaimNames.Exp, DateTime.Now.AddDays(1).ToString()),
+        ];
+
+        var keyBytes = Encoding.UTF8.GetBytes(key!);
+        var securityKey = new SymmetricSecurityKey(keyBytes);
+        var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
 
         var tokenDescriptor = new SecurityTokenDescriptor
         {
-            Subject = new ClaimsIdentity(
-            [
-                new(ClaimTypes.NameIdentifier, administrador.Id.ToString()),
-                new(ClaimTypes.Name, administrador.NombreUsuario)
-            ]),
-            Expires = DateTime.UtcNow.AddHours(5),
-            SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
+            Subject = new ClaimsIdentity(claims),
+            Issuer = issuer,
+            IssuedAt = DateTime.Now,
+            Expires = DateTime.Now.AddDays(1),
+            NotBefore = DateTime.Now,
+            SigningCredentials = credentials
         };
 
-        var token = tokenHandler.CreateToken(tokenDescriptor);
-        
-        return tokenHandler.WriteToken(token);
+        var handler = new JwtSecurityTokenHandler();
+        var token = handler.CreateToken(tokenDescriptor);
+
+        return handler.WriteToken(token);
     }
 }

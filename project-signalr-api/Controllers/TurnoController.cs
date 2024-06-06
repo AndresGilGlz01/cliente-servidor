@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 
 using project_signalr_api.Converters;
 using project_signalr_api.Models.DTOs.Request;
@@ -8,6 +9,7 @@ using project_signalr_api.Validators;
 
 namespace project_signalr_api.Controllers;
 
+[Authorize(Roles = "Administrador")]
 [ApiController]
 [Route("api/[controller]")]
 public class TurnoController(TurnoRepository turnoRepository,

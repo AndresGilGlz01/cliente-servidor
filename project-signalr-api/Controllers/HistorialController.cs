@@ -1,10 +1,12 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 
 using project_signalr_api.Converters;
 using project_signalr_api.Repositories;
 
 namespace project_signalr_api.Controllers;
 
+[Authorize(Roles = "Administrador")]
 [ApiController]
 [Route("api/[controller]")]
 public class HistorialController(HistorialRepository historialRepository) : ControllerBase
