@@ -10,8 +10,8 @@ namespace project_signalr_api.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public class TurnoController(TurnoRepository turnoRepository, 
-    CajaRepository cajaRepository, HistorialRepository historialRepository, 
+public class TurnoController(TurnoRepository turnoRepository,
+    CajaRepository cajaRepository, HistorialRepository historialRepository,
     UpdateTurnoRequestValidator updateTurnoValidator, CreateTurnoRequestValidator createTurnoValidator) : ControllerBase
 {
     readonly UpdateTurnoRequestValidator updateTurnoValidator = updateTurnoValidator;
@@ -28,7 +28,7 @@ public class TurnoController(TurnoRepository turnoRepository,
         if (entity is null) return NotFound();
 
         var response = entity.ToResponse();
-        
+
         return Ok(response);
     }
 
@@ -67,19 +67,22 @@ public class TurnoController(TurnoRepository turnoRepository,
         if (!validationResult.IsValid) return BadRequest(validationResult.Errors.Select(x => x.ErrorMessage));
 
         var turno = await turnoRepository.GetById(request.IdTurno);
+        var caja = await cajaRepository.GetById(request.IdCaja);
 
         var historial = new Historial
         {
             IdTurno = request.IdTurno,
             IdCaja = request.IdCaja,
+            Estado = request.Estado!,
             FechaAtencion = DateTime.UtcNow
         };
-
         await historialRepository.Insert(historial);
 
         turno!.Estado = request.Estado!;
-
         await turnoRepository.Update(turno);
+
+        caja!.IdTurnoActual = turno.Estado == "Atendiendo" ? request.IdTurno : null;
+        await cajaRepository.Update(caja);
 
         return NoContent();
     }

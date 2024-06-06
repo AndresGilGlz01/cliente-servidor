@@ -13,6 +13,8 @@ public partial class Historial
 
     public DateTime FechaAtencion { get; set; }
 
+    public string Estado { get; set; } = null!;
+
     public virtual Caja IdCajaNavigation { get; set; } = null!;
 
     public virtual Turno IdTurnoNavigation { get; set; } = null!;

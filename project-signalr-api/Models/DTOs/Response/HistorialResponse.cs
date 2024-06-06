@@ -8,6 +8,7 @@ public class HistorialResponse
     public DateTime FechaAtencion { get; set; }
     public CajaResponse Caja { get; set; } = null!;
     public FolioResponse Folio { get; set; } = null!;
+    public string Estado { get; set; } = null!;
 
     public class CajaResponse
     {

@@ -69,6 +69,7 @@ public partial class TicketsContext : DbContext
             entity.HasIndex(e => e.IdTurno, "fkhistorial_turno");
 
             entity.Property(e => e.Id).HasColumnType("int(11)");
+            entity.Property(e => e.Estado).HasColumnType("enum('Atendiendo','Atendido')");
             entity.Property(e => e.FechaAtencion).HasColumnType("datetime");
             entity.Property(e => e.IdCaja).HasColumnType("int(11)");
             entity.Property(e => e.IdTurno).HasColumnType("int(11)");
