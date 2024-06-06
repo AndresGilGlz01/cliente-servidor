@@ -2,20 +2,28 @@
 
 using project_signalr_api.Converters;
 using project_signalr_api.Models.DTOs.Request;
+using project_signalr_api.Models.Entities;
 using project_signalr_api.Repositories;
+using project_signalr_api.Validators;
 
 namespace project_signalr_api.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public class TurnoController(TurnoRepository repository) : ControllerBase
+public class TurnoController(TurnoRepository turnoRepository, 
+    CajaRepository cajaRepository, HistorialRepository historialRepository, 
+    UpdateTurnoRequestValidator updateTurnoValidator, CreateTurnoRequestValidator createTurnoValidator) : ControllerBase
 {
-    readonly TurnoRepository repository = repository;
+    readonly UpdateTurnoRequestValidator updateTurnoValidator = updateTurnoValidator;
+    readonly CreateTurnoRequestValidator createTurnoValidator = createTurnoValidator;
+    readonly HistorialRepository historialRepository = historialRepository;
+    readonly TurnoRepository turnoRepository = turnoRepository;
+    readonly CajaRepository cajaRepository = cajaRepository;
 
     [HttpGet("{id}")]
     public async Task<IActionResult> GetById(int id)
     {
-        var entity = await repository.GetById(id);
+        var entity = await turnoRepository.GetById(id);
 
         if (entity is null) return NotFound();
 
@@ -27,7 +35,7 @@ public class TurnoController(TurnoRepository repository) : ControllerBase
     [HttpGet]
     public async Task<IActionResult> GetAll()
     {
-        var entities = await repository.GetAll();
+        var entities = await turnoRepository.GetAll();
 
         var response = entities.Select(entity => entity.ToResponse());
 
@@ -37,12 +45,16 @@ public class TurnoController(TurnoRepository repository) : ControllerBase
     [HttpPost]
     public async Task<IActionResult> Create(CreateTurnoRequest request)
     {
+        var validationResult = await createTurnoValidator.ValidateAsync(request);
+
+        if (!validationResult.IsValid) return BadRequest(validationResult.Errors.Select(x => x.ErrorMessage));
+
         var entity = request.ToEntity();
 
         entity.Fecha = DateTime.UtcNow;
         entity.Estado = "Pendiente";
 
-        await repository.Insert(entity);
+        await turnoRepository.Insert(entity);
 
         return CreatedAtAction(nameof(GetById), new { id = entity.Id }, entity.ToResponse());
     }
@@ -50,13 +62,24 @@ public class TurnoController(TurnoRepository repository) : ControllerBase
     [HttpPut]
     public async Task<IActionResult> Update(UpdateTurnoRequest request)
     {
-        var entity = await repository.GetById(request.Id);
+        var validationResult = await updateTurnoValidator.ValidateAsync(request);
 
-        if (entity is null) return NotFound();
+        if (!validationResult.IsValid) return BadRequest(validationResult.Errors.Select(x => x.ErrorMessage));
 
-        entity.Estado = request.Estado ?? "Pendiente";
+        var turno = await turnoRepository.GetById(request.IdTurno);
 
-        await repository.Update(entity);
+        var historial = new Historial
+        {
+            IdTurno = request.IdTurno,
+            IdCaja = request.IdCaja,
+            FechaAtencion = DateTime.UtcNow
+        };
+
+        await historialRepository.Insert(historial);
+
+        turno!.Estado = request.Estado!;
+
+        await turnoRepository.Update(turno);
 
         return NoContent();
     }

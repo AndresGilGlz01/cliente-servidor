@@ -2,6 +2,7 @@
 
 public class UpdateTurnoRequest
 {
-    public int Id { get; set; }
+    public int IdTurno { get; set; }
+    public int IdCaja { get; set; }
     public string? Estado { get; set; }
 }
