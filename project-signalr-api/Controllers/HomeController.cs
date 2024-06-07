@@ -8,7 +8,6 @@ using project_signalr_api.Validators;
 
 using System.Data;
 using System.IdentityModel.Tokens.Jwt;
-using System.Runtime.Intrinsics.Arm;
 using System.Security.Claims;
 using System.Text;
 
