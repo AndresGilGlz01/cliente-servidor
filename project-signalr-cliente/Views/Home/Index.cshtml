@@ -1,0 +1,48 @@
+﻿<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Solicitar Turno</title>
+    <style>
+        body, html {
+            height: 100%;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            background: linear-gradient(0deg, #0048BA, #1F75FE, #89CFF0, #A1CAF1, #A7C7E7, #C9FFE5, #5D8AA8, #ACE5EE, #4997D0, #9BDDFF, #92A1CF, #003153, #778899, #C3CDE6, #B0E0E6, #73C2FB, #4F97A3, #007BA7, #0F52BA, #4682B4, #0033A0, #0095B6, #6495ED);
+        }
+
+        .container {
+            background-color: rgba(255, 255, 255, 0.8);
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .button {
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+            .button:hover {
+                background-color: #0056b3;
+            }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Solicitar Turno</h1>
+        <form action="~/Home/Turno" method="get">
+            <button type="submit" class="button">Solicitar Turno</button>
+        </form>
+    </div>
+</body>
+</html>
