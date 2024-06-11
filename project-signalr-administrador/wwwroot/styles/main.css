@@ -1,0 +1,375 @@
+﻿@import url("https://fonts.googleapis.com/css2?family=Wix+Madefor+Display:wght@400..800&display=swap");
+
+*,
+html,
+body {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: "Wix Madefor Display", sans-serif;
+    font-optical-sizing: auto;
+}
+
+body {
+    margin: 0;
+    overflow: hidden;
+    background: #01053b;
+    height: 100vh;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.caja {
+    margin: 0;
+    overflow: hidden;
+    background: #01031f;
+    height: 100vh;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: radial-gradient( circle at bottom right, rgba(0, 92, 238, 1) 0%, rgba(7, 1, 106, 1) 42%, rgba(2, 0, 36, 1) 74% );
+}
+
+.pantalla-espera {
+    display: grid;
+    grid-template-columns: 1fr 600px;
+    grid-template-rows: 140px 1fr auto;
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-top: 10px;
+}
+
+    .pantalla-espera .titulo {
+        grid-column-start: 1;
+        grid-column-end: 3;
+        grid-row-start: 1;
+        grid-row-end: 2;
+        display: flex;
+    }
+
+        .pantalla-espera .titulo h1 {
+            text-align: center;
+            margin: auto;
+            margin-bottom: 10px;
+        }
+
+        .pantalla-espera .titulo p {
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 20px;
+        }
+
+.esperando .turno-en-espera h3 {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.pantalla-espera .atendiendo {
+    grid-column-start: 1;
+    grid-column-end: 2;
+    grid-row-start: 2;
+    grid-row-end: 4;
+    display: flex;
+    padding-inline: 20px;
+    padding-block: 20px !important;
+    margin-bottom: 20px;
+}
+
+.ventanilla {
+    padding: 5px 10px;
+    border-radius: 8px;
+    background-color: rgb(237, 112, 20);
+    margin-left: 50px;
+}
+
+.pantalla-espera .esperando {
+    grid-column-start: 2;
+    grid-column-end: 3;
+    grid-row-start: 2;
+    grid-row-end: 3;
+    display: flex;
+    padding-inline: 20px;
+    padding-block: 20px !important;
+}
+
+.controlpanel {
+    background-image: linear-gradient( rgba(44, 43, 48, 0.459), rgba(44, 43, 48, 0.459) );
+    display: flex;
+    flex-direction: column;
+    width: -webkit-fill-available;
+    height: -webkit-fill-available;
+    margin: 20px;
+    border-radius: 8px;
+}
+
+.transparencia {
+    background-image: linear-gradient( rgba(43, 43, 43, 0.493), rgba(43, 43, 43, 0.493) );
+    margin: 10px;
+    box-shadow: 0px 1px 1px 1px rgba(41, 41, 41, 0.79);
+}
+
+    .transparencia .turno-en-espera {
+        background-color: #a0c4eb9f;
+        font-size: 24px;
+        z-index: 500;
+    }
+
+.pantalla-espera .foto {
+    grid-column-start: 2;
+    grid-column-end: 3;
+    grid-row-start: 3;
+    grid-row-end: 4;
+    margin-bottom: 20px;
+}
+
+#cat {
+    border-radius: 8px;
+    width: 100%;
+    height: 30vh;
+    object-fit: cover;
+    object-position: center;
+    z-index: 400;
+    transition: .3s ease-in-out;
+}
+
+.controlpanel-titulo {
+    display: flex;
+    justify-content: space-between;
+    padding: 8px;
+    padding-inline-start: 20px;
+    padding-inline-end: 20px;
+    border-radius: 5px;
+    color: white;
+    margin-top: 10px;
+}
+
+    .controlpanel-titulo h1, .controlpanel h1, .controlpanel p {
+        background: linear-gradient(to right, #0461ee, #72e4de);
+        -webkit-background-clip: text;
+        color: transparent;
+    }
+
+.controlpanel-atendiendo {
+    display: grid;
+    grid-template-rows: auto auto 3fr;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    gap: 20px;
+    color: white;
+    height: -webkit-fill-available;
+    padding: 8px;
+    padding-inline-start: 20px;
+    padding-inline-end: 20px;
+    border-radius: 5px;
+    margin-bottom: 15px;
+}
+
+    .controlpanel-atendiendo .advertencia {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        grid-column-start: 1;
+        grid-column-end: 5;
+        padding: 20px 25px;
+        margin-top: 20px;
+        background-image: linear-gradient( rgb(237, 112, 20, 0.459), rgb(237, 112, 20, 0.459) );
+        border-radius: 8px;
+        border: 1px solid rgb(237, 112, 20);
+    }
+
+    .controlpanel-atendiendo .acciones,
+    .controlpanel-atendiendo .turno-actual,
+    .controlpanel-atendiendo .turnos-siguientes {
+        border-radius: 8px;
+        border: 2px solid rgba(255, 255, 255, 0.178);
+        padding-inline: 20px;
+        padding-block: 20px;
+    }
+
+    .controlpanel-atendiendo .turno-actual {
+        grid-column-start: 1;
+        grid-column-end: 4;
+    }
+
+.turno-actual h2 {
+    background-image: linear-gradient( rgb(237, 112, 20, 0.459), rgb(237, 112, 20, 0.459) );
+    display: inline-block;
+    width: auto;
+    padding: 5px 15px;
+    border-radius: 5px;
+    border: 1px solid rgb(237, 112, 20);
+}
+
+.turno-actual p {
+    margin: 10px 0 0 35px;
+}
+
+.controlpanel-atendiendo .acciones {
+    grid-column-start: 4;
+    grid-column-end: 5;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+    .controlpanel-atendiendo .acciones h1 {
+        margin: 0;
+    }
+
+    .controlpanel-atendiendo .acciones form input {
+        margin: 0 !important;
+        width: 100%;
+    }
+
+.turnos-siguientes {
+    grid-column-start: 1;
+    grid-column-end: 5;
+    overflow: auto;
+    overflow-x: hidden;
+}
+
+    .turnos-siguientes .turno-en-espera {
+        background-image: linear-gradient( rgba(44, 43, 48, 0.308), rgba(23, 22, 27, 0.308) );
+        padding: 15px 30px;
+        border-radius: 8px;
+        box-shadow: 0px 5px 15px 0px rgba(255, 255, 255, 0.027);
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        margin-bottom: 10px;
+    }
+
+.controlpanel-atendiendo .advertencia i {
+    font-size: 25px;
+}
+
+.controlpanel-titulo .usuario {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+    .controlpanel-titulo .usuario img {
+        width: 50px;
+        height: 50px;
+        object-fit: cover;
+        border-radius: 100%;
+    }
+
+.contenedor {
+    color: white;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    padding: 30px 50px;
+    border-radius: 10px;
+    background-image: linear-gradient( rgba(43, 43, 43, 0.354), rgba(43, 43, 43, 0.354) );
+    z-index: 200;
+}
+
+    .contenedor h1,
+    .controlpanel-titulo .titulos h1 {
+        margin: 0;
+        padding: 0;
+    }
+
+    .contenedor p,
+    .controlpanel-titulo .titulos p {
+        margin-top: 5px;
+    }
+
+    .contenedor img {
+        width: 100px;
+        height: 100%;
+    }
+
+input[type="text"],
+input[type="password"],
+input {
+    border: none;
+    padding-inline: 10px;
+    padding-block: 10px;
+    border-radius: 5px;
+    background-color: rgba(43, 43, 43, 0.329);
+    color: white;
+    font-weight: 500;
+}
+
+    input[type="text"]::placeholder,
+    input[type="password"]::placeholder {
+        color: rgba(168, 168, 168, 0.61);
+    }
+
+    input[type="submit"] {
+        background-color: #1565c0;
+        transition: 0.2s ease-in-out;
+        margin: 10px 0;
+    }
+
+        input[type="submit"]:hover {
+            background-color: #518aca;
+            color: #020a5c;
+            box-shadow: 0px 16px 48px 0px rgba(0, 0, 0, 0.176);
+        }
+
+select {
+    padding: 5px 15px;
+    border: none;
+    border-radius: 3px;
+    background-color: white;
+}
+
+    select:focus {
+        outline: none;
+        border-color: #007bff;
+    }
+
+.login form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: 300px;
+    margin-top: 30px;
+}
+
+.particula {
+    position: absolute;
+    width: 500px;
+    height: 250px;
+    background: radial-gradient( circle at 60% 60%, rgba(126, 229, 255, 0.822), rgb(0, 110, 255) 70% );
+    border-radius: 100%;
+    filter: blur(200px);
+}
+
+.flex {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+
+
+@keyframes movimientoErratico {
+    0% {
+        transform: translate(0, 0) rotate(0deg);
+    }
+
+    25% {
+        transform: translate(100px, -150px) rotate(90deg);
+    }
+
+    50% {
+        transform: translate(200px, -300px) rotate(180deg);
+    }
+
+    75% {
+        transform: translate(300px, -450px) rotate(270deg);
+    }
+
+    100% {
+        transform: translate(400px, -600px) rotate(360deg);
+    }
+}

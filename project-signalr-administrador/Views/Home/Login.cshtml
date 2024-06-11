@@ -1,5 +1,57 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
-}
+﻿@model project_signalr_administrador.Models.ViewModel.Home.LoginViewModel
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="~/styles/normalize.css" />
+    <link rel="stylesheet" href="~/styles/main.css" />
+    <script src="https://kit.fontawesome.com/abb25ecaa9.js" crossorigin="anonymous"></script>
+    <title>Sistema de turnos - Login</title>
+</head>
+<body>
+    <div class="contenedor">
+        <img src="~/img/billetera.png" />
+        <div class="login">
+            <h1>Iniciar sesion</h1>
+            <p>Bienvenido de vuelta</p>
+            <form asp-controller="home" asp-action="login" method="post">
+                <label for="">Usuario</label>
+                <input type="text" asp-for="NombreUsuario" placeholder="Usuario">
+
+                <label for="">Contraseña</label>
+                <input type="password" asp-for="Contraseña" placeholder="Contraseña">
+
+                <input type="submit" value="Ingresar">
+            </form>
+        </div>
+    </div>
+
+    <script>
+        const numeroParticulas = 9;
+        const anchoPantalla = window.innerWidth;
+        const altoPantalla = window.innerHeight;
+
+        for (let i = 0; i < numeroParticulas; i++) {
+          const particula = document.createElement("div");
+          particula.className = "particula";
+
+          // Posición inicial aleatoria
+          const posX = Math.random() * anchoPantalla;
+          const posY = Math.random() * altoPantalla;
+          particula.style.left = `${posX}px`;
+          particula.style.top = `${posY}px`;
+
+          // Animación con duración y retraso aleatorio
+          const duracion = Math.random() * 20 + 10; // Entre 10 y 30 segundos
+          const retraso = Math.random() * 2; // Hasta 5 segundos de retraso
+          particula.style.animation = `movimientoErratico ${duracion}s infinite alternate`;
+          particula.style.animationDelay = `${retraso}s`;
+          particula.style.animationDirection = "alternate"; // Alternar dirección
+
+          document.body.appendChild(particula);
+        }
+    </script>
+</body>
+</html>

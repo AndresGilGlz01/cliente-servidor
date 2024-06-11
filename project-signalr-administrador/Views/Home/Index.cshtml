@@ -1,0 +1,135 @@
+﻿@model project_signalr_administrador.Models.ViewModel.Home.IndexViewModel;
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="~/styles/normalize.css" />
+    <link rel="stylesheet" href="~/styles/main.css" />
+    <script src="https://kit.fontawesome.com/abb25ecaa9.js" crossorigin="anonymous"></script>
+    <title>Sistema de turnos - Panel de usuario</title>
+</head>
+<body class="caja">
+    <style>
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #d6d6d680;
+            border-radius: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #0f0c31;
+            border-radius: 20px;
+        }
+    </style>
+    <div class="controlpanel">
+        <div class="controlpanel-titulo">
+            <div class="titulos">
+                <h1>Top Grade International Finances</h1>
+                <p>Operaciones de Ventanilla - <span>Caja: 5</span></p>
+            </div>
+            <div class="usuario">
+                <i class="fa-solid fa-gear"></i>
+                <select name="Estado" id="">
+                    <option selected disabled>Estado</option>
+                    <option value="">Disponible</option>
+                    <option value="">Ocupado</option>
+                </select>
+                <img src="~/img/profilepicture.jpg" />
+            </div>
+        </div>
+
+        <div class="controlpanel-atendiendo">
+            <div class="advertencia">
+                <i class="fa-solid fa-circle-exclamation"></i>
+                <p>
+                    Recuerda revisar detalladamente que el folio en esta pantalla
+                    coincida con el ticket del cliente
+                </p>
+            </div>
+
+            <div class="turno-actual">
+                <div class="flex">
+                    <h1>Turno actual</h1>
+                    <h2>Folio: <span>A12345</span></h2>
+                </div>
+
+                <p>Fecha: <span>4 - Junio - 2024</span></p>
+                <p>Hora: <span>5:12 P.M.</span></p>
+            </div>
+            <div class="acciones">
+                <h1>Próximo Turno</h1>
+                <form action="">
+                    <input type="submit" value="Siguiente" />
+                </form>
+            </div>
+
+            <div class="turnos-siguientes">
+
+                <h1>Proximos turnos</h1>
+
+                @foreach (var turno in Model.Turnos)
+                {
+                    <div class="turno-en-espera">
+                        <h3>Folio: <span>@turno.Folio</span></h3>
+                        <p>Fecha: <span>@turno.Fecha.ToLongDateString()</span></p>
+                        <p>Hora: <span>@turno.Fecha.ToString("t")</span></p>
+                    </div>
+                }
+
+            </div>
+        </div>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/6.0.1/signalr.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const divs = document.querySelectorAll(".turno-en-espera");
+            const totalDivs = divs.length;
+            const maxBlur = 7;
+
+            function applyBlur() {
+                divs.forEach((div, i) => {
+                    const blurAmount = (maxBlur / totalDivs) * i;
+                    div.style.filter = `blur(${blurAmount}px)`;
+                });
+            }
+
+            function cycleBlur() {
+                setTimeout(() => {
+                    applyBlur();
+                }, 100);
+            }
+
+            setInterval(cycleBlur, 1000);
+
+            function ObtenerTickets() {
+
+            }        
+        });
+
+        const connection = new signalR.HubConnectionBuilder()
+            .withUrl("http://localhost:5235/ticketshub", {
+                skipNegotiation: true,
+                transport: signalR.HttpTransportType.WebSockets,
+            })
+            .withAutomaticReconnect()
+            .build();
+
+        async function start() {
+            try {
+                await connection.start();
+                console.log("SignalR Connected.");
+            } catch (err) {
+                console.log(err);
+                setTimeout(start, 5000);
+            }
+        };
+
+        start();
+    </script>
+</body>
+</html>

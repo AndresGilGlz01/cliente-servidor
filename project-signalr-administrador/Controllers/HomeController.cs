@@ -1,6 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 
+using project_signalr_administrador.Helpers;
+using project_signalr_administrador.Models.DTOs.Response;
 using project_signalr_administrador.Models.ViewModel.Home;
+
+using System.Net.Http.Headers;
 
 namespace project_signalr_administrador.Controllers;
 
@@ -8,9 +12,24 @@ public class HomeController(IHttpClientFactory httpClientFactory) : Controller
 {
     readonly HttpClient httpClient = httpClientFactory.CreateClient("server");
 
-    public IActionResult Index()
+    public async Task<IActionResult> Index()
     {
-        return View();
+        var token = HttpContext.Session.GetString("token");
+
+        if (string.IsNullOrEmpty(token)) return RedirectToAction(nameof(Login));
+
+        httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
+        var turnosResponse = await httpClient.GetFromJsonAsync<IEnumerable<TurnoResponse>>("api/turno") ?? [];
+
+        var turnos = turnosResponse.Select(t => t.ToModel());
+
+        var viewModel = new IndexViewModel
+        {
+            Turnos = turnos
+        };
+
+        return View(viewModel);
     }
 
     public IActionResult Login() => View();
@@ -26,17 +45,19 @@ public class HomeController(IHttpClientFactory httpClientFactory) : Controller
 
         var response = await httpClient.PostAsJsonAsync("api/login", request);
 
-        var responseContext = await response.Content.ReadAsStringAsync();
+        var responseContent = await response.Content.ReadAsStringAsync();
 
         if (!response.IsSuccessStatusCode)
         {
-            ModelState.AddModelError(string.Empty, responseContext);
+            ModelState.AddModelError(string.Empty, responseContent);
 
-            return View();
+            return View(loginRequest);
         }
 
+        var token = responseContent; 
 
+        HttpContext.Session.SetString("token", token);
 
-        return View();
+        return RedirectToAction(nameof(Index));
     }
 }
