@@ -1,0 +1,112 @@
+﻿@model project_signalr_cliente.Models.Entities.Turno;
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Turno</title>
+    <style>
+        body, html {
+            height: 100%;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            font-family: Arial, sans-serif;
+            background: linear-gradient(to bottom, #2E8B57, #3CB371, #66CDAA, #8FBC8F, #20B2AA);
+        }
+
+        .container {
+            background-color: rgba(255, 255, 255, 0.9);
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            position: relative;
+            z-index: 1;
+        }
+
+        .turno {
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+
+        .caja {
+            font-size: 18px;
+            color: #333;
+        }
+
+        .cheems-canvas {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            width: 100px;
+            height: 100px;
+            z-index: 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="turno">Turno @Model.Numero</div>
+        <div class="caja">Diríjase a la caja 3</div>
+    </div>
+    <canvas class="cheems-canvas" id="cheemsCanvas"></canvas>
+
+    <script>
+        function drawCheems() {
+            const canvas = document.getElementById('cheemsCanvas');
+            const ctx = canvas.getContext('2d');
+            canvas.width = 100;
+            canvas.height = 100;
+
+            // Dibujo simple de Cheems
+            // Cuerpo
+            ctx.fillStyle = '#F5CBA7';
+            ctx.beginPath();
+            ctx.ellipse(50, 60, 30, 40, Math.PI / 2, 0, 2 * Math.PI);
+            ctx.fill();
+
+            // Cabeza
+            ctx.fillStyle = '#F5CBA7';
+            ctx.beginPath();
+            ctx.arc(50, 30, 20, 0, 2 * Math.PI);
+            ctx.fill();
+
+            // Ojos
+            ctx.fillStyle = '#000000';
+            ctx.beginPath();
+            ctx.arc(40, 25, 3, 0, 2 * Math.PI);
+            ctx.fill();
+            ctx.beginPath();
+            ctx.arc(60, 25, 3, 0, 2 * Math.PI);
+            ctx.fill();
+
+            // Boca
+            ctx.strokeStyle = '#000000';
+            ctx.beginPath();
+            ctx.arc(50, 35, 5, 0, Math.PI, false);
+            ctx.stroke();
+
+            // Patas delanteras
+            ctx.fillStyle = '#F5CBA7';
+            ctx.beginPath();
+            ctx.ellipse(35, 80, 10, 5, Math.PI / 4, 0, 2 * Math.PI);
+            ctx.fill();
+            ctx.beginPath();
+            ctx.ellipse(65, 80, 10, 5, -Math.PI / 4, 0, 2 * Math.PI);
+            ctx.fill();
+
+            // Patas traseras
+            ctx.fillStyle = '#F5CBA7';
+            ctx.beginPath();
+            ctx.ellipse(50, 90, 12, 6, 0, 0, 2 * Math.PI);
+            ctx.fill();
+        }
+
+        drawCheems();
+    </script>
+</body>
+</html>
