@@ -90,7 +90,7 @@
         });
 
         const connection = new signalR.HubConnectionBuilder()
-            .withUrl("http://localhost:44358/ticketshub", {
+            .withUrl("https://api.signalr.labsystec.net/ticketshub", {
                 skipNegotiation: true,
                 transport: signalR.HttpTransportType.WebSockets,
             })

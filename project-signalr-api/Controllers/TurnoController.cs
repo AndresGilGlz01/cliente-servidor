@@ -34,6 +34,18 @@ public class TurnoController(TurnoRepository turnoRepository,
         return Ok(response);
     }
 
+    [HttpGet("bycaja/{id}")]
+    public async Task<IActionResult> GetByCaja(int id)
+    {
+        var entity = await turnoRepository.GetByCaja(id);
+
+        if (entity is null) return NotFound();
+
+        var response = entity.ToResponse();
+
+        return Ok(response);
+    }
+
     [HttpGet]
     public async Task<IActionResult> GetAll()
     {

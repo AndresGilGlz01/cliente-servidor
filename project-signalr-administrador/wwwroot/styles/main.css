@@ -133,7 +133,7 @@ body {
     object-fit: cover;
     object-position: center;
     z-index: 400;
-    transition: .3s ease-in-out;
+    transition: 0.3s ease-in-out;
 }
 
 .controlpanel-titulo {
@@ -147,7 +147,10 @@ body {
     margin-top: 10px;
 }
 
-    .controlpanel-titulo h1, .controlpanel h1, .controlpanel p {
+    .controlpanel-titulo h1,
+    .controlpanel h1,
+    .pedir-turnos h1,
+    #horafecha {
         background: linear-gradient(to right, #0461ee, #72e4de);
         -webkit-background-clip: text;
         color: transparent;
@@ -232,7 +235,7 @@ body {
 }
 
     .turnos-siguientes .turno-en-espera {
-        background-image: linear-gradient( rgba(44, 43, 48, 0.308), rgba(23, 22, 27, 0.308) );
+        background-image: linear-gradient( rgba(65, 64, 68, 0.521), rgba(44, 43, 48, 0.521) );
         padding: 15px 30px;
         border-radius: 8px;
         box-shadow: 0px 5px 15px 0px rgba(255, 255, 255, 0.027);
@@ -240,6 +243,7 @@ body {
         flex-direction: column;
         gap: 8px;
         margin-bottom: 10px;
+        color: white;
     }
 
 .controlpanel-atendiendo .advertencia i {
@@ -288,7 +292,7 @@ body {
 
 input[type="text"],
 input[type="password"],
-input {
+input, button {
     border: none;
     padding-inline: 10px;
     padding-block: 10px;
@@ -303,13 +307,13 @@ input {
         color: rgba(168, 168, 168, 0.61);
     }
 
-    input[type="submit"] {
+    input[type="submit"], button {
         background-color: #1565c0;
         transition: 0.2s ease-in-out;
         margin: 10px 0;
     }
 
-        input[type="submit"]:hover {
+        input[type="submit"]:hover, button:hover {
             background-color: #518aca;
             color: #020a5c;
             box-shadow: 0px 16px 48px 0px rgba(0, 0, 0, 0.176);
@@ -350,7 +354,146 @@ select {
     justify-content: space-between;
 }
 
+.pedir-turnos {
+    display: flex;
+    flex-direction: column;
+}
 
+    .pedir-turnos h1 {
+        text-transform: uppercase;
+        letter-spacing: 5px;
+        margin: 0;
+        padding: 0;
+        margin-bottom: 20px;
+    }
+
+    .pedir-turnos img {
+        width: 200px;
+        margin: 0;
+        padding: 0;
+    }
+
+    .pedir-turnos input {
+        margin-top: 20px;
+        margin-bottom: 30px;
+        padding: 15px 45px;
+        zoom: 300%;
+    }
+
+        .pedir-turnos input:hover {
+            box-shadow: rgba(255, 255, 255, 0.25) 0px 10px 50px -12px;
+        }
+
+    .pedir-turnos #horafecha {
+        color: white;
+        font-weight: 600;
+        font-size: 20px;
+        position: absolute;
+        top: 0;
+        margin: 20px;
+    }
+
+.modal {
+    position: absolute;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    width: -webkit-fill-available;
+    background-color: rgba(122, 122, 122, 0.555);
+    transition: 0.3s ease-in-out;
+    visibility: hidden;
+}
+
+#caja, #estadisticas {
+    transition: .3s ease-in-out !important;
+}
+
+.ticket,
+.elegir-caja,
+.estadisticas {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: rgba(0, 0, 0, 0.459) 0px 4px 16px, rgba(17, 17, 26, 0.1) 0px 8px 24px, rgba(17, 17, 26, 0.1) 0px 16px 56px;
+    background-color: white;
+    zoom: 150%;
+    transition: 0.3s ease-in-out;
+}
+
+    .ticket h1 {
+        margin-bottom: 10px;
+        text-align: center;
+    }
+
+.controlpanel-atendiendo .advertencia p {
+    color: white;
+}
+
+.fa-chart-simple {
+    background-color: white;
+    font-size: 20px;
+    border-radius: 100%;
+    padding: 8px;
+    color: #17144c;
+}
+
+.elegir-caja,
+.estadisticas {
+    zoom: 100%;
+    align-items: center;
+    padding: 15px 30px;
+}
+
+.estadisticas {
+    padding-bottom: 40px;
+}
+
+.elegir-caja button {
+    padding-left: 25px;
+    padding-right: 25px;
+    padding-block: 7px;
+}
+
+.elegir-caja div {
+    display: flex;
+    gap: 15px;
+    align-items: center;
+}
+
+.elegir-caja select {
+    background-color: rgb(207, 207, 207);
+}
+
+.grupo-estadisticas {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 15px;
+}
+
+    .grupo-estadisticas .estadistica div {
+        display: flex;
+        align-items: baseline;
+        gap: 10px;
+        margin-top: 10px;
+    }
+
+.estadistica {
+    background-color: #bbbbbb;
+    padding: 15px;
+    border-radius: 8px;
+    transition: 0.3s ease-in-out;
+}
+
+    .estadistica p {
+        font-weight: 600;
+    }
+
+    .estadistica:hover {
+        box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+    }
 
 @keyframes movimientoErratico {
     0% {

@@ -12,6 +12,10 @@ public class CajaRepository : Repository<Caja>
         .Include(c => c.IdAdministradorActualNavigation)
         .FirstOrDefaultAsync(c => c.Id == id);
 
+    public override async Task<IEnumerable<Caja>> GetAll() => await Context.Set<Caja>()
+        .Include(c => c.IdAdministradorActualNavigation)
+        .ToListAsync();
+
     public async Task<int?> GetLastCaja()
     {
         var caja = await Context.Caja.OrderByDescending(c => c.Id).FirstOrDefaultAsync();
