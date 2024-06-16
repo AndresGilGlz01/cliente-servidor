@@ -11,4 +11,22 @@ public static class DataConverter
         Fecha = turnoResponse.Fecha,
         Estado = turnoResponse.Estado,
     };
+
+    public static HistorialViewModel.TurnoModel ToModel(this HistorialResponse historialResponse) => new()
+    {
+        Id = historialResponse.Id,
+        IdCaja = historialResponse.IdCaja,
+        IdTurno = historialResponse.IdTurno,
+        FechaAtencion = historialResponse.FechaAtencion,
+        Folio = new HistorialViewModel.FolioModel
+        {
+            Folio = historialResponse.Folio.Folio,
+            Fecha = historialResponse.Folio.Fecha,
+        },
+        Caja = new HistorialViewModel.CajaModel
+        {
+            Numero = historialResponse.Caja.Numero,
+        },
+        Estado = historialResponse.Estado,
+    };
 }

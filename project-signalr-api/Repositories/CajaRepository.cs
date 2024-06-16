@@ -8,10 +8,16 @@ public class CajaRepository : Repository<Caja>
 {
     public CajaRepository(TicketsContext context) : base(context) { }
 
+    public override Task<Caja?> GetById(int id) => Context.Set<Caja>()
+        .Include(c => c.IdAdministradorActualNavigation)
+        .FirstOrDefaultAsync(c => c.Id == id);
+
     public async Task<int?> GetLastCaja()
     {
         var caja = await Context.Caja.OrderByDescending(c => c.Id).FirstOrDefaultAsync();
 
         return caja?.NumeroCaja;
     }
+
+    public async Task<bool> Exists(int id) => await Context.Caja.AnyAsync(c => c.Id == id);
 }

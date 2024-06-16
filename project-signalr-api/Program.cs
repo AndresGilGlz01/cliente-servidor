@@ -25,6 +25,7 @@ builder.Services.AddTransient<CajaRepository>();
 builder.Services.AddTransient<TurnoRepository>();
 builder.Services.AddTransient<LoginRequestValidator>();
 builder.Services.AddTransient<UpdateTurnoRequestValidator>();
+builder.Services.AddTransient<UpdateCajaRequestValidator>();
 builder.Services.AddTransient<CreateTurnoRequestValidator>();
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>
 {

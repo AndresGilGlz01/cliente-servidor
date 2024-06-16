@@ -29,7 +29,9 @@ public static class DataConverter
     {
         Id = entity.Id,
         NumeroCaja = entity.NumeroCaja,
+        Administrador = entity.IdAdministradorActualNavigation?.NombreUsuario,
         IdTurnoActual = entity.IdTurnoActual,
+        IdAdministradorActual = entity.IdAdministradorActual,
     };
 
     public static TurnoResponse ToResponse(this Turno entity) => new()

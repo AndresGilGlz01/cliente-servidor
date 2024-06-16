@@ -1,4 +1,4 @@
-﻿@model project_signalr_administrador.Models.ViewModel.Home.IndexViewModel;
+﻿@model project_signalr_administrador.Models.ViewModel.Home.HistorialViewModel;
 @addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
 <!DOCTYPE html>
 <html lang="es">
@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="~/styles/normalize.css" />
     <link rel="stylesheet" href="~/styles/main.css" />
     <script src="https://kit.fontawesome.com/abb25ecaa9.js" crossorigin="anonymous"></script>
-    <title>Sistema de turnos - Panel de usuario</title>
+    <title>Sistema de turnos - Historial</title>
 </head>
 <body class="caja">
     <style>
@@ -44,44 +44,17 @@
         </div>
 
         <div class="controlpanel-atendiendo">
-            <div class="advertencia">
-                <i class="fa-solid fa-circle-exclamation"></i>
-                <p>
-                    Recuerda revisar detalladamente que el folio en esta pantalla
-                    coincida con el ticket del cliente
-                </p>
-            </div>
-
-            @if (Model.TurnoActual is not null)
-            {
-                <div class="turno-actual">
-                    <div class="flex">
-                        <h1>Turno actual</h1>
-                        <h2>Folio: <span>@Model.TurnoActual.Folio</span></h2>
-                    </div>
-
-                    <p>Fecha: <span>@Model.TurnoActual.Fecha.ToLongDateString()</span></p>
-                    <p>Hora: <span>@Model.TurnoActual.Fecha.ToString("t")</span></p>
-                </div>
-            }
-
-            <div class="acciones">
-                <h1>Próximo Turno</h1>
-                <form action="">
-                    <input type="submit" value="Siguiente" />
-                </form>
-            </div>
 
             <div class="turnos-siguientes">
 
-                <h1>Proximos turnos</h1>
+                <h1>Historial</h1>
 
                 @foreach (var turno in Model.Turnos)
                 {
                     <div class="turno-en-espera">
-                        <h3>Folio: <span>@turno.Folio</span></h3>
-                        <p>Fecha: <span>@turno.Fecha.ToLongDateString()</span></p>
-                        <p>Hora: <span>@turno.Fecha.ToString("t")</span></p>
+                        <h3>Folio: <span>@turno.Folio.Folio</span></h3>
+                        <p>Fecha atención: <span>@turno.FechaAtencion</span></p>
+                        <p>Caja: <span>@turno.Caja.Numero</span></p>
                         <p>Estado: <span>@turno.Estado</span></p>
                     </div>
                 }
@@ -113,11 +86,11 @@
 
             function ObtenerTickets() {
 
-            }        
+            }
         });
 
         const connection = new signalR.HubConnectionBuilder()
-            .withUrl("http://localhost:5235/ticketshub", {
+            .withUrl("http://localhost:44358/ticketshub", {
                 skipNegotiation: true,
                 transport: signalR.HttpTransportType.WebSockets,
             })

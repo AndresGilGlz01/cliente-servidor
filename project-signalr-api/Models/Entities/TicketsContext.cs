@@ -47,11 +47,18 @@ public partial class TicketsContext : DbContext
 
             entity.ToTable("caja");
 
+            entity.HasIndex(e => e.IdAdministradorActual, "caja_administrador_FK");
+
             entity.HasIndex(e => e.IdTurnoActual, "fkcaja_turno");
 
             entity.Property(e => e.Id).HasColumnType("int(11)");
+            entity.Property(e => e.IdAdministradorActual).HasColumnType("int(11)");
             entity.Property(e => e.IdTurnoActual).HasColumnType("int(11)");
             entity.Property(e => e.NumeroCaja).HasColumnType("int(11)");
+
+            entity.HasOne(d => d.IdAdministradorActualNavigation).WithMany(p => p.Caja)
+                .HasForeignKey(d => d.IdAdministradorActual)
+                .HasConstraintName("caja_administrador_FK");
 
             entity.HasOne(d => d.IdTurnoActualNavigation).WithMany(p => p.Caja)
                 .HasForeignKey(d => d.IdTurnoActual)

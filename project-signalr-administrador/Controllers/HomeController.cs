@@ -20,13 +20,33 @@ public class HomeController(IHttpClientFactory httpClientFactory) : Controller
 
         httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
-        var turnosResponse = await httpClient.GetFromJsonAsync<IEnumerable<TurnoResponse>>("api/turno") ?? [];
+        var responses = await httpClient.GetFromJsonAsync<IEnumerable<TurnoResponse>>("api/turno") ?? [];
 
-        var turnos = turnosResponse.Select(t => t.ToModel());
+        var models = responses.Select(t => t.ToModel());
 
         var viewModel = new IndexViewModel
         {
-            Turnos = turnos
+            Turnos = models
+        };
+
+        return View(viewModel);
+    }
+
+    public async Task<IActionResult> Historial()
+    {
+        var token = HttpContext.Session.GetString("token");
+
+        if (string.IsNullOrEmpty(token)) return RedirectToAction(nameof(Login));
+
+        httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
+        var responses = await httpClient.GetFromJsonAsync<IEnumerable<HistorialResponse>>("api/historial") ?? [];
+
+        var models = responses.Select(t => t.ToModel());
+
+        var viewModel = new HistorialViewModel
+        {
+            Turnos = models
         };
 
         return View(viewModel);

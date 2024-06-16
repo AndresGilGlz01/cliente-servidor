@@ -10,4 +10,6 @@ public partial class Administrador
     public string NombreUsuario { get; set; } = null!;
 
     public string Contraseña { get; set; } = null!;
+
+    public virtual ICollection<Caja> Caja { get; set; } = new List<Caja>();
 }
