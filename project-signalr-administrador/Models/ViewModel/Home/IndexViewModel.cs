@@ -3,7 +3,6 @@
 public class IndexViewModel
 {
     public TurnoModel? TurnoActual { get; set; }
-    public IEnumerable<TurnoModel> Turnos { get; set; } = [];
 
     public class TurnoModel
     {

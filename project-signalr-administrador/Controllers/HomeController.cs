@@ -20,9 +20,11 @@ public class HomeController(IHttpClientFactory httpClientFactory) : Controller
         if (string.IsNullOrEmpty(token)) return RedirectToAction(nameof(Login));
 
         var idusuario = GetClaimValue(token, "nameid");
+        var usuario = GetClaimValue(token, "unique_name");
 
         HttpContext.Session.SetString("idusuario", idusuario);
-
+        HttpContext.Session.SetString("usuario", usuario);
+        
         return View();
     }
 

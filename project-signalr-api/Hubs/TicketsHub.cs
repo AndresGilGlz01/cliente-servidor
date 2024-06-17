@@ -30,8 +30,19 @@ public class TicketsHub(TurnoRepository turnoRepository, CajaRepository cajaRepo
 
     public async Task UpdateCajaState(UpdateCajaRequest request)
     {
-        var caja = await cajaRepository.GetById(request.IdCaja);
+        var cajas = await cajaRepository.GetAll();
 
+        foreach (var c in cajas)
+        {
+            if (c.IdAdministradorActual == request.IdAdministrador)
+            {
+                c.IdAdministradorActual = null;
+                await cajaRepository.Update(c);
+            }
+        }
+
+        var caja = await cajaRepository.GetById(request.IdCaja);
+        
         caja.IdAdministradorActual = request.IdAdministrador;
 
         var entity = await cajaRepository.Update(caja);
