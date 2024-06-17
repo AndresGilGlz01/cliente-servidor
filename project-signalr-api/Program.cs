@@ -40,15 +40,6 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJw
         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]!))
     };
 });
-builder.Services.AddCors(options =>
-{
-    options.AddPolicy("MyPolicy", app =>
-    {
-        app.AllowAnyOrigin()
-            .AllowAnyMethod()
-            .AllowAnyHeader();
-    });
-});
 
 var app = builder.Build();
 
@@ -62,7 +53,12 @@ app.UseHttpsRedirection();
 
 app.MapHub<TicketsHub>("/ticketshub");
 
-app.UseCors("MyPolicy");
+app.UseCors(x =>
+{
+    x.AllowAnyHeader();
+    x.AllowAnyMethod();
+    x.AllowAnyOrigin();
+});
 
 app.UseAuthentication();
 
