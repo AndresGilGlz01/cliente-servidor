@@ -1,5 +1,4 @@
-﻿@model project_signalr_administrador.Models.ViewModel.Home.IndexViewModel;
-@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+﻿@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -35,12 +34,7 @@
             <div class="usuario">
                 <i class="fa-solid fa-gear"></i>
                 <i class="fa-solid fa-chart-simple"></i>
-                <select name="Estado" id="">
-                    <option selected disabled>Estado</option>
-                    <option value="">Disponible</option>
-                    <option value="">Ocupado</option>
-                </select>
-                <img src="/imgs/profilepicture.jpg" />
+                <img src="~/img/profilepicture.jpg" />
             </div>
         </div>
 
@@ -55,6 +49,7 @@
                 <p>Fecha: <span>4 - Junio - 2024</span></p>
                 <p>Hora: <span>5:12 P.M.</span></p>
             </div>
+
             <div class="acciones" style="visibility: collapse">
                 <h1>Próximo Turno</h1>
                 <form action="">
@@ -65,6 +60,7 @@
             <div class="turnos-siguientes" style="grid-row-start: 1">
                 <h1>Proximos turnos</h1>
             </div>
+
         </div>
     </div>
 
@@ -183,7 +179,7 @@
                 const cajaActual = document.querySelector("#opt-caja");
 
                 data.forEach(caja => {
-                    if (caja.administrador) {
+                    if (!caja.administrador) {
                         let option = document.createElement("option");
 
                         option.value = caja.id;
@@ -278,6 +274,15 @@
                 document.querySelector(".caja-seleccionada-text").innerText = `Caja ${value}`;
 
                 await GetCurrentTurno(value);
+
+                let updateCajaRequest = {
+                    "IdCaja": value,
+                    "IdAdministrador": "@(Context.Session.GetString("idusuario"))"
+                }
+
+                console.log(updateCajaRequest);
+
+                await connection.invoke("UpdateCajaState", updateCajaRequest);
             }
             else {
                 document.querySelector(".caja-seleccionada-text").innerText = "Sin seleccionar";
@@ -307,8 +312,6 @@
 
             setInterval(cycleBlur, 1000);
 
-            start();
-
             GetTurnosAvailed();
             GetCajasAvailed();
         });
@@ -321,17 +324,35 @@
             .withAutomaticReconnect()
             .build();
 
-        async function start() {
-            try {
-                await connection.start();
-                console.log("SignalR Connected.");
-            } catch (err) {
-                console.log(err);
-                setTimeout(start, 5000);
-            }
-        };
+        connection.start()
+            .then(() => console.log('Conexión iniciada.'))
+            .catch(err => console.error('Error al iniciar la conexión: ', err));
 
-        start();
+        connection.on("NuevoTurno", (turno) => {
+            let div = document.querySelector(".turnos-siguientes");
+
+            let turnoDiv = document.createElement("div");
+            turnoDiv.classList.add("turno-en-espera");
+
+            turnoDiv.dataset.id = turno.id;
+
+            let h3 = document.createElement("h3");
+            h3.innerText = `Folio: ${turno.folio}`;
+
+            let fecha = new Date(turno.fecha);
+
+            let p1 = document.createElement("p");
+            p1.innerText = `Fecha: ${fecha.toLocaleDateString()}`;
+
+            let p2 = document.createElement("p");
+            p2.innerText = `Hora: ${fecha.toLocaleTimeString()}`;
+
+            turnoDiv.appendChild(h3);
+            turnoDiv.appendChild(p1);
+            turnoDiv.appendChild(p2);
+
+            div.appendChild(turnoDiv);
+        });
     </script>
 </body>
 </html>

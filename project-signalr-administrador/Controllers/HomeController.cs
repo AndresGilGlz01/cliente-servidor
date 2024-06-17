@@ -4,6 +4,7 @@ using project_signalr_administrador.Helpers;
 using project_signalr_administrador.Models.DTOs.Response;
 using project_signalr_administrador.Models.ViewModel.Home;
 
+using System.IdentityModel.Tokens.Jwt;
 using System.Net.Http.Headers;
 
 namespace project_signalr_administrador.Controllers;
@@ -12,24 +13,17 @@ public class HomeController(IHttpClientFactory httpClientFactory) : Controller
 {
     readonly HttpClient httpClient = httpClientFactory.CreateClient("server");
 
-    public async Task<IActionResult> Index()
+    public IActionResult Index()
     {
         var token = HttpContext.Session.GetString("token");
 
         if (string.IsNullOrEmpty(token)) return RedirectToAction(nameof(Login));
 
-        httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+        var idusuario = GetClaimValue(token, "nameid");
 
-        var responses = await httpClient.GetFromJsonAsync<IEnumerable<TurnoResponse>>("api/turno") ?? [];
+        HttpContext.Session.SetString("idusuario", idusuario);
 
-        var models = responses.Select(t => t.ToModel());
-
-        var viewModel = new IndexViewModel
-        {
-            Turnos = models
-        };
-
-        return View(viewModel);
+        return View();
     }
 
     public async Task<IActionResult> Historial()
@@ -79,5 +73,21 @@ public class HomeController(IHttpClientFactory httpClientFactory) : Controller
         HttpContext.Session.SetString("token", token);
 
         return RedirectToAction(nameof(Index));
+    }
+
+    public static string? GetClaimValue(string token, string claimType)
+    {
+        var handler = new JwtSecurityTokenHandler();
+
+        if (handler.CanReadToken(token))
+        {
+            var jwtToken = handler.ReadJwtToken(token);
+
+            var claim = jwtToken.Claims.FirstOrDefault(c => c.Type == claimType);
+
+            return claim?.Value;
+        }
+
+        return null;
     }
 }
