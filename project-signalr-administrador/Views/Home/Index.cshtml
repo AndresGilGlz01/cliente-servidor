@@ -200,14 +200,14 @@
                 let data = await response.json();
 
                 const cajaActual = document.querySelector("#opt-caja");
-
                 data.forEach(caja => {
-
-                    if (caja.idAdministradorActual == 1) {
+                    if (caja.administrador == "@Context.Session.GetString("usuario")") {
                         document.querySelector(".caja-seleccionada-text").innerText = `Caja ${caja.numeroCaja}`;
+                        GetCurrentTurno(caja.numeroCaja);
                         ShowTurnoActual();
+                    } else {
+                        HideTurnoActual();
                     }
-                    // console.log(@(Context.Session.GetString("idusuario")))
 
                     if (!caja.administrador) {
                         let option = document.createElement("option");
@@ -304,9 +304,7 @@
                 let updateCajaRequest = {
                     "IdCaja": parseInt(value),
                     "IdAdministrador": @(Context.Session.GetString("idusuario"))
-                                }
-
-                console.log(updateCajaRequest);
+                }
 
                 await connection.invoke("UpdateCajaState", updateCajaRequest);
             }
