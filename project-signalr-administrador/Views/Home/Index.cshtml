@@ -299,7 +299,7 @@
                 let updateCajaRequest = {
                     "IdCaja": parseInt(value),
                     "IdAdministrador": @(Context.Session.GetString("idusuario"))
-                        }
+                                }
 
                 await connection.invoke("UpdateCajaState", updateCajaRequest);
             }
@@ -317,7 +317,6 @@
             await connection.invoke("UpdateTurnoState", idCaja);
 
             const turnos = document.querySelectorAll(".turno-en-espera");
-            GetTurnosAvailed();
             GetCurrentTurno(idCaja);
         }
 
@@ -399,7 +398,7 @@
             await GetCajasAvailed();
         });
 
-        connection.on("TurnosActualizados", async (data) => { 
+        connection.on("TurnosActualizados", async (data) => {
             let div = document.querySelector("#opt-caja");
 
             let options = div.querySelectorAll("option");
@@ -410,14 +409,15 @@
                 }
             });
 
-            await GetCajasAvailed();
-
             let turnos = document.querySelectorAll(".turno-en-espera");
+
+            console.log(turnos);
 
             turnos.forEach(turno => {
                 document.querySelector(".turnos-siguientes").removeChild(turno);
             });
 
+            await GetCajasAvailed();
             await GetTurnosAvailed();
         });
     </script>
