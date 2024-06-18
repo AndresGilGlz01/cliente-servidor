@@ -53,9 +53,9 @@
 
             <div class="acciones">
                 <h1>Próximo Turno</h1>
-                <form action="">
+                <div onclick="OnNextTurno()">
                     <input type="submit" value="Siguiente" />
-                </form>
+                </div>
             </div>
 
             <div class="turnos-siguientes">
@@ -166,26 +166,19 @@
         });
     </script>
     <script>
+
+        let cajaSeleccionada;
+
         function HideTurnoActual() {
             let div = document.querySelector(".turno-actual");
-            let siguiente = document.querySelector(".acciones");
 
             div.style.visibility = "collapse";
-            siguiente.style.visibility = "collapse";
-
-            document.querySelector(".turnos-siguientes").style.gridRowStart = "1";
         }
 
         function ShowTurnoActual() {
             let div = document.querySelector(".turno-actual");
-            let siguiente = document.querySelector(".acciones");
 
             div.style.visibility = "visible";
-            div.style.gridRowStart = "1";
-            siguiente.style.visibility = "visible";
-            siguiente.style.gridRowStart = "1";
-
-            document.querySelector(".turnos-siguientes").style.gridRowStart = "2";
         }
 
         async function GetCajasAvailed() {
@@ -203,6 +196,7 @@
                 data.forEach(caja => {
                     if (caja.administrador == "@Context.Session.GetString("usuario")") {
                         document.querySelector(".caja-seleccionada-text").innerText = `Caja ${caja.numeroCaja}`;
+                        cajaSeleccionada = caja.numeroCaja;
                         GetCurrentTurno(caja.numeroCaja);
                         ShowTurnoActual();
                     } else {
@@ -273,7 +267,7 @@
                 let data = await response.json();
 
                 ShowTurnoActual();
-                
+
                 let div = document.querySelector(".turno-actual");
 
                 let h2 = div.querySelector("h2");
@@ -297,6 +291,7 @@
             const value = cajaActual.value;
 
             if (value !== "0") {
+                cajaSeleccionada = value;
                 document.querySelector(".caja-seleccionada-text").innerText = `Caja ${value}`;
 
                 await GetCurrentTurno(value);
@@ -304,7 +299,7 @@
                 let updateCajaRequest = {
                     "IdCaja": parseInt(value),
                     "IdAdministrador": @(Context.Session.GetString("idusuario"))
-                }
+                        }
 
                 await connection.invoke("UpdateCajaState", updateCajaRequest);
             }
@@ -314,6 +309,16 @@
 
             const cajaDiv = document.getElementById('caja');
             cajaDiv.style.visibility = 'hidden';
+        }
+
+        async function OnNextTurno() {
+            let idCaja = cajaSeleccionada;
+
+            await connection.invoke("UpdateTurnoState", idCaja);
+
+            const turnos = document.querySelectorAll(".turno-en-espera");
+            GetTurnosAvailed();
+            GetCurrentTurno(idCaja);
         }
 
         document.addEventListener("DOMContentLoaded", function () {
@@ -335,6 +340,8 @@
             }
 
             setInterval(cycleBlur, 1000);
+
+            HideTurnoActual();
 
             GetTurnosAvailed();
             GetCajasAvailed();
@@ -390,6 +397,28 @@
             });
 
             await GetCajasAvailed();
+        });
+
+        connection.on("TurnosActualizados", async (data) => { 
+            let div = document.querySelector("#opt-caja");
+
+            let options = div.querySelectorAll("option");
+
+            options.forEach(option => {
+                if (option.value !== "0") {
+                    div.removeChild(option);
+                }
+            });
+
+            await GetCajasAvailed();
+
+            let turnos = document.querySelectorAll(".turno-en-espera");
+
+            turnos.forEach(turno => {
+                document.querySelector(".turnos-siguientes").removeChild(turno);
+            });
+
+            await GetTurnosAvailed();
         });
     </script>
 </body>

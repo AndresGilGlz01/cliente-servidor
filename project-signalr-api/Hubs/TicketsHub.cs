@@ -7,7 +7,9 @@ using project_signalr_api.Repositories;
 
 namespace project_signalr_api.Hubs;
 
-public class TicketsHub(TurnoRepository turnoRepository, CajaRepository cajaRepository) : Hub
+public class TicketsHub(TurnoRepository turnoRepository,
+    HistorialRepository historialRepository,
+    CajaRepository cajaRepository) : Hub
 {
     private readonly TurnoRepository turnoRepository = turnoRepository;
     private readonly CajaRepository cajaRepository = cajaRepository;
@@ -49,6 +51,42 @@ public class TicketsHub(TurnoRepository turnoRepository, CajaRepository cajaRepo
         var response = entity.ToResponse();
 
         await Clients.All.SendAsync("CajaActualizada", response);
+    }
+
+    public async Task UpdateTurnoState(int idCaja)
+    {
+        var caja = await cajaRepository.GetById(idCaja);
+
+        if (caja?.IdTurnoActual != null)
+        {
+            var turno = await turnoRepository.GetById(caja.IdTurnoActual.Value);
+
+            turno.Estado = "Atendido";
+
+            await turnoRepository.Update(turno);
+        }
+
+        var siguienteTurno = turnoRepository.GetAll().Result
+            .Where(t => t.Estado == "Pendiente")
+            .OrderBy(t => t.Fecha)
+            .FirstOrDefault();
+
+        if (siguienteTurno != null)
+        {
+            caja.IdTurnoActual = siguienteTurno.Id;
+            await cajaRepository.Update(caja);
+
+            siguienteTurno.Estado = "Atendiendo";
+            await turnoRepository.Update(siguienteTurno);
+        }
+        else
+        {
+            caja.IdTurnoActual = null;
+        }
+
+        var response = caja?.ToResponse();
+
+        await Clients.All.SendAsync("TurnosActualizados", response);
     }
 
     public async void SolicitarTurno()
