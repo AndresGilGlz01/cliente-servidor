@@ -82,6 +82,7 @@ public class TicketsHub(TurnoRepository turnoRepository,
         else
         {
             caja.IdTurnoActual = null;
+            await cajaRepository.Update(caja);
         }
 
         var response = caja?.ToResponse();
