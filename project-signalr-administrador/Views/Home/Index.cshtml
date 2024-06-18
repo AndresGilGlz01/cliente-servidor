@@ -33,6 +33,7 @@
                 <p>Caja actual - <span class="caja-seleccionada-text">Sin seleccionar</span></p>
             </div>
             <div class="usuario">
+                <a asp-controller="home" asp-action="historial">Historial</a>
                 <i class="fa-solid fa-gear"></i>
                 <i class="fa-solid fa-chart-simple"></i>
                 <img src="~/img/profilepicture.jpg" />
@@ -74,7 +75,7 @@
                     <h3>Gente en espera</h3>
                     <div>
                         <i class="fa-solid fa-user-clock"></i>
-                        <p>4</p>
+                        <p class="estadistica-pendientes">Sin definir</p>
                     </div>
                 </div>
 
@@ -82,7 +83,7 @@
                     <h3>Gente en ventanilla</h3>
                     <div>
                         <i class="fa-solid fa-user-check"></i>
-                        <p>2</p>
+                        <p class="estadistica-atendiendo">Sin definir</p>
                     </div>
                 </div>
 
@@ -90,7 +91,7 @@
                     <h3>Clientes en total hoy</h3>
                     <div>
                         <i class="fa-solid fa-users"></i>
-                        <p>15</p>
+                        <p class="estadistica-atendidos">Sin definir</p>
                     </div>
                 </div>
 
@@ -98,7 +99,7 @@
                     <h3>Caja mas frecuentada</h3>
                     <div>
                         <i class="fa-solid fa-fire"></i>
-                        <p>2</p>
+                        <p>Sin definir</p>
                     </div>
                 </div>
 
@@ -106,17 +107,10 @@
                     <h3>Caja menos frecuentada</h3>
                     <div>
                         <i class="fa-solid fa-snowflake"></i>
-                        <p>5</p>
+                        <p>Sin definir</p>
                     </div>
                 </div>
 
-                <div class="estadistica">
-                    <h3>Tiempo de cliente en caja</h3>
-                    <div>
-                        <i class="fa-solid fa-clock"></i>
-                        <p>5 minutos</p>
-                    </div>
-                </div>
             </div>
         </div>
     </div>
@@ -212,6 +206,15 @@
                         cajaActual.appendChild(option);
                     }
                 });
+
+                if (cajaSeleccionada) {
+                    let siguiente = document.querySelector(".acciones");
+                    siguiente.style.visibility = "visible";
+                }
+                else {
+                    let siguiente = document.querySelector(".acciones");
+                    siguiente.style.visibility = "collapse";
+                }
             }
         }
 
@@ -320,6 +323,20 @@
             GetCurrentTurno(idCaja);
         }
 
+        async function UpdateEstadisticas() {
+            const response = await fetch("https://api.signalr.labsystec.net/api/estadistica");
+
+            if (response.ok) {
+                let data = await response.json();
+
+                let estadisticas = document.querySelectorAll(".estadistica");
+
+                document.querySelector(".estadistica-pendientes").innerText = data.cantidadEspera;
+                document.querySelector(".estadistica-atendiendo").innerText = data.cantidadAtendiendo;
+                document.querySelector(".estadistica-atendidos").innerText = data.cantidadAtendidos;
+            }
+        }
+
         document.addEventListener("DOMContentLoaded", function () {
             const divs = document.querySelectorAll(".turno-en-espera");
             const totalDivs = divs.length;
@@ -344,6 +361,7 @@
 
             GetTurnosAvailed();
             GetCajasAvailed();
+            UpdateEstadisticas();
         });
 
         const connection = new signalR.HubConnectionBuilder()
@@ -411,14 +429,13 @@
 
             let turnos = document.querySelectorAll(".turno-en-espera");
 
-            console.log(turnos);
-
             turnos.forEach(turno => {
                 document.querySelector(".turnos-siguientes").removeChild(turno);
             });
 
             await GetCajasAvailed();
             await GetTurnosAvailed();
+            await UpdateEstadisticas();
         });
     </script>
 </body>
