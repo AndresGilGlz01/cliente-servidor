@@ -14,23 +14,64 @@
 
     <img src="~/imgs/billetera.png" alt="" srcset="" />
     <h1>Bienvenido a TGIF</h1>
-    <form action="~/Home/PedirTurno" id="form">
-        <input type="submit" value="Pedir turno" />
+    <form  id="form"  >
+        <input type="submit" value="Pedir turno" class="boton"/>
     </form>
 
     <div class="modal">
         <div class="ticket">
-            <h1>Ticket</h1>
-            <p>Folio: A12345</p>
-            <p>Hora: 10:50 A.M.</p>
-            <p>Fecha: 14 de junio del 2024</p>
+            
+                <h1>Ticket</h1>
+                <p>Folio: <p class="turnoFolio"></p></p>
+                <p>Hora: <p class="turnoHora"></p></p>
+                <p>Fecha: <p class="turnoFecha"></p></p>
+            
+            
         </div>
     </div>
-
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/6.0.1/signalr.js"></script>
     <script>
+        var primeraSolicitud = false;
+        const connection = new signalR.HubConnectionBuilder()
+            .withUrl("https://api.signalr.labsystec.net/ticketshub", {
+                skipNegotiation: true,
+                transport: signalR.HttpTransportType.WebSockets,
+            })
+            .withAutomaticReconnect()
+            .build();
+        connection.start()
+            .then(() => console.log('Conexión iniciada.'))
+            .catch(err => console.error('Error al iniciar la conexión: ', err));
+            
+        connection.on("NuevoTurno", (turno)=>{
+            if (primeraSolicitud == false) {
+                let folio = document.querySelector(".turnoFolio");
+                let hora = document.querySelector(".turnoHora");
+                let fecha = document.querySelector(".turnoFecha");
+                let button = document.querySelector(".boton");
+
+                folio.textContent = turno.folio;
+
+
+                let fechaa = new Date(turno.fecha);
+                fecha.textContent = fechaa.toLocaleDateString();
+
+                hora.textContent = fechaa.toLocaleTimeString();
+
+                button.value = "Ver turno";
+                primeraSolicitud = true;
+            }
+            
+
+
+        });
         document
             .getElementById("form")
             .addEventListener("submit", function (event) {
+                connection.invoke("RequestTurno").then(() => {
+                    console.log("RequestTurno llamado");
+                }).catch(error => console.error("Error al llamar turno", error));
+
                 event.preventDefault();
                 var modal = document.querySelector(".modal");
                 modal.style.visibility = "visible";
@@ -38,6 +79,8 @@
                     modal.style.visibility = 'hidden';
                 }, 5000);
             });
+
+
     </script>
     <script>
         function actualizarHoraFecha() {
