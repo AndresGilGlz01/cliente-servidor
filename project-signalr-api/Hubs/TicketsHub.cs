@@ -64,6 +64,16 @@ public class TicketsHub(TurnoRepository turnoRepository,
             turno.Estado = "Atendido";
 
             await turnoRepository.Update(turno);
+
+            var historial = new Historial
+            {
+                IdTurno = turno.Id,
+                FechaAtencion = DateTime.UtcNow,
+                IdCaja = caja.Id,
+                Estado = "Atendido",
+            };
+
+            await historialRepository.Insert(historial);
         }
 
         var siguienteTurno = turnoRepository.GetAll().Result
@@ -78,6 +88,16 @@ public class TicketsHub(TurnoRepository turnoRepository,
 
             siguienteTurno.Estado = "Atendiendo";
             await turnoRepository.Update(siguienteTurno);
+
+            var historial = new Historial
+            {
+                IdTurno = siguienteTurno.Id,
+                FechaAtencion = DateTime.UtcNow,
+                IdCaja = caja.Id,
+                Estado = "Atendiendo",
+            };
+
+            await historialRepository.Insert(historial);
         }
         else
         {

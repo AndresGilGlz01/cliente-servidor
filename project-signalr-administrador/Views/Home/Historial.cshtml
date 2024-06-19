@@ -1,5 +1,4 @@
-﻿@model project_signalr_administrador.Models.ViewModel.Home.HistorialViewModel;
-@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+﻿@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -29,16 +28,11 @@
     <div class="controlpanel">
         <div class="controlpanel-titulo">
             <div class="titulos">
-                <h1>Top Grade International Finances</h1>
-                <p>Operaciones de Ventanilla - <span>Caja: 5</span></p>
+                <h1>Sistema de turnos</h1>
+                <p>Caja actual - <span class="caja-seleccionada-text">Sin definir</span></p>
             </div>
             <div class="usuario">
-                <i class="fa-solid fa-gear"></i>
-                <select name="Estado" id="">
-                    <option selected disabled>Estado</option>
-                    <option value="">Disponible</option>
-                    <option value="">Ocupado</option>
-                </select>
+                <a asp-controller="home" asp-action="index">Dashboard</a>
                 <img src="~/img/profilepicture.jpg" />
             </div>
         </div>
@@ -49,21 +43,99 @@
 
                 <h1>Historial</h1>
 
-                @foreach (var turno in Model.Turnos)
-                {
-                    <div class="turno-en-espera">
-                        <h3>Folio: <span>@turno.Folio.Folio</span></h3>
-                        <p>Fecha atención: <span>@turno.FechaAtencion</span></p>
-                        <p>Caja: <span>@turno.Caja.Numero</span></p>
-                        <p>Estado: <span>@turno.Estado</span></p>
-                    </div>
-                }
-
             </div>
         </div>
     </div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/6.0.1/signalr.js"></script>
     <script>
+        let cajaSeleccionada;
+
+        async function GetCajasAvailed() {
+            const response = await fetch("https://api.signalr.labsystec.net/api/caja", {
+                method: "GET",
+                headers: {
+                    'Authorization': 'Bearer ' + "@Context.Session.GetString("token")"
+                }
+            });
+
+            if (response.ok) {
+                let data = await response.json();
+
+                data.forEach(caja => {
+                    if (caja.administrador == "@Context.Session.GetString("usuario")") {
+                        document.querySelector(".caja-seleccionada-text").innerText = `Caja ${caja.numeroCaja}`;
+                        cajaSeleccionada = caja.numeroCaja;
+                    } else {
+                    }
+
+                    if (!caja.administrador) {
+                        let option = document.createElement("option");
+
+                        option.value = caja.id;
+                        option.text = `Caja ${caja.numeroCaja}`;
+                    }
+                });
+            }
+        }
+        
+        async function GetHistorial() {
+            const response = await fetch("https://api.signalr.labsystec.net/api/historial", {
+                method: "GET",
+                headers: {
+                    'Authorization': 'Bearer ' + "@Context.Session.GetString("token")"
+                }
+            });
+
+            if (response.ok) {
+                let data = await response.json(); 
+                
+                // {
+                //     "id": 22,
+                //     "idCaja": 2,
+                //     "idTurno": 1,
+                //     "fechaAtencion": "0001-01-01T00:00:00",
+                //      "caja": {
+                //         "numero": 2
+                //     },
+                //     "folio": {
+                //         "folio": "C16-6-24-13-40",
+                //             "estado": "Atendido",
+                //                 "fecha": "2024-06-06T19:38:45"
+                //     },
+                //     "estado": "Atendiendo"
+                // }
+
+                data.forEach(turno => {
+                    let turnoDiv = document.createElement("div");
+                    turnoDiv.classList.add("turno-en-espera");
+
+                    let h3 = document.createElement("h3");
+                    h3.innerText = `Folio: ${turno.folio.folio}`;
+                    let spanFolio = document.createElement("span");
+                    spanFolio.innerText = turno.folio.folio;
+                    h3.appendChild(spanFolio);
+
+                    let fecha = new Date(turno.fechaAtencion);
+
+                    let p1 = document.createElement("p");
+                    p1.innerText = `Fecha: ${fecha.toLocaleDateString()} ${fecha.toLocaleTimeString()}`;
+
+                    let p2 = document.createElement("p");
+                    p2.innerText = `Caja: ${turno.caja.numero}`;
+
+                    let p3 = document.createElement("p");
+                    p3.innerText = `Estado: ${turno.estado}`;
+
+                    turnoDiv.appendChild(h3);
+                    turnoDiv.appendChild(p1);
+                    turnoDiv.appendChild(p2);
+                    turnoDiv.appendChild(p3);
+
+                    document.querySelector(".turnos-siguientes").appendChild(turnoDiv);
+                });
+            }
+        }
+
         document.addEventListener("DOMContentLoaded", function () {
             const divs = document.querySelectorAll(".turno-en-espera");
             const totalDivs = divs.length;
@@ -83,10 +155,9 @@
             }
 
             setInterval(cycleBlur, 1000);
-
-            function ObtenerTickets() {
-
-            }
+            
+            GetCajasAvailed();
+            GetHistorial();
         });
 
         const connection = new signalR.HubConnectionBuilder()
@@ -97,17 +168,21 @@
             .withAutomaticReconnect()
             .build();
 
-        async function start() {
-            try {
-                await connection.start();
-                console.log("SignalR Connected.");
-            } catch (err) {
-                console.log(err);
-                setTimeout(start, 5000);
-            }
-        };
+        connection.start()
+            .then(() => console.log('Conexión iniciada.'))
+            .catch(err => console.error('Error al iniciar la conexión: ', err));
 
-        start();
+        connection.on("TurnosActualizados", async (data) => {
+            
+            let turnosAll = document.querySelectorAll(".turno-en-espera");
+
+            turnosAll.forEach(turno => {
+                turno.remove();
+            });
+
+            await GetHistorial();
+        });
+
     </script>
 </body>
 </html>

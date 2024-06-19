@@ -26,9 +26,11 @@ public class HistorialController(HistorialRepository historialRepository) : Cont
     }
 
     [HttpGet]
-    public async Task<IActionResult> GetAll()
+    public IActionResult GetAll()
     {
-        var entities = await historialRepository.GetAll();
+        var entities = historialRepository.GetAll().Result
+            .OrderByDescending(entity => entity.FechaAtencion)
+            .ThenByDescending(x => x.Id);
 
         var response = entities.Select(entity => entity.ToResponse());
 

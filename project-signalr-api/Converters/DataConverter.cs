@@ -13,6 +13,7 @@ public static class DataConverter
         IdCaja = entity.IdCaja,
         IdTurno = entity.IdTurno,
         Estado = entity.Estado,
+        FechaAtencion = entity.FechaAtencion,
         Caja = new HistorialResponse.CajaResponse
         {
             Numero = entity.IdCajaNavigation.NumeroCaja

@@ -34,4 +34,16 @@ public class TurnoRepository : Repository<Turno>
 
         return turno;
     }
+
+    public async Task<int> GetCantidadTurnosEspera() => await Context.Turno
+        .Where(x => x.Estado == "Pendiente")
+        .CountAsync();
+
+    public async Task<int> GetCantidadTurnosAtendiendo() => await Context.Turno
+        .Where(x => x.Estado == "Atendiendo")
+        .CountAsync();
+
+    public async Task<int> GetCantidadTurnosAtendidos() => await Context.Turno
+        .Where(x => x.Estado == "Atendido")
+        .CountAsync();
 }

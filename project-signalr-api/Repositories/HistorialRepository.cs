@@ -15,4 +15,26 @@ public class HistorialRepository : Repository<Historial>
             .Include(historial => historial.IdTurnoNavigation)
             .ToListAsync();
     }
+
+    public async Task<int> GetCajaMasFrecuente() 
+    {
+        var cajaMasFrecuente = await Context.Historial
+            .GroupBy(historial => historial.IdCaja)
+            .OrderByDescending(group => group.Count())
+            .Select(group => group.Key)
+            .FirstOrDefaultAsync();
+
+        return cajaMasFrecuente;
+    }
+
+    public async Task<int> GetCajaMenosFrecuente() 
+    {
+        var cajaMenosFrecuente = await Context.Historial
+            .GroupBy(historial => historial.IdCaja)
+            .OrderBy(group => group.Count())
+            .Select(group => group.Key)
+            .FirstOrDefaultAsync();
+
+        return cajaMenosFrecuente;
+    }
 }
