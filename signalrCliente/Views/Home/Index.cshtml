@@ -32,6 +32,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/6.0.1/signalr.js"></script>
     <script>
         var primeraSolicitud = false;
+        
         const connection = new signalR.HubConnectionBuilder()
             .withUrl("https://api.signalr.labsystec.net/ticketshub", {
                 skipNegotiation: true,
@@ -68,9 +69,12 @@
         document
             .getElementById("form")
             .addEventListener("submit", function (event) {
-                connection.invoke("RequestTurno").then(() => {
-                    console.log("RequestTurno llamado");
-                }).catch(error => console.error("Error al llamar turno", error));
+                if(primeraSolicitud == false){
+                    connection.invoke("RequestTurno").then(() => {
+                        console.log("RequestTurno llamado");
+                    }).catch(error => console.error("Error al llamar turno", error));
+                }
+                
 
                 event.preventDefault();
                 var modal = document.querySelector(".modal");
