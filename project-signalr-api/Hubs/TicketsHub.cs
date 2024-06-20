@@ -110,13 +110,5 @@ public class TicketsHub(TurnoRepository turnoRepository,
         await Clients.All.SendAsync("TurnosActualizados", response);
     }
 
-    public async void SolicitarTurno()
-    {
-        //fucking codigo
-
-        //solo quiero probar xd
-        Random r = new Random();
-        string turno = $"A{r.Next(1000, 9004)}";
-        await Clients.Caller.SendAsync("TurnoNuevo", turno);
-    }
+   
 }
