@@ -32,6 +32,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/6.0.1/signalr.js"></script>
     <script>
         var primeraSolicitud = false;
+        var IdTurno;
         
         const connection = new signalR.HubConnectionBuilder()
             .withUrl("https://api.signalr.labsystec.net/ticketshub", {
@@ -50,7 +51,7 @@
                 let hora = document.querySelector(".turnoHora");
                 let fecha = document.querySelector(".turnoFecha");
                 let button = document.querySelector(".boton");
-
+                IdTurno = turno.id;
                 folio.textContent = turno.folio;
 
 
@@ -62,7 +63,28 @@
                 button.value = "Ver turno";
                 primeraSolicitud = true;
             }
+        });
+        connection.on("TurnosActualizados", (caja) => {
+
+
+            if (caja.idTurnoActual == IdTurno) {
+                
+                let folio = document.querySelector(".turnoFolio");
+               
+                let button = document.querySelector(".boton");
+
+                let hora = document.querySelector(".turnoHora");
+                let fecha = document.querySelector(".turnoFecha");
+                alert(`Turno ${folio.textContent} pasar a caja ${caja.numeroCaja}`)
+                button.value = "Pedir nuevo turno";
+                folio.textContent = "";
+                hora.textContent = "";
+                fecha.textContent = "";
+                IdTurno = 0;
+                primeraSolicitud = false;
+            }
             
+
 
 
         });
