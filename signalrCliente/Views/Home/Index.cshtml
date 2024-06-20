@@ -32,7 +32,9 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/6.0.1/signalr.js"></script>
     <script>
         var primeraSolicitud = false;
-        var IdTurno;
+        var Atendiendo = false; //si es uno , es que apenas paso, si es 2 o mayor significa que ya se esta atendiedo
+        var IdTurno = 0;
+        var NumCaja = 0;
         
         const connection = new signalR.HubConnectionBuilder()
             .withUrl("https://api.signalr.labsystec.net/ticketshub", {
@@ -67,21 +69,38 @@
         connection.on("TurnosActualizados", (caja) => {
 
 
-            if (caja.idTurnoActual == IdTurno) {
-                
-                let folio = document.querySelector(".turnoFolio");
+            if (caja.idTurnoActual == IdTurno && Atendiendo == false) {
+                // var modal = document.querySelector(".modal");
+                // modal.style.visibility = 'hidden';
+
+                 let folio = document.querySelector(".turnoFolio");
+
+                // let button = document.querySelector(".boton");
+
+                // let hora = document.querySelector(".turnoHora");
+                // let fecha = document.querySelector(".turnoFecha");
+                alert(`Turno ${folio.textContent} pasar a caja ${caja.numeroCaja}`);
+                NumCaja = caja.numeroCaja;
                
+                primeraSolicitud = false;
+                Atendiendo = true;
+            }
+            else if (caja.numeroCaja== NumCaja && Atendiendo == true) {
+                var modal = document.querySelector(".modal");
+                modal.style.visibility = 'hidden';
+
+                let folio = document.querySelector(".turnoFolio");
+
                 let button = document.querySelector(".boton");
 
                 let hora = document.querySelector(".turnoHora");
                 let fecha = document.querySelector(".turnoFecha");
-                alert(`Turno ${folio.textContent} pasar a caja ${caja.numeroCaja}`)
                 button.value = "Pedir nuevo turno";
                 folio.textContent = "";
                 hora.textContent = "";
                 fecha.textContent = "";
                 IdTurno = 0;
-                primeraSolicitud = false;
+                Atendiendo = false;
             }
             
 
@@ -91,7 +110,7 @@
         document
             .getElementById("form")
             .addEventListener("submit", function (event) {
-                if(primeraSolicitud == false){
+                if(primeraSolicitud == false && Atendiendo == false){
                     connection.invoke("RequestTurno").then(() => {
                         console.log("RequestTurno llamado");
                     }).catch(error => console.error("Error al llamar turno", error));
