@@ -3,6 +3,7 @@
 using project_signalr_administrador.Models.ViewModel.Home;
 
 using System.IdentityModel.Tokens.Jwt;
+using System.Net.Http.Headers;
 
 namespace project_signalr_administrador.Controllers;
 
@@ -34,6 +35,8 @@ public class HomeController(IHttpClientFactory httpClientFactory) : Controller
 
     public IActionResult Login() => View();
 
+    public IActionResult Registro() => View();
+
     [HttpPost]
     public async Task<IActionResult> Login(LoginViewModel loginRequest)
     {
@@ -59,6 +62,34 @@ public class HomeController(IHttpClientFactory httpClientFactory) : Controller
         HttpContext.Session.SetString("token", token);
 
         return RedirectToAction(nameof(Index));
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> Registro(RegistrarViewModel registroRequest)
+    {
+        var request = new
+        {
+            Nombre = registroRequest.Nombre,
+            Contraseña = registroRequest.Contraseña,
+            ConfirmarContraseña = registroRequest.ConfirmarContraseña
+        };
+
+        var token = HttpContext.Session.GetString("token");
+
+        httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
+        var response = await httpClient.PostAsJsonAsync("api/usuario", request);
+
+        var responseContent = await response.Content.ReadAsStringAsync();
+
+        if (!response.IsSuccessStatusCode)
+        {
+            ModelState.AddModelError(string.Empty, responseContent);
+
+            return View(registroRequest);
+        }
+
+        return RedirectToAction(nameof(Login));
     }
 
     [HttpGet("/logout")]

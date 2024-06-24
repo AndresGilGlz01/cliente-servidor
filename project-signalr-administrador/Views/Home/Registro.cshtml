@@ -1,0 +1,45 @@
+﻿@model project_signalr_administrador.Models.ViewModel.Home.RegistrarViewModel
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="~/styles/normalize.css" />
+    <link rel="stylesheet" href="~/styles/main.css" />
+    <script src="https://kit.fontawesome.com/abb25ecaa9.js" crossorigin="anonymous"></script>
+    <title>Sistema de turnos - Registro de usuario</title>
+</head>
+<body class="caja">
+
+    <style>
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #d6d6d680;
+            border-radius: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #0f0c31;
+            border-radius: 20px;
+        }
+    </style>
+
+    <form action="~/home/registro" method="post">
+        <label>Nombre</label>
+        <input type="text" asp-for="Nombre" />
+
+        <label>Contraseña</label>
+        <input type="password" asp-for="Contraseña" />
+
+        <label>Confirmar contraseña</label>
+        <input type="password" asp-for="ConfirmarContraseña" />
+
+        <button type="submit" id="btnRegistrar">Registrar</button>
+    </form>
+
+</body>
+</html>
