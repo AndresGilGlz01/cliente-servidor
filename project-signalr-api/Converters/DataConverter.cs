@@ -33,6 +33,7 @@ public static class DataConverter
         Administrador = entity.IdAdministradorActualNavigation?.NombreUsuario,
         IdTurnoActual = entity.IdTurnoActual,
         IdAdministradorActual = entity.IdAdministradorActual,
+        Abierta = entity.Abierta!.Value,
     };
 
     public static TurnoResponse ToResponse(this Turno entity) => new()

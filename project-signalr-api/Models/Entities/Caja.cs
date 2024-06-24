@@ -13,6 +13,8 @@ public partial class Caja
 
     public int? IdAdministradorActual { get; set; }
 
+    public bool? Abierta { get; set; }
+
     public virtual ICollection<Historial> Historial { get; set; } = new List<Historial>();
 
     public virtual Administrador? IdAdministradorActualNavigation { get; set; }

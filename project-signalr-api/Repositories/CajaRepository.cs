@@ -23,5 +23,7 @@ public class CajaRepository : Repository<Caja>
         return caja?.NumeroCaja;
     }
 
+    public async Task<bool> AnyAbierta() => await Context.Caja.AnyAsync(c => c.Abierta!.Value);
+
     public async Task<bool> Exists(int id) => await Context.Caja.AnyAsync(c => c.Id == id);
 }

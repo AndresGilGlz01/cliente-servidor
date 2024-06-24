@@ -16,6 +16,11 @@ public class TicketsHub(TurnoRepository turnoRepository,
 
     public async Task RequestTurno()
     {
+
+        var isAvailedCajas = await cajaRepository.AnyAbierta();
+
+        if (!isAvailedCajas) return;
+
         var turno = new Turno
         {
             Folio = Guid.NewGuid().ToString().Substring(0, 8),

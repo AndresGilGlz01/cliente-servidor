@@ -7,4 +7,5 @@ public class CajaResponse
     public string? Administrador { get; set; }
     public int? IdTurnoActual { get; set; }
     public int? IdAdministradorActual { get; set; }
+    public bool Abierta { get; set; }
 }

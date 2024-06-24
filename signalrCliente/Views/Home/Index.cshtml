@@ -57,6 +57,9 @@
 
         connection.on("NuevoTurno", (turno) => {
             if (primeraSolicitud == false) {
+                var modal = document.querySelector(".modal");
+                modal.style.visibility = 'visible';
+
                 let folio = document.querySelector(".turnoFolio");
                 let hora = document.querySelector(".turnoHora");
                 let fecha = document.querySelector(".turnoFecha");
@@ -75,6 +78,7 @@
             }
             GetTurnosAvailed();
         });
+
         connection.on("TurnosActualizados", (caja) => {
 
 
@@ -124,13 +128,12 @@
 
 
                 event.preventDefault();
-                var modal = document.querySelector(".modal");
-                modal.style.visibility = "visible";
+                // var modal = document.querySelector(".modal");
+                // modal.style.visibility = "visible";
                 // setTimeout(function () {
                 //     modal.style.visibility = 'hidden';
                 // }, 5000);
             });
-
 
         async function GetTurnosAvailed() {
             const response = await fetch("https://api.signalr.labsystec.net/api/turno", {
