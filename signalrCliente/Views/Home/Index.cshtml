@@ -33,7 +33,7 @@
         <h1>Proximos turnos</h1>
     </div>
 
-    <div class="turnos-siguientes controlpanel transparencia esperando" style="padding: 10px" id="turnos-ahora">
+    <div class="turnos-siguientes controlpanel transparencia esperando" style="padding: 10px;"  id="turnos-ahora" >
         <h1>Atendiendo ahora</h1>
     </div>
 
@@ -43,9 +43,10 @@
         var Atendiendo = false; //si es uno , es que apenas paso, si es 2 o mayor significa que ya se esta atendiedo
         var IdTurno = 0;
         var NumCaja = 0;
+var folio1 ="";
 
         const connection = new signalR.HubConnectionBuilder()
-            .withUrl("https://api.signalr.labsystec.net/ticketshub", {
+                            .withUrl("https://api.signalr.labsystec.net/ticketshub", {
                 skipNegotiation: true,
                 transport: signalR.HttpTransportType.WebSockets,
             })
@@ -55,31 +56,62 @@
             .then(() => console.log('Conexión iniciada.'))
             .catch(err => console.error('Error al iniciar la conexión: ', err));
 
-        connection.on("NuevoTurno", (turno) => {
+        connection.on("NuevoTurnoT", (turno) => {
             if (primeraSolicitud == false) {
-                var modal = document.querySelector(".modal");
-                modal.style.visibility = 'visible';
+        
+                            folio1 = turno.folio;
+                            var modal = document.querySelector(".modal");
+                            modal.style.visibility = 'visible';
 
-                let folio = document.querySelector(".turnoFolio");
-                let hora = document.querySelector(".turnoHora");
-                let fecha = document.querySelector(".turnoFecha");
-                let button = document.querySelector(".boton");
-                IdTurno = turno.id;
-                folio.textContent = turno.folio;
+                            let folio = document.querySelector(".turnoFolio");
+                            let hora = document.querySelector(".turnoHora");
+                            let fecha = document.querySelector(".turnoFecha");
+                            let button = document.querySelector(".boton");
+                            IdTurno = turno.id;
+                            folio.textContent = turno.folio;
 
 
-                let fechaa = new Date(turno.fecha);
-                fecha.textContent = fechaa.toLocaleDateString();
+                            let fechaa = new Date(turno.fecha);
+                            fecha.textContent = fechaa.toLocaleDateString();
 
-                hora.textContent = fechaa.toLocaleTimeString();
+                            hora.textContent = fechaa.toLocaleTimeString();
 
-                button.value = "Ver turno";
-                primeraSolicitud = true;
-            }
+                            button.value = "Ver turno";
+                            primeraSolicitud = true;
+                        }
+        
+        
             GetTurnosAvailed();
         });
+                        connection.on("NuevoTurno", (turno) => {
+                            // if (primeraSolicitud == false) {
 
-        connection.on("TurnosActualizados", (caja) => {
+                            //     // folio1 = turno.folio;
+                            //     // var modal = document.querySelector(".modal");
+                            //     // modal.style.visibility = 'visible';
+
+                            //     // let folio = document.querySelector(".turnoFolio");
+                            //     // let hora = document.querySelector(".turnoHora");
+                            //     // let fecha = document.querySelector(".turnoFecha");
+                            //     // let button = document.querySelector(".boton");
+                            //     // IdTurno = turno.id;
+                            //     // folio.textContent = turno.folio;
+
+
+                            //     //let fechaa = new Date(turno.fecha);
+                            //     // fecha.textContent = fechaa.toLocaleDateString();
+
+                            //     // hora.textContent = fechaa.toLocaleTimeString();
+
+                            //     // button.value = "Ver turno";
+                            //     // primeraSolicitud = true;
+                            // }
+
+
+                            GetTurnosAvailed();
+         
+   });
+   connection.on("TurnosActualizados", (caja) => {
 
 
             if (caja.idTurnoActual == IdTurno && Atendiendo == false) {
@@ -128,11 +160,11 @@
 
 
                 event.preventDefault();
-                // var modal = document.querySelector(".modal");
-                // modal.style.visibility = "visible";
-                // setTimeout(function () {
-                //     modal.style.visibility = 'hidden';
-                // }, 5000);
+                var modal = document.querySelector(".modal");
+                modal.style.visibility = "visible";
+                setTimeout(function () {
+                    modal.style.visibility = 'hidden';
+                }, 5000);
             });
 
         async function GetTurnosAvailed() {

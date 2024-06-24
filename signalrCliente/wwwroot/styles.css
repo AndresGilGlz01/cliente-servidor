@@ -12,7 +12,6 @@ body {
 
 body {
   margin: 0;
-  overflow: hidden;
   background: #01053b;
   height: 100vh;
   width: 100%;
@@ -241,8 +240,7 @@ body {
 .turnos-siguientes {
   grid-column-start: 1;
   grid-column-end: 5;
-  overflow: auto;
-  overflow-x: hidden;
+
 }
 
 .turnos-siguientes .turno-en-espera {
@@ -441,6 +439,7 @@ select:focus {
   background-color: white;
   zoom: 150%;
   transition: 0.3s ease-in-out;
+  z-index:2000;
 }
 .ticket h1 {
   margin-bottom: 10px;

@@ -44,8 +44,8 @@ public class TicketsHub(TurnoRepository turnoRepository,
         await turnoRepository.Insert(turno);
 
         var response = turno.ToResponse();
-
         await Clients.All.SendAsync("NuevoTurno", response);
+        await Clients.Caller.SendAsync("NuevoTurnoT", response);
     }
 
     public async Task UpdateCajaState(UpdateCajaRequest request)
