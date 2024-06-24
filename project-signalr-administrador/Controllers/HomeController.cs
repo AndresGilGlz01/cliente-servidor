@@ -1,11 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 
-using project_signalr_administrador.Helpers;
-using project_signalr_administrador.Models.DTOs.Response;
 using project_signalr_administrador.Models.ViewModel.Home;
 
 using System.IdentityModel.Tokens.Jwt;
-using System.Net.Http.Headers;
 
 namespace project_signalr_administrador.Controllers;
 
@@ -62,6 +59,16 @@ public class HomeController(IHttpClientFactory httpClientFactory) : Controller
         HttpContext.Session.SetString("token", token);
 
         return RedirectToAction(nameof(Index));
+    }
+
+    [HttpGet("/logout")]
+    public IActionResult Logout()
+    {
+        HttpContext.Session.Remove("token");
+        HttpContext.Session.Remove("idusuario");
+        HttpContext.Session.Remove("usuario");
+
+        return RedirectToAction(nameof(Login));
     }
 
     public static string? GetClaimValue(string token, string claimType)
