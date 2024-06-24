@@ -9,7 +9,6 @@ using project_signalr_api.Validators;
 
 namespace project_signalr_api.Controllers;
 
-[Authorize(Roles = "Administrador")]
 [ApiController]
 [Route("api/[controller]")]
 public class TurnoController(TurnoRepository turnoRepository,
@@ -22,6 +21,7 @@ public class TurnoController(TurnoRepository turnoRepository,
     readonly TurnoRepository turnoRepository = turnoRepository;
     readonly CajaRepository cajaRepository = cajaRepository;
 
+    [Authorize(Roles = "Administrador")]
     [HttpGet("{id}")]
     public async Task<IActionResult> GetById(int id)
     {
@@ -34,6 +34,7 @@ public class TurnoController(TurnoRepository turnoRepository,
         return Ok(response);
     }
 
+    [Authorize(Roles = "Administrador")]
     [HttpGet("bycaja/{id}")]
     public async Task<IActionResult> GetByCaja(int id)
     {
@@ -56,6 +57,22 @@ public class TurnoController(TurnoRepository turnoRepository,
         return Ok(response);
     }
 
+    [HttpGet("atendiendo")]
+    public async Task<IActionResult> GetAtendiendo()
+    {
+        var entities = await turnoRepository.GetAtendiendo();
+
+        var response = entities.Select(entity => new
+        {
+            Folio = entity.Folio,
+            Estado = entity.Estado,
+            Caja = entity.Caja.FirstOrDefault()?.NumeroCaja,
+        });
+
+        return Ok(response);
+    }
+
+    [Authorize(Roles = "Administrador")]
     [HttpPost]
     public async Task<IActionResult> Create(CreateTurnoRequest request)
     {
@@ -73,6 +90,7 @@ public class TurnoController(TurnoRepository turnoRepository,
         return CreatedAtAction(nameof(GetById), new { id = entity.Id }, entity.ToResponse());
     }
 
+    [Authorize(Roles = "Administrador")]
     [HttpPut]
     public async Task<IActionResult> Update(UpdateTurnoRequest request)
     {

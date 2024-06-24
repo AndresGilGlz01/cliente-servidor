@@ -80,10 +80,7 @@
         
         async function GetHistorial() {
             const response = await fetch("https://api.signalr.labsystec.net/api/historial", {
-                method: "GET",
-                headers: {
-                    'Authorization': 'Bearer ' + "@Context.Session.GetString("token")"
-                }
+                method: "GET"
             });
 
             if (response.ok) {

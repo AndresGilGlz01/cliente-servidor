@@ -46,4 +46,9 @@ public class TurnoRepository : Repository<Turno>
     public async Task<int> GetCantidadTurnosAtendidos() => await Context.Turno
         .Where(x => x.Estado == "Atendido")
         .CountAsync();
+
+    public async Task<IEnumerable<Turno>> GetAtendiendo() => await Context.Turno
+        .Include(x => x.Caja)
+        .Where(x => x.Estado == "Atendiendo")
+        .ToListAsync();
 }

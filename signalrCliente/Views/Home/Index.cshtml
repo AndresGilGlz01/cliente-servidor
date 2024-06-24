@@ -9,33 +9,41 @@
             crossorigin="anonymous"></script>
     <title>Sistema de turnos - Pantalla de espera</title>
 </head>
-<body class="pedir-turnos">
-    <p id="horafecha"></p>
+<body class="pedir-turnos" style="padding: 10px;">
+    <p id="horafecha" style="position:initial;"></p>
 
     <img src="~/imgs/billetera.png" alt="" srcset="" />
-    <h1>Bienvenido a TGIF</h1>
-    <form  id="form"  >
-        <input type="submit" value="Pedir turno" class="boton"/>
+    <h1 style="text-align: center">Bienvenido a TGIF</h1>
+    <form id="form" style="display: flex; flex-direction:column; gap: 10px; width: 100%">
+        <input type="submit" value="Pedir turno" class="boton" style="margin-bottom: 10px; zoom:normal;" />
     </form>
 
     <div class="modal">
         <div class="ticket">
-            
-                <h1>Ticket</h1>
-                <p>Folio: <p class="turnoFolio"></p></p>
-                <p>Hora: <p class="turnoHora"></p></p>
-                <p>Fecha: <p class="turnoFecha"></p></p>
-            
-            
+
+            <h1>Ticket</h1>
+            <p>Folio: <p class="turnoFolio"></p></p>
+            <p>Hora: <p class="turnoHora"></p></p>
+            <p>Fecha: <p class="turnoFecha"></p></p>
+
         </div>
     </div>
+
+    <div class="turnos-siguientes controlpanel transparencia atendiendo" style="padding: 10px">
+        <h1>Proximos turnos</h1>
+    </div>
+
+    <div class="turnos-siguientes controlpanel transparencia esperando" style="padding: 10px" id="turnos-ahora">
+        <h1>Atendiendo ahora</h1>
+    </div>
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/6.0.1/signalr.js"></script>
     <script>
         var primeraSolicitud = false;
         var Atendiendo = false; //si es uno , es que apenas paso, si es 2 o mayor significa que ya se esta atendiedo
         var IdTurno = 0;
         var NumCaja = 0;
-        
+
         const connection = new signalR.HubConnectionBuilder()
             .withUrl("https://api.signalr.labsystec.net/ticketshub", {
                 skipNegotiation: true,
@@ -46,8 +54,8 @@
         connection.start()
             .then(() => console.log('Conexión iniciada.'))
             .catch(err => console.error('Error al iniciar la conexión: ', err));
-            
-        connection.on("NuevoTurno", (turno)=>{
+
+        connection.on("NuevoTurno", (turno) => {
             if (primeraSolicitud == false) {
                 let folio = document.querySelector(".turnoFolio");
                 let hora = document.querySelector(".turnoHora");
@@ -65,27 +73,27 @@
                 button.value = "Ver turno";
                 primeraSolicitud = true;
             }
+            GetTurnosAvailed();
         });
         connection.on("TurnosActualizados", (caja) => {
 
 
             if (caja.idTurnoActual == IdTurno && Atendiendo == false) {
-                // var modal = document.querySelector(".modal");
-                // modal.style.visibility = 'hidden';
+                let folio = document.querySelector(".turnoFolio");
 
-                 let folio = document.querySelector(".turnoFolio");
+                // Vibrar durante 200ms
+                navigator.vibrate(200);
 
-                // let button = document.querySelector(".boton");
-
-                // let hora = document.querySelector(".turnoHora");
-                // let fecha = document.querySelector(".turnoFecha");
-                alert(`Turno ${folio.textContent} pasar a caja ${caja.numeroCaja}`);
-                NumCaja = caja.numeroCaja;
-               
-                primeraSolicitud = false;
-                Atendiendo = true;
+                // Esperar a que la vibración termine antes de mostrar el alert
+                setTimeout(() => {
+                    alert(`Turno ${folio.textContent} pasar a caja ${caja.numeroCaja}`);
+                    NumCaja = caja.numeroCaja;
+                    primeraSolicitud = false;
+                    Atendiendo = true;
+                }, 200); // 200ms para asegurar que la vibración se complete
             }
-            else if (caja.numeroCaja== NumCaja && Atendiendo == true) {
+
+            else if (caja.numeroCaja == NumCaja && Atendiendo == true) {
                 var modal = document.querySelector(".modal");
                 modal.style.visibility = 'hidden';
 
@@ -102,20 +110,18 @@
                 IdTurno = 0;
                 Atendiendo = false;
             }
-            
 
-
-
+            GetTurnosAvailed();
+            GetAtendidos();
         });
-        document
-            .getElementById("form")
-            .addEventListener("submit", function (event) {
-                if(primeraSolicitud == false && Atendiendo == false){
+        
+        document.getElementById("form").addEventListener("submit", function (event) {
+                if (primeraSolicitud == false && Atendiendo == false) {
                     connection.invoke("RequestTurno").then(() => {
                         console.log("RequestTurno llamado");
                     }).catch(error => console.error("Error al llamar turno", error));
                 }
-                
+
 
                 event.preventDefault();
                 var modal = document.querySelector(".modal");
@@ -126,6 +132,85 @@
             });
 
 
+        async function GetTurnosAvailed() {
+            const response = await fetch("https://api.signalr.labsystec.net/api/turno", {
+                method: "GET"
+            });
+
+            if (response.ok) {
+                let data = await response.json();
+                let turnosEnEspera = document.querySelector(".turnos-siguientes");
+
+                let turnos = turnosEnEspera.querySelectorAll(".turno-en-espera");
+
+                turnos.forEach(turno => {
+                    document.querySelector(".turnos-siguientes").removeChild(turno);
+                });
+
+                data.forEach(turno => {
+                    if (turno.estado == "Pendiente") {
+                        let turnoDiv = document.createElement("div");
+                        turnoDiv.classList.add("turno-en-espera");
+
+                        turnoDiv.dataset.id = turno.id;
+
+                        let h3 = document.createElement("h3");
+                        h3.innerText = `Folio: ${turno.folio}`;
+
+                        turnoDiv.appendChild(h3);
+
+                        turnosEnEspera.appendChild(turnoDiv);
+                    }
+                });
+            }
+        }
+
+        async function GetAtendidos() {
+            const response = await fetch("https://api.signalr.labsystec.net/api/turno/atendiendo", {
+                method: "GET"
+            });
+
+            if (response.ok) {
+                let data = await response.json();
+                let turnosEnEspera = document.querySelector("#turnos-ahora");
+
+                let turnos = turnosEnEspera.querySelectorAll(".turno-en-espera");
+
+                turnos.forEach(turno => {
+                    turnosEnEspera.removeChild(turno);
+                });
+
+                data.forEach(turno => {
+                    console.log(turno);
+                    if (turno.estado == "Atendiendo") {
+                        let turnoDiv = document.createElement("div");
+                        turnoDiv.classList.add("turno-en-espera");
+
+                        let h3 = document.createElement("h3");
+
+                        let span1 = document.createElement("span");
+                        span1.innerText = `Folio: ${turno.folio}`;
+
+                        let span2 = document.createElement("span");
+                        span2.classList.add("ventanilla");
+                        span2.innerText = `Caja: ${turno.caja}`;
+
+                        h3.appendChild(span1);
+
+                        h3.appendChild(span2);
+
+                        turnoDiv.appendChild(h3);
+
+                        turnosEnEspera.appendChild(turnoDiv);
+                    }
+                });
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', function () {
+            GetTurnosAvailed();
+            GetAtendidos();
+        });
     </script>
     <script>
         function actualizarHoraFecha() {

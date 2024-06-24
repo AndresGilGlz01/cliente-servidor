@@ -6,7 +6,6 @@ using project_signalr_api.Repositories;
 
 namespace project_signalr_api.Controllers;
 
-[Authorize(Roles = "Administrador")]
 [ApiController]
 [Route("api/[controller]")]
 public class HistorialController(HistorialRepository historialRepository) : ControllerBase
