@@ -16,24 +16,26 @@ public class HistorialRepository : Repository<Historial>
             .ToListAsync();
     }
 
-    public async Task<int> GetCajaMasFrecuente() 
+    public int GetCajaMasFrecuenteHoy() 
     {
-        var cajaMasFrecuente = await Context.Historial
-            .GroupBy(historial => historial.IdCaja)
-            .OrderByDescending(group => group.Count())
-            .Select(group => group.Key)
-            .FirstOrDefaultAsync();
+        var cajaMasFrecuente = Context.Caja
+            .Include(caja => caja.Historial)
+            .Where(caja => caja.Historial.Any(historial => historial.FechaAtencion.Date == DateTime.UtcNow.Date))
+            .OrderByDescending(caja => caja.Historial.Count)
+            .Select(caja => caja.Id)
+            .FirstOrDefault();
 
         return cajaMasFrecuente;
     }
 
-    public async Task<int> GetCajaMenosFrecuente() 
+    public int GetCajaMenosFrecuenteHoy() 
     {
-        var cajaMenosFrecuente = await Context.Historial
-            .GroupBy(historial => historial.IdCaja)
-            .OrderBy(group => group.Count())
-            .Select(group => group.Key)
-            .FirstOrDefaultAsync();
+        var cajaMenosFrecuente = Context.Caja
+            .Include(caja => caja.Historial)
+            .Where(caja => caja.Historial.Any(historial => historial.FechaAtencion.Date == DateTime.UtcNow.Date))
+            .OrderBy(caja => caja.Historial.Count)
+            .Select(caja => caja.Id)
+            .FirstOrDefault();
 
         return cajaMenosFrecuente;
     }

@@ -97,18 +97,18 @@
                 </div>
 
                 <div class="estadistica">
-                    <h3>Caja mas frecuentada</h3>
+                    <h3>Caja más activa hoy</h3>
                     <div>
                         <i class="fa-solid fa-fire"></i>
-                        <p>Sin definir</p>
+                        <p class="estadistica-mas-frecuenada">Sin definir</p>
                     </div>
                 </div>
 
                 <div class="estadistica">
-                    <h3>Caja menos frecuentada</h3>
+                    <h3>Caja menos activa hoy</h3>
                     <div>
                         <i class="fa-solid fa-snowflake"></i>
-                        <p>Sin definir</p>
+                        <p class="estadistica-menos-frecuentada">Sin definir</p>
                     </div>
                 </div>
 
@@ -161,7 +161,6 @@
         });
     </script>
     <script>
-
         let cajaSeleccionada;
 
         function HideTurnoActual() {
@@ -190,7 +189,30 @@
                 const cajaActual = document.querySelector("#opt-caja");
                 data.forEach(caja => {
                     if (caja.administrador == "@Context.Session.GetString("usuario")") {
-                        document.querySelector(".caja-seleccionada-text").innerText = `Caja ${caja.numeroCaja}`;
+                        if (caja.abierta) {
+                            document.querySelector(".caja-seleccionada-text").innerText = `Caja ${caja.numeroCaja} - Abierta - `;
+                            let link = document.createElement("a");
+                            link.href = "javascript:";
+                            link.innerText = "Cerrar";
+                            link.addEventListener("click", async () => {
+                                await connection.invoke("ToggleCaja", caja.numeroCaja);
+                            });
+
+                            document.querySelector(".caja-seleccionada-text").appendChild(link);
+                        }
+                        else {
+                            document.querySelector(".caja-seleccionada-text").innerText = `Caja ${caja.numeroCaja} - Cerrada - `;
+                            let link = document.createElement("a");
+                            link.href = "javascript:";
+                            link.innerText = "Abrir";
+                            link.addEventListener("click", async () => {
+                                await connection.invoke("ToggleCaja", caja.numeroCaja);
+                            });
+
+                            document.querySelector(".caja-seleccionada-text").appendChild(link);
+                            HideTurnoActual();
+                        }
+
                         cajaSeleccionada = caja.numeroCaja;
                         GetCurrentTurno(caja.numeroCaja);
                         ShowTurnoActual();
@@ -300,7 +322,7 @@
                 let updateCajaRequest = {
                     "IdCaja": parseInt(value),
                     "IdAdministrador": @(Context.Session.GetString("idusuario"))
-                                }
+                                        }
 
                 await connection.invoke("UpdateCajaState", updateCajaRequest);
             }
@@ -332,6 +354,8 @@
                 document.querySelector(".estadistica-pendientes").innerText = data.cantidadEspera;
                 document.querySelector(".estadistica-atendiendo").innerText = data.cantidadAtendiendo;
                 document.querySelector(".estadistica-atendidos").innerText = data.cantidadAtendidos;
+                document.querySelector(".estadistica-mas-frecuenada").innerText = `Caja ${data.cajaMasFrecuente}`;
+                document.querySelector(".estadistica-menos-frecuentada").innerText = `Caja ${data.cajaMenosFrecuente}`;
             }
         }
 

@@ -10,6 +10,10 @@ body {
     font-optical-sizing: auto;
 }
 
+a {
+    color: white;
+}
+
 body {
     margin: 0;
     overflow: hidden;

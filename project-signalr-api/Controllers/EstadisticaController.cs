@@ -19,8 +19,8 @@ public class EstadisticaController(HistorialRepository historialRepository,
         var cantidadEspera = await turnoRepository.GetCantidadTurnosEspera();
         var cantidadAtendiendo = await turnoRepository.GetCantidadTurnosAtendiendo();
         var cantidadAtendidos = await turnoRepository.GetCantidadTurnosAtendidos();
-        var cajaMasFrecuente = await historialRepository.GetCajaMasFrecuente();
-        var cajaMenosFrecuente = await historialRepository.GetCajaMenosFrecuente();
+        var cajaMasFrecuente = historialRepository.GetCajaMasFrecuenteHoy();
+        var cajaMenosFrecuente = historialRepository.GetCajaMenosFrecuenteHoy();
 
         var responose = new EstadisticaResponse
         {

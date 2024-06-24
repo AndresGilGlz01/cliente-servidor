@@ -14,6 +14,19 @@ public class TicketsHub(TurnoRepository turnoRepository,
     private readonly TurnoRepository turnoRepository = turnoRepository;
     private readonly CajaRepository cajaRepository = cajaRepository;
 
+    public async Task ToggleCaja(int idCaja)
+    {
+        var caja = await cajaRepository.GetById(idCaja);
+
+        caja!.Abierta = !caja.Abierta;
+
+        var entity = await cajaRepository.Update(caja);
+
+        var response = entity.ToResponse();
+
+        await Clients.All.SendAsync("CajaActualizada", response);
+    }
+
     public async Task RequestTurno()
     {
 
@@ -89,7 +102,9 @@ public class TicketsHub(TurnoRepository turnoRepository,
         if (siguienteTurno != null)
         {
             caja.IdTurnoActual = siguienteTurno.Id;
+            caja.Abierta = true;
             await cajaRepository.Update(caja);
+            await Clients.All.SendAsync("CajaActualizada", caja.ToResponse());
 
             siguienteTurno.Estado = "Atendiendo";
             await turnoRepository.Update(siguienteTurno);
@@ -107,13 +122,13 @@ public class TicketsHub(TurnoRepository turnoRepository,
         else
         {
             caja.IdTurnoActual = null;
+            caja.Abierta = true;
             await cajaRepository.Update(caja);
+            await Clients.All.SendAsync("CajaActualizada", caja.ToResponse());
         }
 
         var response = caja?.ToResponse();
 
         await Clients.All.SendAsync("TurnosActualizados", response);
     }
-
-   
 }

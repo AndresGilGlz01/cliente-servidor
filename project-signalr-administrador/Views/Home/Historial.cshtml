@@ -84,23 +84,7 @@
             });
 
             if (response.ok) {
-                let data = await response.json(); 
-                
-                // {
-                //     "id": 22,
-                //     "idCaja": 2,
-                //     "idTurno": 1,
-                //     "fechaAtencion": "0001-01-01T00:00:00",
-                //      "caja": {
-                //         "numero": 2
-                //     },
-                //     "folio": {
-                //         "folio": "C16-6-24-13-40",
-                //             "estado": "Atendido",
-                //                 "fecha": "2024-06-06T19:38:45"
-                //     },
-                //     "estado": "Atendiendo"
-                // }
+                let data = await response.json();
 
                 data.forEach(turno => {
                     let turnoDiv = document.createElement("div");
