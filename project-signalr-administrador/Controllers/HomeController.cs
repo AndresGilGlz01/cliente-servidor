@@ -4,6 +4,8 @@ using project_signalr_administrador.Models.ViewModel.Home;
 
 using System.IdentityModel.Tokens.Jwt;
 using System.Net.Http.Headers;
+using System.Text;
+using System.Text.Json;
 
 namespace project_signalr_administrador.Controllers;
 
@@ -67,18 +69,21 @@ public class HomeController(IHttpClientFactory httpClientFactory) : Controller
     [HttpPost]
     public async Task<IActionResult> Registro(RegistrarViewModel registroRequest)
     {
-        var request = new
+        var request = JsonSerializer.Serialize(new
         {
             Nombre = registroRequest.Nombre,
-            Contraseña = registroRequest.Contraseña,
-            ConfirmarContraseña = registroRequest.ConfirmarContraseña
-        };
+            Contrasena = registroRequest.Contraseña,
+            ConfirmarContrasena = registroRequest.ConfirmarContraseña
+        });
 
         var token = HttpContext.Session.GetString("token");
-
+        
         httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
-        var response = await httpClient.PostAsJsonAsync("api/usuario", request);
+        // Encoding UTF8
+
+        var response = await httpClient.PostAsync("api/usuario", new StringContent(request, Encoding.UTF8, "application/json"));
+        //var response = await httpClient.PostAsJsonAsync("api/usuario", request);
 
         var responseContent = await response.Content.ReadAsStringAsync();
 

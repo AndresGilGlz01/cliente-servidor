@@ -28,18 +28,49 @@
         }
     </style>
 
-    <form action="~/home/registro" method="post">
-        <label>Nombre</label>
-        <input type="text" asp-for="Nombre" />
+    <div class="controlpanel">
+        <div class="controlpanel-titulo">
+            <div class="titulos">
+                <h1>Sistema de turnos</h1>
+            </div>
+            <div class="usuario">
+                <a asp-controller="home" asp-action="historial">Historial</a>
+                <a asp-controller="home" asp-action="index">Dashboard</a>
+                <i class="fa-solid fa-gear"></i>
+                <i class="fa-solid fa-chart-simple"></i>
+                <img src="~/img/profilepicture.jpg" />
+                <a href="~/logout">Cerrar sesión</a>
+            </div>
+        </div>
 
-        <label>Contraseña</label>
-        <input type="password" asp-for="Contraseña" />
+        <form action="~/home/registro" method="post" class="registrar-form">
+            <label>Nombre</label>
+            <input type="text" asp-for="Nombre" />
 
-        <label>Confirmar contraseña</label>
-        <input type="password" asp-for="ConfirmarContraseña" />
+            <label>Contraseña</label>
+            <input type="password" asp-for="Contraseña" />
 
-        <button type="submit" id="btnRegistrar">Registrar</button>
-    </form>
+            <label>Confirmar contraseña</label>
+            <input type="password" asp-for="ConfirmarContraseña" />
 
+            <button type="submit" id="btnRegistrar">Registrar</button>
+        </form>
+        <style>
+            .registrar-form {
+                display: flex;
+                flex-direction: column;
+                gap: 10px;
+                color: white;
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+            }
+
+                .registrar-form input[type="text"], .registrar-form input[type="password"] {
+                    background-color: gray;
+                }
+        </style>
+    </div>
 </body>
 </html>

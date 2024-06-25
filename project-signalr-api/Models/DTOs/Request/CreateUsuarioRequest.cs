@@ -3,6 +3,6 @@
 public class CreateUsuarioRequest
 {
     public string? Nombre { get; set; }
-    public string? Contraseña { get; set; }
-    public string? ConfirmarContraseña { get; set; }
+    public string? Contrasena { get; set; }
+    public string? ConfirmarContrasena { get; set; }
 }

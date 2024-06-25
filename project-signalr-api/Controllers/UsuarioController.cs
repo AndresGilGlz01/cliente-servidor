@@ -10,17 +10,25 @@ namespace project_signalr_api.Controllers;
 [Authorize(Roles = "Administrador")]
 [ApiController]
 [Route("api/[controller]")]
-public class UsuarioController(UsuarioRepository repository) : ControllerBase
+public class UsuarioController(UsuarioRepository repository, CreateUsuarioRequestValidator validator) : ControllerBase
 {
     readonly UsuarioRepository usuarioRepository = repository;
+    readonly CreateUsuarioRequestValidator validator = validator;
 
     [HttpPost]
     public async Task<IActionResult> Post([FromBody] CreateUsuarioRequest usuario)
     {
+        var validationResult = await validator.ValidateAsync(usuario);
+
+        if (!validationResult.IsValid)
+        {
+            return BadRequest(validationResult.Errors);
+        }
+
         var entity = new Models.Entities.Administrador
         {
             NombreUsuario = usuario.Nombre!,
-            Contraseña = usuario.Contraseña!,
+            Contraseña = usuario.Contrasena!,
         };
 
         var result = await usuarioRepository.Insert(entity);

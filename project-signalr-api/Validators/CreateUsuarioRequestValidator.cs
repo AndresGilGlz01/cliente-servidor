@@ -13,11 +13,11 @@ public class CreateUsuarioRequestValidator : AbstractValidator<CreateUsuarioRequ
         RuleFor(x => x.Nombre)
             .NotEmpty().WithMessage("El nombre es requerido");
 
-        RuleFor(x => x.Contraseña)
+        RuleFor(x => x.Contrasena)
             .NotEmpty().WithMessage("La contraseña es requerida");
 
-        RuleFor(x => x.ConfirmarContraseña)
+        RuleFor(x => x.ConfirmarContrasena)
             .NotEmpty().WithMessage("La confirmación de la contraseña es requerida")
-            .Equal(x => x.Contraseña).WithMessage("Las contraseñas no coinciden");
+            .Equal(x => x.Contrasena).WithMessage("Las contraseñas no coinciden");
     }
 }
