@@ -381,8 +381,8 @@
         }
         async function UpdateEstadisticas2() {
             
-            //const response = await fetch(`https://api.signalr.labsystec.net/api/estadistica/EstaHora?hora=${hora}`);
-            const response = await fetch(`https://localhost:7129/api/estadistica/EstaHora`);
+            const response = await fetch(`https://api.signalr.labsystec.net/api/estadistica/EstaHora`);
+            //const response = await fetch(`https://localhost:7129/api/estadistica/EstaHora`);
             // const response = await fetch(`https://localhost:7129/api/estadistica/Hoy?hora=${hora}`, {
             //     method: "GET"
                 
@@ -401,8 +401,8 @@
         }
         async function UpdateEstadisticas3() {
             
-            //const response = await fetch(`https://api.signalr.labsystec.net/api/estadistica/Hoy?hora=${hora}`);
-            const response = await fetch(`https://localhost:7129/api/estadistica/Hoy`);
+            const response = await fetch(`https://api.signalr.labsystec.net/api/estadistica/Hoy`);
+            //const response = await fetch(`https://localhost:7129/api/estadistica/Hoy`);
 
             if (response.ok) {
                 let data = await response.json();
