@@ -83,7 +83,8 @@ var folio1 ="";
         
             GetTurnosAvailed();
         });
-                        connection.on("NuevoTurno", (turno) => {
+        
+        connection.on("NuevoTurno", (turno) => {
                             // if (primeraSolicitud == false) {
 
                             //     // folio1 = turno.folio;
@@ -111,7 +112,8 @@ var folio1 ="";
                             GetTurnosAvailed();
          
    });
-   connection.on("TurnosActualizados", (caja) => {
+        
+        connection.on("TurnosActualizados", (caja) => {
 
 
             if (caja.idTurnoActual == IdTurno && Atendiendo == false) {
@@ -150,6 +152,13 @@ var folio1 ="";
             GetTurnosAvailed();
             GetAtendidos();
         });
+
+        connection.on("CajasCerradas", () => {
+            folio = "";
+
+            GetAtendidos();
+            GetTurnosAvailed();
+        })
         
         document.getElementById("form").addEventListener("submit", function (event) {
                 if (primeraSolicitud == false && Atendiendo == false) {

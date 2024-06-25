@@ -22,6 +22,26 @@ public class TicketsHub(TurnoRepository turnoRepository,
 
         var entity = await cajaRepository.Update(caja);
 
+        var allClosed = await cajaRepository.AllClosed();
+
+        if (allClosed)
+        {
+            var cajas = await cajaRepository.GetAll();
+
+            caja.IdTurnoActual = null;
+            await cajaRepository.Update(caja);
+
+            var turnos = await turnoRepository.GetAll();
+
+            foreach (var t in turnos)
+            {
+                t.Estado = "Atendido";
+                await turnoRepository.Update(t);
+            }
+
+            await Clients.All.SendAsync("CajasCerradas");
+        }
+
         var response = entity.ToResponse();
 
         await Clients.All.SendAsync("CajaActualizada", response);

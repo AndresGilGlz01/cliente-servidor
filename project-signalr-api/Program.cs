@@ -21,10 +21,12 @@ builder.Services.AddDbContext<TicketsContext>(options =>
 });
 builder.Services.AddTransient<AdministradorRepository>();
 builder.Services.AddTransient<HistorialRepository>();
+builder.Services.AddTransient<UsuarioRepository>();
 builder.Services.AddTransient<CajaRepository>();
 builder.Services.AddTransient<TurnoRepository>();
 builder.Services.AddTransient<LoginRequestValidator>();
 builder.Services.AddTransient<UpdateTurnoRequestValidator>();
+builder.Services.AddTransient<CreateUsuarioRequestValidator>();
 builder.Services.AddTransient<UpdateCajaRequestValidator>();
 builder.Services.AddTransient<CreateTurnoRequestValidator>();
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>

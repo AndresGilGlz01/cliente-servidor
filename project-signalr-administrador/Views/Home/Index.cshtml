@@ -34,6 +34,7 @@
             </div>
             <div class="usuario">
                 <a asp-controller="home" asp-action="historial">Historial</a>
+                <a asp-controller="home" asp-action="registro">registrar</a>
                 <i class="fa-solid fa-gear"></i>
                 <i class="fa-solid fa-chart-simple"></i>
                 <img src="~/img/profilepicture.jpg" />
@@ -518,6 +519,19 @@
             await UpdateEstadisticas3();
 
 
+        });
+
+        connection.on("CajasCerradas", () => {
+            console.log("cajas cerradas");
+            HideTurnoActual();
+            
+            let turnos = document.querySelectorAll(".turno-en-espera");
+
+            turnos.forEach(turno => {
+                document.querySelector(".turnos-siguientes").removeChild(turno);
+            });
+
+            GetCurrentTurno();
         });
     </script>
 </body>
