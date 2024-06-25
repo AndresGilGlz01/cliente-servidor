@@ -26,4 +26,6 @@ public class CajaRepository : Repository<Caja>
     public async Task<bool> AnyAbierta() => await Context.Caja.AnyAsync(c => c.Abierta!.Value);
 
     public async Task<bool> Exists(int id) => await Context.Caja.AnyAsync(c => c.Id == id);
+
+    public async Task<bool> AllClosed() => await Context.Caja.AllAsync(c => !c.Abierta!.Value);
 }

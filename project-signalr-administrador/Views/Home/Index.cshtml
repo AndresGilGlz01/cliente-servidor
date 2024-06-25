@@ -460,6 +460,19 @@
             await GetTurnosAvailed();
             await UpdateEstadisticas();
         });
+
+        connection.on("CajasCerradas", () => {
+            console.log("cajas cerradas");
+            HideTurnoActual();
+            
+            let turnos = document.querySelectorAll(".turno-en-espera");
+
+            turnos.forEach(turno => {
+                document.querySelector(".turnos-siguientes").removeChild(turno);
+            });
+
+            GetCurrentTurno();
+        });
     </script>
 </body>
 </html>
