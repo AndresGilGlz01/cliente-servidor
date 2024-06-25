@@ -103,7 +103,26 @@
                         <p class="estadistica-mas-frecuenada">Sin definir</p>
                     </div>
                 </div>
-
+                <div class="estadistica">
+                    <h3>Promedio de espera de hoy</h3>
+                    <div>
+                        <i class="fa-solid fa-fire"></i>
+                        <p class="estadistica-promedio-hoy">Sin definir</p>
+                    </div>
+                </div><div class="estadistica">
+                    <h3>Promedio de espera de esta hora</h3>
+                    <div>
+                        <i class="fa-solid fa-fire"></i>
+                        <p class="estadistica-promedio-hora">Sin definir</p>
+                    </div>
+                </div>
+                <div class="estadistica">
+                    <h3>Volumen de clientes esta hora</h3>
+                    <div>
+                        <i class="fa-solid fa-fire"></i>
+                        <p class="estadistica-volumen-hora">Sin definir</p>
+                    </div>
+                </div>
                 <div class="estadistica">
                     <h3>Caja menos activa hoy</h3>
                     <div>
@@ -277,6 +296,7 @@
                 });
             }
         }
+        
 
         async function GetCurrentTurno(id) {
             const response = await fetch(`https://api.signalr.labsystec.net/api/turno/bycaja/${id}`, {
@@ -356,6 +376,42 @@
                 document.querySelector(".estadistica-atendidos").innerText = data.cantidadAtendidos;
                 document.querySelector(".estadistica-mas-frecuenada").innerText = `Caja ${data.cajaMasFrecuente}`;
                 document.querySelector(".estadistica-menos-frecuentada").innerText = `Caja ${data.cajaMenosFrecuente}`;
+            }
+        }
+        async function UpdateEstadisticas2() {
+            
+            //const response = await fetch(`https://api.signalr.labsystec.net/api/estadistica/EstaHora?hora=${hora}`);
+            const response = await fetch(`https://localhost:7129/api/estadistica/EstaHora`);
+            // const response = await fetch(`https://localhost:7129/api/estadistica/Hoy?hora=${hora}`, {
+            //     method: "GET"
+                
+            // });
+
+            if (response.ok) {
+                let data = await response.json();
+
+                let estadisticas = document.querySelectorAll(".estadistica");
+
+                
+               // document.querySelector(".estadistica-promedio-hoy").innerText = data.tiempoPromedioDeEspera;
+                document.querySelector(".estadistica-promedio-hora").innerText = data.tiempoPromedioDeEspera;
+                document.querySelector(".estadistica-volumen-hora").innerText = data.volumenDeUsuarios;
+            }
+        }
+        async function UpdateEstadisticas3() {
+            
+            //const response = await fetch(`https://api.signalr.labsystec.net/api/estadistica/Hoy?hora=${hora}`);
+            const response = await fetch(`https://localhost:7129/api/estadistica/Hoy`);
+
+            if (response.ok) {
+                let data = await response.json();
+
+                let estadisticas = document.querySelectorAll(".estadistica");
+
+
+                 document.querySelector(".estadistica-promedio-hoy").innerText = data.tiempoPromedioDeEspera;
+                //document.querySelector(".estadistica-promedio-hora").innerText = data.tiempoPromedioDeEspera;
+                //document.querySelector(".estadistica-volumen-hora").innerText = data.volumenDeUsuarios;
             }
         }
 
@@ -458,6 +514,10 @@
             await GetCajasAvailed();
             await GetTurnosAvailed();
             await UpdateEstadisticas();
+            await UpdateEstadisticas2();
+            await UpdateEstadisticas3();
+
+
         });
     </script>
 </body>

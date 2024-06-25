@@ -7,4 +7,7 @@ public class EstadisticaResponse
     public int CantidadAtendidos { get; set; }
     public int? CajaMasFrecuente { get; set; }
     public int? CajaMenosFrecuente { get; set; }
+    public string VolumenDeUsuarios { get; set; } = "";
+    public string TiempoPromedioDeEspera { get; set; } = "";
+
 }
